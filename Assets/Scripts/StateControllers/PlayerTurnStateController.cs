@@ -27,6 +27,13 @@ public class PlayerTurnStateController : TurnStateController
     _hand.GetComponent<HandController>().OnCardClicked += OnCardClicked;
   }
 
+  public override void Start()
+  {
+    base.Start();
+
+    DebugCard(CardName.SwordThem, AgentStatusEffects.Intoxicated, default(AgentStatusEffects));
+  }
+
   public override void Update()
   {
     if(_innerState == InnerState.SpinnerSpinning)

@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,10 @@ public class AgentState : IContextObject
 
   public AgentStatusEffects StatusEffects()
   {
-    return _statusEffects.Select(sE => sE.Effect()).Aggregate((one, two) => { return one | two; });
+    var effects = _statusEffects.Select(sE => sE.Effect());
+    if(effects.Any())
+      return effects.Aggregate((one, two) => one | two);
+    return default(AgentStatusEffects);
   }
 
   class StatusEffect

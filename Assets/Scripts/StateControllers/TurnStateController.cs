@@ -54,11 +54,13 @@ public class TurnStateController : StateController
         break;
       
       case InnerState.PlayedCardMovingToPosition:
-        _playedCard.transform.position = new Vector3(HUtilities.MoveTowards(_playedCard.transform.position.x, _playedCardTarget.x, 2f), HUtilities.MoveTowards(_playedCard.transform.position.y, _playedCardTarget.y, 16f), _playedCard.transform.position.z);
+        if(!HUtilities.InPosition(_playedCard.transform.position, _playedCardTarget)) {
+          _playedCard.transform.position = new Vector3(HUtilities.MoveTowards(_playedCard.transform.position.x, _playedCardTarget.x, 2f), HUtilities.MoveTowards(_playedCard.transform.position.y, _playedCardTarget.y, 16f), _playedCard.transform.position.z);
 
-        if(HUtilities.InPosition(_playedCard.transform.position, _playedCardTarget)) {
-          OnPlayedCardInPosition();
-          _countdowns.Add(new HUtilities.Countdown(_doCardPauseLength, DoCard));
+          if(HUtilities.InPosition(_playedCard.transform.position, _playedCardTarget)) {
+            OnPlayedCardInPosition();
+            _countdowns.Add(new HUtilities.Countdown(_doCardPauseLength, DoCard));
+          }
         }
         break;
 
@@ -66,7 +68,7 @@ public class TurnStateController : StateController
         _spinner.transform.position = new Vector3(0, HUtilities.MoveTowards(_spinner.transform.position.y, _spinnerTarget.y, 8f), _spinner.transform.position.z);
         if(HUtilities.InPosition(_spinner.transform.position, _spinnerTarget)) {
           _innerState = InnerState.SpinnerSpinning;
-          _spinner.GetComponent<SpinnerController>().StartSpinning();
+          _spinner.GetComponent<SpinnerController>().StartSpinning(_meState.StatusEffects());
           OnSpinnerInPosition();
         }
         break;
@@ -81,10 +83,30 @@ public class TurnStateController : StateController
     }
   }
 
+  protected void DebugCard(CardName cardName, AgentStatusEffects meState, AgentStatusEffects themState)
+  {
+    _innerState = InnerState.PlayedCardMovingToPosition;
+    _meState.AddEffect(meState, 1);
+    _themState.AddEffect(themState, 1);
+
+    var handController = _hand.GetComponent<HandController>();
+    var cardToPlay = handController.CardAt(UnityEngine.Random.Range(0, handController.TotalCards()-1));
+    handController.RemoveCard(cardToPlay);
+
+    _playedCard.GetComponent<PlayedCardController>().PlayCard(Agent.Player, cardName, cardToPlay.Image());
+
+    _hand.GetComponent<HandController>().RemoveCard(cardToPlay);
+  }
+
   void DoCard()
   {
+    PerformCard(_playedCard.GetComponent<PlayedCardController>().CardName());
+  }
+
+  void PerformCard(CardName cardName)
+  {
     // todo: Feels janky, maybe the Played Card Name should be held in this class instead idk
-    _cardEffect = new PerformCardEffect(_playedCard.GetComponent<PlayedCardController>().CardName(), _meHealthBar, _themHealthBar, _meState, _themState);
+    _cardEffect = new PerformCardEffect(cardName, _meHealthBar, _themHealthBar, _meState, _themState);
 
     switch(_cardEffect.Perform())
     {

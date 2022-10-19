@@ -17,26 +17,39 @@ public class PerformCardEffect
     _themState = themState;
   }
 
-  public EffectOutcome Perform()
+  public ICardOutcome Perform()
   {
     switch(_cardName)
     {
       case CardName.SwordThem:
-        return EffectOutcome.SpinWheel;
+        return new SpinWheelOutcome(SpinnerConfig(CardName.SwordThem));
       case CardName.AxeThem:
-        return EffectOutcome.SpinWheel;
+        return new SpinWheelOutcome(SpinnerConfig(CardName.AxeThem));
       case CardName.DistractThem:
         _themState.AddEffect(AgentStatusEffects.Distracted, 2);
-        return EffectOutcome.Continue;
+        return new NoOutcome();
       case CardName.FocusMe:
         _meState.AddEffect(AgentStatusEffects.Focused, 2);
-        return EffectOutcome.Continue;
+        return new NoOutcome();
       case CardName.IntoxicateThem:
         _themState.AddEffect(AgentStatusEffects.Intoxicated, 2);
-        return EffectOutcome.Continue;
+        return new NoOutcome();
     }
 
-    return EffectOutcome.Continue;
+    return new NoOutcome();
+  }
+
+  SpinnerConfiguration SpinnerConfig(CardName cardName)
+  {
+    switch(cardName)
+    {
+      case CardName.SwordThem:
+        return new SpinnerConfiguration(0.5f, 0.1f);
+      case CardName.AxeThem:
+        return new SpinnerConfiguration(0.4f, 0.2f);
+      default:
+        return new SpinnerConfiguration(0.5f, 0.1f);
+    }
   }
 
   public void ResolveSpinner(SpinnerResult result)
@@ -50,6 +63,31 @@ public class PerformCardEffect
       _themHealthBar.GetComponent<HealthBarController>().SetHealth(_themState.Health());
     }
   }
+}
+
+public interface ICardOutcome
+{
+  EffectOutcome Outcome();
+  object Data();
+}
+
+public class NoOutcome : ICardOutcome
+{
+  public EffectOutcome Outcome() { return EffectOutcome.Continue; }
+  public object Data() { return null; }
+}
+
+public class SpinWheelOutcome : ICardOutcome
+{
+  SpinnerConfiguration _config;
+
+  public SpinWheelOutcome(SpinnerConfiguration config)
+  {
+    _config = config;
+  }
+
+  public EffectOutcome Outcome() { return EffectOutcome.SpinWheel; }
+  public object Data() { return _config; }
 }
 
 public enum EffectOutcome

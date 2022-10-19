@@ -107,14 +107,16 @@ public class TurnStateController : StateController
   {
     // todo: Feels janky, maybe the Played Card Name should be held in this class instead idk
     _cardEffect = new PerformCardEffect(cardName, _meHealthBar, _themHealthBar, _meState, _themState);
+    var performOutcome = _cardEffect.Perform();
 
-    switch(_cardEffect.Perform())
+    switch(performOutcome.Outcome())
     {
       case EffectOutcome.Continue:
         EndTurn();
         break;
       case EffectOutcome.SpinWheel:
         _innerState = InnerState.SpinnerComingIn;
+        _spinner.GetComponent<SpinnerController>().UpdateConfig(performOutcome.Data() as SpinnerConfiguration);
         break;
     }
   }

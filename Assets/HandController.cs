@@ -1,20 +1,29 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HandController : MonoBehaviour
 {
     public GameObject CardPrefab;
     public bool PlayerHand;
+    public GameObject DrawCounter;
+    public GameObject DiscardCounter;
 
     IList<HandCard> _handCards;
+    IList<CardName> _drawPile;
+    IList<CardName> _discardPile;
     CardName[] _deck;
 
     public event EventHandler OnCardClicked;
 
     public HandController() {
       _handCards = new List<HandCard>();
+
+      _drawPile = new List<CardName>();
+      _discardPile = new List<CardName>();
     }
 
     // Start is called before the first frame update
@@ -31,14 +40,36 @@ public class HandController : MonoBehaviour
     {
       _deck = deck;
 
+      Shuffle();
       DealHand();
+    }
+
+    void Shuffle()
+    {
+      _drawPile = new List<CardName>(_deck);
+      foreach(var handCard in _handCards)
+        _drawPile.RemoveAt(_drawPile.IndexOf(handCard.CardName()));
+      _drawPile.Shuffle();
+
+      _discardPile = new List<CardName>();
+
+      UpdateCounters();
     }
 
     void DealHand()
     {
-      _deck.Shuffle();
+      if(_handCards.Count == 0)
+        Shuffle();
+
       for(var i = 0; i < 5; i++)
-        AddCard(_deck[i]);
+        DrawCard();
+    }
+
+    public void DrawCard()
+    {
+      AddCard(_drawPile.First());
+      _drawPile.RemoveAt(0);
+      UpdateCounters();
     }
 
     void AddCard(CardName cardName)
@@ -52,6 +83,12 @@ public class HandController : MonoBehaviour
       _handCards.Add(handCard);
 
       RefreshCardPositions();
+    }
+
+    public void DiscardCard(CardName cardName)
+    {
+      _discardPile.Add(cardName);
+      UpdateCounters();
     }
     
     public void RemoveCard(HandCard handCard)
@@ -92,5 +129,15 @@ public class HandController : MonoBehaviour
     public HandCard CardAt(int index)
     {
       return _handCards[index];
+    }
+
+    public void UpdateCounters()
+    {
+      // todo: Hmm, feels bad man. Maybe two separate classes that inherit from this one instead
+      if(!PlayerHand)
+        return;
+
+      DrawCounter.GetComponent<Text>().text = _drawPile.Count.ToString();
+      DiscardCounter.GetComponent<Text>().text = _discardPile.Count.ToString();
     }
 }

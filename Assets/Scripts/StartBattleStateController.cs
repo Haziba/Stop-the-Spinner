@@ -22,12 +22,12 @@ public class StartBattleStateController  : StateController
   public void DealCards()
   {
     _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(new CardName[] {
-        /*CardName.SwordThem,
+        CardName.SwordThem,
         CardName.SwordThem,
         CardName.AxeThem,
         CardName.AxeThem,
         CardName.IntoxicateThem,
-        CardName.FocusMe,*/
+        CardName.FocusMe,
         CardName.DistractThem,
         CardName.SwordThem,
         CardName.AxeThem,
@@ -36,16 +36,16 @@ public class StartBattleStateController  : StateController
     });
 
     _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>().SetDeck(new CardName[] {
-        /*CardName.AxeThem,
+        CardName.AxeThem,
         CardName.AxeThem,
         CardName.FocusMe,
         CardName.AxeThem,
         CardName.FocusMe,
-        CardName.DistractThem*/
-        CardName.IntoxicateThem,
-        CardName.IntoxicateThem,
-        CardName.IntoxicateThem,
-        CardName.IntoxicateThem,
+        CardName.DistractThem,
+        CardName.AxeThem,
+        CardName.AxeThem,
+        CardName.FocusMe,
+        CardName.DistractThem,
         CardName.IntoxicateThem,
     });
 

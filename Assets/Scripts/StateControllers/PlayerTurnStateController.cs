@@ -31,7 +31,7 @@ public class PlayerTurnStateController : TurnStateController
   {
     base.Start();
 
-    DebugCard(CardName.SwordThem, AgentStatusEffects.Intoxicated, default(AgentStatusEffects));
+    //DebugCard(CardName.SwordThem, AgentStatusEffects.Intoxicated, default(AgentStatusEffects));
   }
 
   public override void Update()

@@ -95,7 +95,7 @@ public class TurnStateController : StateController
 
     _playedCard.GetComponent<PlayedCardController>().PlayCard(Agent.Player, cardName, cardToPlay.Image());
 
-    _hand.GetComponent<HandController>().RemoveCard(cardToPlay);
+    _hand.GetComponent<HandController>().DiscardCard(cardName);
   }
 
   void DoCard()
@@ -137,7 +137,9 @@ public class TurnStateController : StateController
 
   public override void End()
   {
+    _hand.GetComponent<HandController>().DiscardCard(_playedCard.GetComponent<PlayedCardController>().CardName());
     _playedCard.GetComponent<PlayedCardController>().RemoveCard();
+    _hand.GetComponent<HandController>().DrawCard();
   }
 
   void EndTurn()

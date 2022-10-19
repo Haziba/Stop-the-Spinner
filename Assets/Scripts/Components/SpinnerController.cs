@@ -24,16 +24,16 @@ public class SpinnerController : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if(_statusEffects.HasFlag(AgentStatusEffects.Intoxicated)) {
+    if(IsSpinning() && _statusEffects.HasFlag(AgentStatusEffects.Intoxicated)) {
       _intoxicatedSpeed += _intoxicatedAccel * Time.deltaTime;
       _intoxicatedChangeCountdown -= Time.deltaTime;
       if(_intoxicatedChangeCountdown <= 0)
         SpinIntoxicationWheel();
+
+      Arrow.transform.Rotate(new Vector3(0, 0, -_intoxicatedSpeed * Time.deltaTime));
     }
 
-    Debug.Log(_intoxicatedSpeed);
-
-    Arrow.transform.Rotate(new Vector3(0, 0, -(_spinSpeed + _intoxicatedSpeed) * Time.deltaTime));
+    Arrow.transform.Rotate(new Vector3(0, 0, -_spinSpeed * Time.deltaTime));
   }
 
   public void StartSpinning(AgentStatusEffects statusEffects)

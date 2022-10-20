@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PerformCardEffect
 {
@@ -52,17 +53,40 @@ public class PerformCardEffect
     }
   }
 
+  // todo: This shouldn't live here lol
+  IDictionary<CardName, CardDamage> _cardDamages = new Dictionary<CardName, CardDamage>
+  {
+    [CardName.SwordThem] = new CardDamage(1, 2),
+    [CardName.AxeThem] = new CardDamage(2, 3)
+  };
+
   public void ResolveSpinner(SpinnerResult result)
   {
     if(result == SpinnerResult.Hit) {
-      _themState.TakeDamage(1);
+      _themState.TakeDamage(_cardDamages[_cardName].Hit);
       _themHealthBar.GetComponent<HealthBarController>().SetHealth(_themState.Health());
     }
     if(result == SpinnerResult.Crit) {
-      _themState.TakeDamage(1);
+      _themState.TakeDamage(_cardDamages[_cardName].Crit);
       _themHealthBar.GetComponent<HealthBarController>().SetHealth(_themState.Health());
     }
   }
+}
+
+// todo: Move all these classes to sensible locations, maybe scoped to a folder / namespace
+public class CardDamage
+{
+  int _hit;
+  int _crit;
+
+  public CardDamage(int hit, int crit)
+  {
+    _hit = hit;
+    _crit = crit;
+  }
+
+  public int Hit => _hit;
+  public int Crit => _crit;
 }
 
 public interface ICardOutcome

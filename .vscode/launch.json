@@ -7,7 +7,7 @@
     {
       "name": "Unity Editor",
       "type": "unity",
-      "path": "/Users/harryboyes/dev/Stop the Spinner/Library/EditorInstance.json",
+      "path": "Library/EditorInstance.json",
       "request": "launch"
     },
     {

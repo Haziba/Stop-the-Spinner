@@ -27,10 +27,7 @@ public class EnemyTurnStateController : TurnStateController
 
   public override void Start()
   {
-    _countdowns.Add(new HUtilities.Countdown(1f, () => {
-      PlayCard();
-      _innerState = InnerState.PlayedCardMovingToPosition;
-    }));
+    _countdowns.Add(new HUtilities.Countdown(1f, PlayCard));
 
     base.Start();
   }
@@ -53,6 +50,7 @@ public class EnemyTurnStateController : TurnStateController
     handController.RemoveCard(cardToPlay);
 
     _context.Get<GameObject>(ContextObjects.EnemyPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Enemy, cardToPlay.CardName(), cardToPlay.Image());
-  }
 
+    PlayCardFromHand();
+  }
 }

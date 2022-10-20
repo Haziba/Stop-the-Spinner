@@ -50,11 +50,10 @@ public class PlayerTurnStateController : TurnStateController
 
     var cardClickedEvent = e as CardClickedEventArgs;
 
-    _innerState = InnerState.PlayedCardMovingToPosition;
-
     _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Player, cardClickedEvent.CardName(), cardClickedEvent.HandCard().Image());
-
     _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().RemoveCard(cardClickedEvent.HandCard());
+
+    PlayCardFromHand();
   }
 
 	public void SpacePressed()

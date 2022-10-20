@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class TurnStateController : StateController
 {
@@ -48,54 +49,44 @@ public class TurnStateController : StateController
       if(!_countdowns[i].Update())
         _countdowns.RemoveAt(i);
     
+    // todo: This may not be fit for purpose anymore
     switch(_innerState)
     {
       case InnerState.ChoosingCard:
         break;
-      
       case InnerState.PlayedCardMovingToPosition:
-        if(!HUtilities.InPosition(_playedCard.transform.position, _playedCardTarget)) {
-          _playedCard.transform.position = new Vector3(HUtilities.MoveTowards(_playedCard.transform.position.x, _playedCardTarget.x, 2f), HUtilities.MoveTowards(_playedCard.transform.position.y, _playedCardTarget.y, 16f), _playedCard.transform.position.z);
-
-          if(HUtilities.InPosition(_playedCard.transform.position, _playedCardTarget)) {
-            OnPlayedCardInPosition();
-            _countdowns.Add(new HUtilities.Countdown(_doCardPauseLength, DoCard));
-          }
-        }
         break;
-
       case InnerState.SpinnerComingIn:
-        _spinner.transform.position = new Vector3(0, HUtilities.MoveTowards(_spinner.transform.position.y, _spinnerTarget.y, 8f), _spinner.transform.position.z);
-        if(HUtilities.InPosition(_spinner.transform.position, _spinnerTarget)) {
-          _innerState = InnerState.SpinnerSpinning;
-          _spinner.GetComponent<SpinnerController>().StartSpinning(_meState.StatusEffects());
-          OnSpinnerInPosition();
-        }
         break;
       case InnerState.SpinnerSpinning:
         break;
       case InnerState.SpinnerGoingOut:
-        _spinner.transform.position = new Vector3(0, HUtilities.MoveTowards(_spinner.transform.position.y, _spinnerOrigin.y, 8f), _spinner.transform.position.z);
-        if(HUtilities.InPosition(_spinner.transform.position, _spinnerOrigin)) {
-          EndTurn();
-        }
         break;
     }
   }
 
   protected void DebugCard(CardName cardName, AgentStatusEffects meState, AgentStatusEffects themState)
   {
-    _innerState = InnerState.PlayedCardMovingToPosition;
-    _meState.AddEffect(meState, 1);
-    _themState.AddEffect(themState, 1);
-
     var handController = _hand.GetComponent<HandController>();
     var cardToPlay = handController.CardAt(UnityEngine.Random.Range(0, handController.TotalCards()-1));
     handController.RemoveCard(cardToPlay);
 
     _playedCard.GetComponent<PlayedCardController>().PlayCard(Agent.Player, cardName, cardToPlay.Image());
 
+    PlayCardFromHand();
+
     _hand.GetComponent<HandController>().DiscardCard(cardName);
+  }
+
+  protected void PlayCardFromHand()
+  {
+    _innerState = InnerState.PlayedCardMovingToPosition;
+
+    _playedCard.transform.DOMove(_playedCardTarget, 0.5f)
+      .OnComplete(() => {
+        OnPlayedCardInPosition();
+        _countdowns.Add(new HUtilities.Countdown(_doCardPauseLength, DoCard));
+      });
   }
 
   void DoCard()
@@ -117,6 +108,12 @@ public class TurnStateController : StateController
       case EffectOutcome.SpinWheel:
         _innerState = InnerState.SpinnerComingIn;
         _spinner.GetComponent<SpinnerController>().UpdateConfig(performOutcome.Data() as SpinnerConfiguration);
+        _spinner.transform.DOMove(_spinnerTarget, 0.5f)
+          .OnComplete(() => {
+            _innerState = InnerState.SpinnerSpinning;
+            _spinner.GetComponent<SpinnerController>().StartSpinning(_meState.StatusEffects());
+            OnSpinnerInPosition();
+          });
         break;
     }
   }
@@ -129,6 +126,9 @@ public class TurnStateController : StateController
 
     _countdowns.Add(new HUtilities.Countdown(1f, () => {
       _innerState = InnerState.SpinnerGoingOut;
+
+      _spinner.transform.DOMove(_spinnerOrigin, 0.5f)
+        .OnComplete(EndTurn);
     }));
   }
 

@@ -21,7 +21,6 @@ public class HealthBarController : MonoBehaviour
 
     void UpdateHealthbar()
     {
-        Debug.Log(_health);
         Background.GetComponent<Image>().fillAmount = _health / 10f;
     }
 

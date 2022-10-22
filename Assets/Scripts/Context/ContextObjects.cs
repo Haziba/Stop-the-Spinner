@@ -14,4 +14,8 @@ public enum ContextObjects
 
   PlayerState,
   EnemyState,
+
+  Enemy,
+
+  EnemyConfig,
 }

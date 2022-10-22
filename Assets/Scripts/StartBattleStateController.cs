@@ -9,6 +9,7 @@ public class StartBattleStateController  : StateController
   public override void Start()
   {
     DealCards();
+    SetEnemy();
   }
 
   public override void Update()
@@ -50,5 +51,30 @@ public class StartBattleStateController  : StateController
     });
 
     ChangeGameState(GameState.PlayerTurn);
+  }
+
+  void SetEnemy()
+  {
+    var enemyName = (_context.Get<IContextObject>(ContextObjects.EnemyConfig) as EnemyConfig).Name;
+
+    SetEnemyImage(enemyName);
+  }
+
+  public void SetEnemyImage(EnemyName enemyName)
+  {
+    HideAllEnemyImages();
+    ShowEnemyImage(enemyName);
+  }
+
+  void HideAllEnemyImages()
+  {
+    for(var i = 0; i < _context.Get<GameObject>(ContextObjects.Enemy).transform.childCount; i++){
+      _context.Get<GameObject>(ContextObjects.Enemy).transform.GetChild(i).gameObject.SetActive(false);
+    }
+  }
+
+  void ShowEnemyImage(EnemyName enemyName)
+  {
+    _context.Get<GameObject>(ContextObjects.Enemy).transform.Find(enemyName.ToString()).gameObject.SetActive(true);;
   }
 }

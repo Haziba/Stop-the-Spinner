@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -19,9 +20,13 @@ public class GameController : MonoBehaviour
   public GameObject PlayerPlayedCard;
   public GameObject EnemyPlayedCard;
 
+  public GameObject Enemy;
+
   // Start is called before the first frame update
   void Start()
   {
+    var sceneData = SceneDataHandler.GetData();
+
     var context = new ContextManager(
       new Dictionary<ContextObjects, GameObject> {
         [ContextObjects.PlayerHealthBar] = PlayerHealthBar,
@@ -35,12 +40,15 @@ public class GameController : MonoBehaviour
 
         [ContextObjects.PlayerPlayedCard] = PlayerPlayedCard,
         [ContextObjects.EnemyPlayedCard] = EnemyPlayedCard,
+
+        [ContextObjects.Enemy] = Enemy,
       },
       new Dictionary<ContextObjects, Camera>(),
       new Dictionary<ContextObjects, IContextObject>
       {
         [ContextObjects.PlayerState] = new AgentState(10),
-        [ContextObjects.EnemyState] = new AgentState(10)
+        [ContextObjects.EnemyState] = new AgentState(10),
+        [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(EnemyName.Gronk),
       }
     );
 
@@ -56,6 +64,7 @@ public class GameController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+    Debug.Log(Input.GetKeyDown("space"));
     CurrentGameState().Update();
     var newGameState = CurrentGameState().CurrentGameState();
     if(newGameState != _gameState)

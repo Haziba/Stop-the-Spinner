@@ -20,7 +20,7 @@ class WorldPathController : MonoBehaviour
     var childPoints = new[] {
         new MapPoint {
           Event = PointEvent.Battle,
-          BackgroundName = WorldPathBackgroundName.OneWayPath
+          BackgroundName = WorldPathBackgroundName.WitchHut
         },
         new MapPoint {
           Event = PointEvent.Event,
@@ -92,7 +92,7 @@ class WorldPathController : MonoBehaviour
       switch(newPoint.Event)
       {
         case PointEvent.Battle:
-          SceneDataHandler.UpdateData(new Dictionary<SceneDataKey, object> { [SceneDataKey.Enemy] = new EnemyConfig(EnemyName.Flaps) });
+          SceneDataHandler.UpdateData(new Dictionary<SceneDataKey, object> { [SceneDataKey.Enemy] = new EnemyConfig(EnemyName.Sleppy) });
           SceneManager.LoadScene("BattleScene");
           break;
         case PointEvent.Event:

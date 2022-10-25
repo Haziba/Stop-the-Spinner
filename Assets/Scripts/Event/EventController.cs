@@ -14,7 +14,7 @@ public class EventController : MonoBehaviour
   public GameObject OptionPrefab;
 
   EventName _event = EventName.WitchHut;
-  int _eventStep;
+  int _currentStepNumber;
   EventStep _currentEventStep;
 
   IList<GameObject> _options = new List<GameObject>();
@@ -22,9 +22,8 @@ public class EventController : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    _eventStep = -1;
+    _currentStepNumber = -1;
 
-    //todo: Get the _event from the scene change data
     var sceneData = SceneDataHandler.GetData();
     var eventData = (sceneData[SceneDataKey.Event] as EventConfig);
     _event = eventData.EventName;
@@ -41,7 +40,7 @@ public class EventController : MonoBehaviour
 
   void StartStep(int newStep)
   {
-    if(_eventStep > 0) {
+    if(_currentStepNumber > 0) {
       EndStep();
     }
     if(newStep < 0) {
@@ -49,8 +48,8 @@ public class EventController : MonoBehaviour
       return;
     }
 
-    _eventStep = newStep;
-    _currentEventStep = EventLibrary.Details[_event].Steps[_eventStep];
+    _currentStepNumber = newStep;
+    _currentEventStep = EventLibrary.Details[_event].Steps[_currentStepNumber];
     StartEventStep();
   }
 
@@ -106,7 +105,6 @@ public class EventController : MonoBehaviour
       var nextStepId = (sender as EventOptionController).NextStepId();
       StartStep(nextStepId);
     };
-    // todo: Eesh big smell around here
     opt.GetComponent<EventOptionController>().SetResolution(option.Resolution);
     _options.Add(opt);
   }
@@ -120,9 +118,13 @@ public class EventController : MonoBehaviour
       return;
     }
 
-    var newStep = _currentEventStep.Update(goNextPressed);
-    if(newStep != _eventStep)
-      StartStep(newStep);
+    switch(_currentEventStep.Type)
+    {
+      case EventStepType.Text:
+        if(goNextPressed)
+          StartStep(_currentStepNumber + 1);
+        break;
+    }
   }
 
   bool GoNextPressed()

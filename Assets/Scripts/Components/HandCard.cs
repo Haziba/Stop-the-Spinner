@@ -40,13 +40,3 @@ public class HandCard
     return _cardName;
   }
 }
-
-//todo: This definitely shouldn't live in here
-public enum CardName
-{
-  SwordThem,
-  AxeThem,
-  DistractThem,
-  FocusMe,
-  IntoxicateThem,
-}

@@ -1,5 +1,6 @@
 public enum EnemyName
 {
   Gronk,
-  Flaps
+  Flaps,
+  Sleppy
 }

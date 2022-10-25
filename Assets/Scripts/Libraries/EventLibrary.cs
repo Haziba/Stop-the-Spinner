@@ -12,17 +12,17 @@ public static class EventLibrary
 
   static EventDetails WitchHut()
   {
-    var initialShpiel = new TextEventStep(0, "You come a cross a hut in a spooky swamp.");
-    var goodResolution = new ResolutionEventStep(2, "You find a new card", new List<ResolutionEventStep.Resolution> {
+    var initialShpiel = new TextEventStep("You come a cross a hut in a spooky swamp.");
+    var goodResolution = new ResolutionEventStep("You find a new card", new List<ResolutionEventStep.Resolution> {
       new ResolutionEventStep.Resolution(ResolutionType.GainCard, CardName.IntoxicateThem)
     }, finalStep: true);
-    var badResolution = new ResolutionEventStep(3, "It's trapped! You take 3 damage", new List<ResolutionEventStep.Resolution> {
+    var badResolution = new ResolutionEventStep("It's trapped! You take 3 damage", new List<ResolutionEventStep.Resolution> {
       new ResolutionEventStep.Resolution(ResolutionType.Health, -3)
     }, finalStep: true);
 
     return new EventDetails(EventName.WitchHut, EventImage.WitchHut, new List<EventStep> {
       initialShpiel,
-      new QuestionEventStep(1, "Do you investigate inside, or leave well alone?", new List<QuestionOption> {
+      new QuestionEventStep("Do you investigate inside, or leave well alone?", new List<QuestionOption> {
         new QuestionOption("Explore inside", () => { if(UnityEngine.Random.Range(0, 10) <= 3) return 3; return 2; }),
         new QuestionOption("Ignore", () => -1)
       }),
@@ -62,36 +62,13 @@ public class EventStep
   public object Data => _data;
   protected bool _finalStep;
   public bool FinalStep => _finalStep;
-  int _stepId;
-
-  public EventStep(int stepId)
-  {
-    _stepId = stepId;
-  }
-
-  //todo: This whole thing stinks
-  public int Update(bool spacePressed)
-  {
-    switch(_type)
-    {
-      case EventStepType.Text:
-        if(spacePressed)
-          return _stepId + 1;
-        break;
-    }
-
-    return _stepId;
-  }
 }
 
-public class EventStep<TData> : EventStep
-{
-  public EventStep(int stepId) : base(stepId) { }
-}
+public class EventStep<TData> : EventStep { }
 
 public class TextEventStep : EventStep<TextEventStep.EventData>
 {
-  public TextEventStep(int stepId, string text) : base(stepId)
+  public TextEventStep(string text)
   {
     _type = EventStepType.Text;
     _data = new EventData(text);
@@ -111,7 +88,7 @@ public class TextEventStep : EventStep<TextEventStep.EventData>
 
 public class QuestionEventStep : EventStep<QuestionEventStep.EventData>
 {
-  public QuestionEventStep(int stepId, string text, IEnumerable<QuestionOption> options) : base(stepId)
+  public QuestionEventStep(string text, IEnumerable<QuestionOption> options)
   {
     _type = EventStepType.Question;
     _data = new EventData(text, options);
@@ -148,7 +125,7 @@ public class QuestionOption
 
 public class ResolutionEventStep : EventStep<ResolutionEventStep.EventData>
 {
-  public ResolutionEventStep(int stepId, string text, IEnumerable<Resolution> resolutions, bool finalStep = false) : base(stepId)
+  public ResolutionEventStep(string text, IEnumerable<Resolution> resolutions, bool finalStep = false)
   {
     _type = EventStepType.Resolution;
     _data = new EventData(text, resolutions);

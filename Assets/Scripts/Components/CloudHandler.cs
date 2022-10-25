@@ -1,22 +1,17 @@
 using UnityEngine;
 using System;
 using System.Linq;
-using System.Collections.Generic;
 
 public class CloudHandler : MonoBehaviour
 {
   public float Speed;
-
-  public CloudHandler()
-  {
-  }
 
   // Start is called before the first frame update
   void Start()
   {
 		var width = transform.GetChild(0).GetComponent<SpriteRenderer>().bounds.size.x;
 
-		var cloudNums = new int[] { 0, 1 };/*Enumerable
+		var cloudNums = new[] { 0, 1 };/*Enumerable
 			.Range(0, _context.Get<GameObject>(ContextObjects.Background).transform.childCount)
 			.ToArray();*/
 		Array

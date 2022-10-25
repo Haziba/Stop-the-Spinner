@@ -26,6 +26,8 @@ public class PerformCardEffect
         return new SpinWheelOutcome(SpinnerConfig(CardName.SwordThem));
       case CardName.AxeThem:
         return new SpinWheelOutcome(SpinnerConfig(CardName.AxeThem));
+      case CardName.DaggerThem:
+        return new SpinWheelOutcome(SpinnerConfig(CardName.DaggerThem));
       case CardName.DistractThem:
         _themState.AddEffect(AgentStatusEffects.Distracted, 2);
         return new NoOutcome();
@@ -47,7 +49,9 @@ public class PerformCardEffect
       case CardName.SwordThem:
         return new SpinnerConfiguration(0.5f, 0.1f);
       case CardName.AxeThem:
-        return new SpinnerConfiguration(0.4f, 0.2f);
+        return new SpinnerConfiguration(0.4f, 0.2f); 
+      case CardName.DaggerThem:
+        return new SpinnerConfiguration(0.6f, 0.03f);
       default:
         return new SpinnerConfiguration(0.5f, 0.1f);
     }
@@ -57,7 +61,8 @@ public class PerformCardEffect
   IDictionary<CardName, CardDamage> _cardDamages = new Dictionary<CardName, CardDamage>
   {
     [CardName.SwordThem] = new CardDamage(1, 2),
-    [CardName.AxeThem] = new CardDamage(2, 3)
+    [CardName.AxeThem] = new CardDamage(2, 3),
+    [CardName.DaggerThem] = new CardDamage(1, 2),
   };
 
   public void ResolveSpinner(SpinnerResult result)

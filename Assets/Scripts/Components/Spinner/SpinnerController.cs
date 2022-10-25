@@ -92,7 +92,7 @@ public class SpinnerController : MonoBehaviour
 
     SpinIntoxicationWheel();
 
-    _spinSpeed = 100f;//360f*multiplier;
+    _spinSpeed = 360f*multiplier;
   }
 
   public void UpdateConfig(SpinnerConfiguration config)

@@ -1,3 +1,4 @@
+using Libraries;
 using UnityEngine;
 
 public class StartBattleStateController  : StateController
@@ -34,36 +35,25 @@ public class StartBattleStateController  : StateController
         CardName.AxeThem,
         CardName.FocusMe,
         CardName.DistractThem
-    });
+    }, 5);
 
-    _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>().SetDeck(new CardName[] {
-        CardName.AxeThem,
-        CardName.AxeThem,
-        CardName.FocusMe,
-        CardName.AxeThem,
-        CardName.FocusMe,
-        CardName.DistractThem,
-        CardName.AxeThem,
-        CardName.AxeThem,
-        CardName.FocusMe,
-        CardName.DistractThem,
-        CardName.IntoxicateThem,
-    });
+    var enemy = Monster();
 
+    _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>().SetDeck(enemy.Deck, enemy.MaxCardsInHand);
+    
     ChangeGameState(GameState.PlayerTurn);
   }
 
   void SetEnemy()
   {
-    var enemyName = (_context.Get<IContextObject>(ContextObjects.EnemyConfig) as EnemyConfig).Name;
-
-    SetEnemyImage(enemyName);
+    SetEnemyImage(MonsterName());
+    _context.Get<GameObject>(ContextObjects.EnemyHealthBar).GetComponent<HealthBarController>().SetHealth(Monster().Health);
   }
 
-  public void SetEnemyImage(EnemyName enemyName)
+  public void SetEnemyImage(MonsterName monsterName)
   {
     HideAllEnemyImages();
-    ShowEnemyImage(enemyName);
+    ShowEnemyImage(monsterName);
   }
 
   void HideAllEnemyImages()
@@ -73,8 +63,19 @@ public class StartBattleStateController  : StateController
     }
   }
 
-  void ShowEnemyImage(EnemyName enemyName)
+  void ShowEnemyImage(MonsterName monsterName)
   {
-    _context.Get<GameObject>(ContextObjects.Enemy).transform.Find(enemyName.ToString()).gameObject.SetActive(true);;
+    _context.Get<GameObject>(ContextObjects.Enemy).transform.Find(monsterName.ToString()).gameObject.SetActive(true);;
+  }
+
+  MonsterName MonsterName()
+  {
+    var monsterConfig = _context.Get<IContextObject>(ContextObjects.EnemyConfig) as EnemyConfig;
+    return monsterConfig.Name;
+  }
+
+  Monster Monster()
+  {
+    return MonsterLibrary.Monsters[MonsterName()];
   }
 }

@@ -16,6 +16,7 @@ public class HandController : MonoBehaviour
     IList<CardName> _drawPile;
     IList<CardName> _discardPile;
     CardName[] _deck;
+    int _maxCardsInHand;
 
     public event EventHandler OnCardClicked;
 
@@ -36,9 +37,10 @@ public class HandController : MonoBehaviour
     {
     }
 
-    public void SetDeck(CardName[] deck)
+    public void SetDeck(CardName[] deck, int maxCardsInHand)
     {
       _deck = deck;
+      _maxCardsInHand = maxCardsInHand;
 
       Shuffle();
       DealHand();
@@ -61,12 +63,18 @@ public class HandController : MonoBehaviour
       if(_handCards.Count == 0)
         Shuffle();
 
-      for(var i = 0; i < 5; i++)
+      for(var i = 0; i < _maxCardsInHand; i++)
         DrawCard();
     }
 
     public void DrawCard()
     {
+      if (!_drawPile.Any())
+        if (_discardPile.Any())
+          Shuffle();
+        else
+          return;
+      
       AddCard(_drawPile.First());
       _drawPile.RemoveAt(0);
       UpdateCounters();

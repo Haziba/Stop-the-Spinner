@@ -1,9 +1,11 @@
+using Libraries;
+
 public class EnemyConfig : IContextObject
 {
-  EnemyName _name;
-  public EnemyName Name => _name;
+  MonsterName _name;
+  public MonsterName Name => _name;
 
-  public EnemyConfig(EnemyName name)
+  public EnemyConfig(MonsterName name)
   {
     _name = name;
   }

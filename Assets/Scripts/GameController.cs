@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Libraries;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,7 +49,7 @@ public class GameController : MonoBehaviour
       {
         [ContextObjects.PlayerState] = new AgentState(10),
         [ContextObjects.EnemyState] = new AgentState(10),
-        [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(EnemyName.Gronk),
+        [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Gronk),
       }
     );
 

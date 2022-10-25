@@ -164,7 +164,8 @@ public class ResolutionEventStep : EventStep<ResolutionEventStep.EventData>
 public enum ResolutionType
 {
   Health,
-  GainCard
+  GainCard,
+  Gold
 }
 
 public enum EventStepType

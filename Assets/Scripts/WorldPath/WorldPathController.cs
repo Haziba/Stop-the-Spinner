@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Libraries;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -92,7 +93,7 @@ class WorldPathController : MonoBehaviour
       switch(newPoint.Event)
       {
         case PointEvent.Battle:
-          SceneDataHandler.UpdateData(new Dictionary<SceneDataKey, object> { [SceneDataKey.Enemy] = new EnemyConfig(EnemyName.Sleppy) });
+          SceneDataHandler.UpdateData(new Dictionary<SceneDataKey, object> { [SceneDataKey.Enemy] = new EnemyConfig(MonsterName.Sleppy) });
           SceneManager.LoadScene("BattleScene");
           break;
         case PointEvent.Event:

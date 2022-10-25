@@ -45,6 +45,7 @@ public class MapPoint
 {
   public PointEvent Event;
   public MapPoint[] Children;
+  public WorldPathBackgroundName BackgroundName;
   public bool Visited;
 }
 

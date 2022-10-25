@@ -1,16 +1,35 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
 public static class EventLibrary
 {
   static IDictionary<EventName, EventDetails> _details = new Dictionary<EventName, EventDetails> {
-    [EventName.WitchHut] = new EventDetails(EventName.WitchHut, EventImage.WitchHut, new List<EventStep> {
-      new TextEventStep("Hey there cowboy"),
-      new TextEventStep("Hey multiple lines, who knew")
-    })
+    [EventName.WitchHut] = WitchHut()
   };
 
   public static IDictionary<EventName, EventDetails> Details => _details;
+
+  static EventDetails WitchHut()
+  {
+    var initialShpiel = new TextEventStep(0, "You come a cross a hut in a spooky swamp.");
+    var goodResolution = new ResolutionEventStep(2, "You find a new card", new List<ResolutionEventStep.Resolution> {
+      new ResolutionEventStep.Resolution(ResolutionType.GainCard, CardName.IntoxicateThem)
+    }, finalStep: true);
+    var badResolution = new ResolutionEventStep(3, "It's trapped! You take 3 damage", new List<ResolutionEventStep.Resolution> {
+      new ResolutionEventStep.Resolution(ResolutionType.Health, -3)
+    }, finalStep: true);
+
+    return new EventDetails(EventName.WitchHut, EventImage.WitchHut, new List<EventStep> {
+      initialShpiel,
+      new QuestionEventStep(1, "Do you investigate inside, or leave well alone?", new List<QuestionOption> {
+        new QuestionOption("Explore inside", () => { if(UnityEngine.Random.Range(0, 10) <= 3) return 3; return 2; }),
+        new QuestionOption("Ignore", () => -1)
+      }),
+      goodResolution,
+      badResolution,
+    });
+  }
 }
 
 public enum EventName
@@ -41,29 +60,38 @@ public class EventStep
   public EventStepType Type => _type;
   protected object _data;
   public object Data => _data;
+  protected bool _finalStep;
+  public bool FinalStep => _finalStep;
+  int _stepId;
+
+  public EventStep(int stepId)
+  {
+    _stepId = stepId;
+  }
 
   //todo: This whole thing stinks
-  public bool Update(bool spacePressed)
+  public int Update(bool spacePressed)
   {
     switch(_type)
     {
       case EventStepType.Text:
         if(spacePressed)
-          return true;
+          return _stepId + 1;
         break;
     }
 
-    return false;
+    return _stepId;
   }
 }
 
 public class EventStep<TData> : EventStep
 {
+  public EventStep(int stepId) : base(stepId) { }
 }
 
 public class TextEventStep : EventStep<TextEventStep.EventData>
 {
-  public TextEventStep(string text)
+  public TextEventStep(int stepId, string text) : base(stepId)
   {
     _type = EventStepType.Text;
     _data = new EventData(text);
@@ -81,10 +109,93 @@ public class TextEventStep : EventStep<TextEventStep.EventData>
   }
 }
 
+public class QuestionEventStep : EventStep<QuestionEventStep.EventData>
+{
+  public QuestionEventStep(int stepId, string text, IEnumerable<QuestionOption> options) : base(stepId)
+  {
+    _type = EventStepType.Question;
+    _data = new EventData(text, options);
+  }
+
+  public class EventData
+  {
+    string _text;
+    public string Text => _text;
+    IEnumerable<QuestionOption> _options;
+    public IEnumerable<QuestionOption> Options => _options;
+
+    public EventData(string text, IEnumerable<QuestionOption> options)
+    {
+      _text = text;
+      _options = options;
+    }
+  }
+}
+
+public class QuestionOption
+{
+  string _text;
+  public string Text => _text;
+  Func<int> _resolution;
+  public Func<int> Resolution => _resolution;
+
+  public QuestionOption(string text, Func<int> resolution)
+  {
+    _text = text;
+    _resolution = resolution;
+  }
+}
+
+public class ResolutionEventStep : EventStep<ResolutionEventStep.EventData>
+{
+  public ResolutionEventStep(int stepId, string text, IEnumerable<Resolution> resolutions, bool finalStep = false) : base(stepId)
+  {
+    _type = EventStepType.Resolution;
+    _data = new EventData(text, resolutions);
+    _finalStep = finalStep;
+  }
+
+  public class EventData
+  {
+    string _text;
+    public string Text => _text;
+    IEnumerable<Resolution> _resolutions;
+    public IEnumerable<Resolution> Resolutions => _resolutions;
+
+    public EventData(string text, IEnumerable<Resolution> resolutions)
+    {
+      _text = text;
+      _resolutions = resolutions;
+    }
+  }
+
+  public class Resolution
+  {
+    ResolutionType _type;
+    public ResolutionType Type => _type;
+    object _change;
+    public object Change => _change;
+
+    public Resolution(ResolutionType type, object change)
+    {
+      _type = type;
+      _change = change;
+    }
+  }
+}
+
+public enum ResolutionType
+{
+  Health,
+  GainCard
+}
+
 public enum EventStepType
 {
   Text,
-  Reward
+  Question,
+  Resolution,
+  End,
 }
 
 public enum EventImage

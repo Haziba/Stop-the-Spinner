@@ -19,5 +19,6 @@ public static class SceneDataHandler
 
 public enum SceneDataKey
 {
-  Enemy
+  Enemy,
+  Event
 }

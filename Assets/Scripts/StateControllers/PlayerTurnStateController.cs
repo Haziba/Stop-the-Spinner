@@ -31,7 +31,7 @@ public class PlayerTurnStateController : TurnStateController
   {
     base.Start();
 
-    //DebugCard(CardName.DaggerThem, AgentStatusEffects.Focused, default(AgentStatusEffects));
+    //DebugCard(CardName.BiteThem, AgentStatusEffects.Focused, default(AgentStatusEffects));
   }
 
   public override void Update()

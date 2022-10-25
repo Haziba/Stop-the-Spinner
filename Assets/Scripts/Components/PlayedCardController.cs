@@ -7,9 +7,6 @@ public class PlayedCardController : MonoBehaviour
   CardName _cardName;
   GameObject _card;
 
-  public void Start() {}
-  public void Update() {}
-
   public void PlayCard(Agent agent, CardName cardName, GameObject previousCard)
   {
     _card = Instantiate(CardPrefab,

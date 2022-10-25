@@ -1,9 +1,5 @@
-using System;
-using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 
 public class TurnStateController : StateController
@@ -121,6 +117,8 @@ public class TurnStateController : StateController
   protected void StopSpinning()
   {
     var result = _spinner.GetComponent<SpinnerController>().StopSpinning();
+
+    Debug.Log(result);
 
     _cardEffect.ResolveSpinner(result);
 

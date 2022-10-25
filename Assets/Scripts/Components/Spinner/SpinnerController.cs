@@ -12,6 +12,8 @@ public class SpinnerController : MonoBehaviour
   public GameObject CritArea;
 
   float _spinSpeed;
+  float _hit;
+  float _crit;
 
   AgentStatusEffects _statusEffects;
 
@@ -23,7 +25,9 @@ public class SpinnerController : MonoBehaviour
   void Start()
   {
     _spinSpeed = 0f;
-    SetSegments(0.1f, 0.6f);
+    _hit = 0.1f;
+    _crit = 0.6f;
+    UpdateSegments();
   }
 
   // Update is called once per frame
@@ -41,20 +45,20 @@ public class SpinnerController : MonoBehaviour
     Arrow.transform.Rotate(new Vector3(0, 0, -_spinSpeed * Time.deltaTime));
   }
 
-  public void SetSegments(float hit, float crit)
+  public void UpdateSegments()
   {
-    HitArea.GetComponent<Image>().fillAmount = hit;
-    HitArea.GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, 180 * hit);
+    HitArea.GetComponent<Image>().fillAmount = _hit;
+    HitArea.GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, 180 * _hit);
 
-    CritArea.GetComponent<Image>().fillAmount = crit;
-    CritArea.GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, 180 * crit);
+    CritArea.GetComponent<Image>().fillAmount = _crit;
+    CritArea.GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, 180 * _crit);
 
     var edges = new List<float>();
 
     // Show Hit edge if not covered by Crit edge
-    if(hit + crit < 1)
-      edges.AddRange(new [] { -hit * 180, hit * 180 });
-    edges.AddRange(new [] { 180 - (crit * 180), 180 + (crit * 180) });
+    if(_hit + _crit < 1)
+      edges.AddRange(new [] { -_hit * 180, _hit * 180 });
+    edges.AddRange(new [] { 180 - (_crit * 180), 180 + (_crit * 180) });
 
     SetEdges(edges.ToArray());
   }
@@ -88,12 +92,14 @@ public class SpinnerController : MonoBehaviour
 
     SpinIntoxicationWheel();
 
-    _spinSpeed = 360f*multiplier;
+    _spinSpeed = 100f;//360f*multiplier;
   }
 
   public void UpdateConfig(SpinnerConfiguration config)
   {
-    SetSegments(config.Hit(), config.Crit());
+    _hit = config.Hit();
+    _crit = config.Crit();
+    UpdateSegments();
   }
 
   void SpinIntoxicationWheel()
@@ -114,9 +120,9 @@ public class SpinnerController : MonoBehaviour
 
     var direction = Arrow.transform.rotation.eulerAngles.z;
 
-    if(direction > 265 || direction < 90)
+    if (direction > 360 - (_hit * 180) || direction < (_hit * 180))
       return SpinnerResult.Hit;
-    if(direction < 192 && direction > 160)
+    if (direction < 180 + (_crit * 180) && direction > 180 - (_crit * 180))
       return SpinnerResult.Crit;
 
     return SpinnerResult.Miss;
@@ -124,37 +130,6 @@ public class SpinnerController : MonoBehaviour
 
   public bool IsSpinning()
   {
-    //Debug.Log(_spinSpeed);
     return _spinSpeed != 0f;
-  }
-}
-
-public enum SpinnerResult
-{
-  Hit,
-  Miss,
-  Crit
-}
-
-
-public class SpinnerConfiguration
-{
-  float _hit;
-  float _crit;
-
-  public SpinnerConfiguration(float hit, float crit)
-  {
-    _hit = hit;
-    _crit = crit;
-  }
-
-  public float Hit()
-  {
-    return _hit;
-  }
-
-  public float Crit()
-  {
-    return _crit;
   }
 }

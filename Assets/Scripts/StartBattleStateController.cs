@@ -11,6 +11,7 @@ public class StartBattleStateController  : StateController
   {
     DealCards();
     SetEnemy();
+    SetBackground();
   }
 
   public override void Update()
@@ -77,5 +78,11 @@ public class StartBattleStateController  : StateController
   Monster Monster()
   {
     return MonsterLibrary.Monsters[MonsterName()];
+  }
+  
+  void SetBackground()
+  {
+    var config = _context.Get<IContextObject>(ContextObjects.EnemyConfig) as EnemyConfig;
+    _context.Get<GameObject>(ContextObjects.Background).GetComponent<BackgroundController>().SetImage(config.BackgroundName);
   }
 }

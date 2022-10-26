@@ -20,10 +20,9 @@ public class TurnStateController : StateController
   protected GameObject _meHealthBar;
   protected GameObject _themHealthBar;
 
-  protected Vector2 _playedCardTarget;
-  protected Vector2 _playedCardOrigin;
-  protected Vector2 _spinnerTarget;
-  protected Vector2 _spinnerOrigin;
+  protected Vector3 _playedCardTarget;
+  protected Vector3 _spinnerTarget;
+  protected Vector3 _spinnerOrigin;
 
   protected AgentState _meState;
   protected AgentState _themState;

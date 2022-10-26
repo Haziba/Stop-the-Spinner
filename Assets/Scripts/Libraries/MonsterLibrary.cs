@@ -59,6 +59,20 @@ namespace Libraries
         {
           new ResolutionEventStep.Resolution(ResolutionType.GainCard, CardName.FocusMe)
         }
+      },
+      [MonsterName.Witch] = new Monster
+      {
+        Health = 6,
+        Deck = new []
+        {
+          CardName.DaggerThem,
+          CardName.DaggerThem,
+          CardName.SwordThem,
+          CardName.DistractThem,
+          CardName.IntoxicateThem,
+          CardName.IntoxicateThem,
+        },
+        MaxCardsInHand = 4
       }
     };
   }
@@ -67,7 +81,8 @@ namespace Libraries
   {
     Gronk,
     Flaps,
-    Sleppy
+    Sleppy,
+    Witch
   }
 
   public class Monster

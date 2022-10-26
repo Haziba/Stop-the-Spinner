@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +20,6 @@ public class SpinnerController : MonoBehaviour
   float _intoxicatedAccel;
   float _intoxicatedChangeCountdown;
 
-  // Start is called before the first frame update
   void Start()
   {
     _spinSpeed = 0f;
@@ -30,7 +28,6 @@ public class SpinnerController : MonoBehaviour
     UpdateSegments();
   }
 
-  // Update is called once per frame
   void Update()
   {
     if(IsSpinning() && _statusEffects.HasFlag(AgentStatusEffects.Intoxicated)) {

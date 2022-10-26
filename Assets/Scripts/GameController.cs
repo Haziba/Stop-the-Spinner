@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
   GameState? _gameState;
   IDictionary<GameState, IStateController> _stateControllers;
 
+  public GameObject Background;
+
   public GameObject PlayerHealthBar;
   public GameObject EnemyHealthBar;
 
@@ -43,13 +45,15 @@ public class GameController : MonoBehaviour
         [ContextObjects.EnemyPlayedCard] = EnemyPlayedCard,
 
         [ContextObjects.Enemy] = Enemy,
+        
+        [ContextObjects.Background] = Background,
       },
       new Dictionary<ContextObjects, Camera>(),
       new Dictionary<ContextObjects, IContextObject>
       {
         [ContextObjects.PlayerState] = new AgentState(10),
         [ContextObjects.EnemyState] = new AgentState(10),
-        [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Gronk),
+        [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Witch, WorldPathBackgroundName.OneWayPath),
       }
     );
 

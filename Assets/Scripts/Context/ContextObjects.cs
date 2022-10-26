@@ -18,4 +18,6 @@ public enum ContextObjects
   Enemy,
 
   EnemyConfig,
+  
+  Background
 }

@@ -1,9 +1,4 @@
-using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EnemyTurnStateController : TurnStateController
 {
@@ -17,10 +12,9 @@ public class EnemyTurnStateController : TurnStateController
     _playedCard = _context.Get<GameObject>(ContextObjects.EnemyPlayedCard);
     _meHealthBar = _context.Get<GameObject>(ContextObjects.EnemyHealthBar);
     _themHealthBar = _context.Get<GameObject>(ContextObjects.PlayerHealthBar);
-    _playedCardTarget = new Vector2(0, 1f);
-    _playedCardOrigin = new Vector2(0, 8f);
-    _spinnerTarget = new Vector2(0, 1f);
-    _spinnerOrigin = new Vector2(0, 8f);
+    _playedCardTarget = new Vector3(0, 1f, -5f);
+    _spinnerTarget = new Vector3(0, 1f, -6f);
+    _spinnerOrigin = new Vector3(0, 8f, -6f);
     _meState = _context.Get<IContextObject>(ContextObjects.EnemyState) as AgentState;
     _themState = _context.Get<IContextObject>(ContextObjects.PlayerState) as AgentState;
   }

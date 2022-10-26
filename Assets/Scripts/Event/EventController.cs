@@ -49,7 +49,7 @@ public class EventController : MonoBehaviour
     }
 
     _currentStepNumber = newStep;
-    _currentEventStep = EventLibrary.Details[_event].Steps[_currentStepNumber];
+    _currentEventStep = EventLibrary.Events[_event].Steps[_currentStepNumber];
     StartEventStep();
   }
 

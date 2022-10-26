@@ -10,39 +10,9 @@ class WorldPathController : MonoBehaviour
   public GameObject[] Arrows;
   public GameObject Background;
 
-  static MapData _mapData;
+  static MapData _mapData = State.WorldPath.MapData;
   static Vector2 _mapLocation = new Vector2(0, 0);
   static IList<Vector2> _pathTaken = new List<Vector2>();
-
-  public WorldPathController()
-  {
-    if(_mapData != null)
-      return;
-    var childPoints = new[] {
-        new MapPoint {
-          Event = PointEvent.Battle,
-          BackgroundName = WorldPathBackgroundName.OneWayPath
-        },
-        new MapPoint {
-          Event = PointEvent.Event,
-          BackgroundName = WorldPathBackgroundName.WitchHut
-        },
-      };
-    _mapData = new MapData
-    {
-      Points = new [] {
-        new [] {
-          new MapPoint {
-            Event = PointEvent.None,
-            Children = childPoints,
-            BackgroundName = WorldPathBackgroundName.TwoWayPath,
-            Visited = true
-          },
-        },
-        childPoints
-      }
-    };
-  }
 
   public void Start()
   {

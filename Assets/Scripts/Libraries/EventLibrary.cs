@@ -1,14 +1,11 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
 
 public static class EventLibrary
 {
-  static IDictionary<EventName, EventDetails> _details = new Dictionary<EventName, EventDetails> {
+  public static IDictionary<EventName, EventDetails> Events = new Dictionary<EventName, EventDetails> {
     [EventName.WitchHut] = WitchHut()
   };
-
-  public static IDictionary<EventName, EventDetails> Details => _details;
 
   static EventDetails WitchHut()
   {

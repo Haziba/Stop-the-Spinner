@@ -141,10 +141,6 @@ public class HandController : MonoBehaviour
 
     public void UpdateCounters()
     {
-      // todo: Hmm, feels bad man. Maybe two separate classes that inherit from this one instead
-      if(!PlayerHand)
-        return;
-
       DrawCounter.GetComponent<Text>().text = _drawPile.Count.ToString();
       DiscardCounter.GetComponent<Text>().text = _discardPile.Count.ToString();
     }

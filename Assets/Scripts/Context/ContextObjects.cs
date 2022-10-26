@@ -19,5 +19,11 @@ public enum ContextObjects
 
   EnemyConfig,
   
-  Background
+  Background,
+  
+  PlayerDrawPile,
+  PlayerDiscardPile,
+  
+  EnemyDrawPile,
+  EnemyDiscardPile,
 }

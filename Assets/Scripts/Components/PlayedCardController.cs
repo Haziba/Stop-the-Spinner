@@ -34,4 +34,9 @@ public class PlayedCardController : MonoBehaviour
   {
     return _cardName;
   }
+
+  public void HideCard()
+  {
+    _card.GetComponent<CardHandler>().HideCard();
+  }
 }

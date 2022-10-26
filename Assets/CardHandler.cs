@@ -62,4 +62,10 @@ public class CardHandler : MonoBehaviour
     HideAllCardImages();
     ShowCardBack();
   }
+
+  public void HideCard()
+  {
+    HideAllCardImages();
+    ShowCardBack();
+  }
 }

@@ -19,6 +19,8 @@ public class TurnStateController : StateController
   protected GameObject _playedCard;
   protected GameObject _meHealthBar;
   protected GameObject _themHealthBar;
+  protected GameObject _drawPile;
+  protected GameObject _discardPile;
 
   protected Vector3 _playedCardTarget;
   protected Vector3 _spinnerTarget;
@@ -136,16 +138,24 @@ public class TurnStateController : StateController
 
   public override void End()
   {
-    _hand.GetComponent<HandController>().DiscardCard(_playedCard.GetComponent<PlayedCardController>().CardName());
-    _playedCard.GetComponent<PlayedCardController>().RemoveCard();
-    _hand.GetComponent<HandController>().DrawCard();
   }
 
   void EndTurn()
   {
-    ChangeGameState(_themGameState);
+    var mySequence = DOTween.Sequence();
+    _playedCard.GetComponent<PlayedCardController>().HideCard();
+    mySequence.Append(_playedCard.transform.DOMove(_discardPile.transform.position, 0.5f));
+    mySequence.OnComplete(() =>
+      {
+        _hand.GetComponent<HandController>().DiscardCard(_playedCard.GetComponent<PlayedCardController>().CardName());
+        _playedCard.GetComponent<PlayedCardController>().RemoveCard();
+
+        _hand.GetComponent<HandController>().DrawCard();
+        ChangeGameState(_themGameState);
+      });
+    mySequence.Play();
   }
-  
+
   protected virtual void OnSpinnerInPosition() { }
   protected virtual void OnPlayedCardInPosition() { }
 

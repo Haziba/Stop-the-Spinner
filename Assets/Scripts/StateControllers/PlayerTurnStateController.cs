@@ -13,6 +13,8 @@ public class PlayerTurnStateController : TurnStateController
     _playedCard = _context.Get<GameObject>(ContextObjects.PlayerPlayedCard);
     _meHealthBar = _context.Get<GameObject>(ContextObjects.PlayerHealthBar);
     _themHealthBar = _context.Get<GameObject>(ContextObjects.EnemyHealthBar);
+    _drawPile = _context.Get<GameObject>(ContextObjects.PlayerDrawPile);
+    _discardPile = _context.Get<GameObject>(ContextObjects.PlayerDiscardPile);
     _playedCardTarget = new Vector3(0, -1f, -5f);
     _spinnerTarget = new Vector3(0, -1f, -6f);
     _spinnerOrigin = new Vector3(0, -8f, -6f);

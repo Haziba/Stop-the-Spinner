@@ -23,6 +23,12 @@ public class GameController : MonoBehaviour
   public GameObject PlayerPlayedCard;
   public GameObject EnemyPlayedCard;
 
+  public GameObject PlayerDrawPile;
+  public GameObject PlayerDiscardPile;
+
+  public GameObject EnemyDrawPile;
+  public GameObject EnemyDiscardPile;
+
   public GameObject Enemy;
 
   // Start is called before the first frame update
@@ -47,6 +53,12 @@ public class GameController : MonoBehaviour
         [ContextObjects.Enemy] = Enemy,
         
         [ContextObjects.Background] = Background,
+
+        [ContextObjects.PlayerDrawPile] = PlayerDrawPile,
+        [ContextObjects.PlayerDiscardPile] = PlayerDiscardPile,
+
+        [ContextObjects.EnemyDrawPile] = EnemyDrawPile,
+        [ContextObjects.EnemyDiscardPile] = EnemyDiscardPile,
       },
       new Dictionary<ContextObjects, Camera>(),
       new Dictionary<ContextObjects, IContextObject>

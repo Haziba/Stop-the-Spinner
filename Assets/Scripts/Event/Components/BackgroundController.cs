@@ -3,7 +3,7 @@ using System.Linq;
 
 public class BackgroundController : MonoBehaviour
 {
-  public void SetImage(WorldPathBackgroundName backgroundName)
+  public void SetImage(BackgroundName backgroundName)
   {
     HideAllImages();
     ShowImage(backgroundName);
@@ -16,7 +16,7 @@ public class BackgroundController : MonoBehaviour
     }
   }
 
-  void ShowImage(WorldPathBackgroundName backgroundName)
+  void ShowImage(BackgroundName backgroundName)
   {
     transform.Find(backgroundName.ToString()).gameObject.SetActive(true);;
   }

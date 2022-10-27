@@ -1,5 +1,7 @@
 /*using System;
 using System.IO;*/
+
+using System;
 using UnityEngine;
 
 public class MapDataController : MonoBehaviour
@@ -45,8 +47,13 @@ public class MapPoint
 {
   public PointEvent Event;
   public MapPoint[] Children;
-  public WorldPathBackgroundName BackgroundName;
+  public BackgroundName BackgroundName;
   public bool Visited;
+
+  public MapPoint()
+  {
+    Children = Array.Empty<MapPoint>();
+  }
 }
 
 public enum PointEvent

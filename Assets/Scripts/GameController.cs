@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
       {
         [ContextObjects.PlayerState] = new AgentState(10),
         [ContextObjects.EnemyState] = new AgentState(10),
-        [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Sleppy, WorldPathBackgroundName.OneWayPath),
+        [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Sleppy, BackgroundName.OneWayPath),
       }
     );
 

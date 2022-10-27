@@ -4,10 +4,10 @@ public class EnemyConfig : IContextObject
 {
   MonsterName _name;
   public MonsterName Name => _name;
-  WorldPathBackgroundName _backgroundName;
-  public WorldPathBackgroundName BackgroundName => _backgroundName;
+  BackgroundName _backgroundName;
+  public BackgroundName BackgroundName => _backgroundName;
 
-  public EnemyConfig(MonsterName name, WorldPathBackgroundName backgroundName)
+  public EnemyConfig(MonsterName name, BackgroundName backgroundName)
   {
     _name = name;
     _backgroundName = backgroundName;

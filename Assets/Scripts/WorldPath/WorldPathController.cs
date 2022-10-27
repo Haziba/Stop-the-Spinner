@@ -4,18 +4,22 @@ using System.Collections.Generic;
 using Libraries;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 class WorldPathController : MonoBehaviour
 {
   public GameObject[] Arrows;
   public GameObject Background;
 
-  static MapData _mapData = State.WorldPath.MapData;
+  static MapData _mapData;
   static Vector2 _mapLocation = new Vector2(0, 0);
   static IList<Vector2> _pathTaken = new List<Vector2>();
 
   public void Start()
   {
+    Random.InitState(5);
+    _mapData = State.WorldPath.MapData;
+    
     foreach(var arrow in Arrows)
       arrow.GetComponent<ArrowController>().OnArrowClicked += ArrowClicked;
 
@@ -24,7 +28,7 @@ class WorldPathController : MonoBehaviour
 
   MapPoint CurrentMapPoint()
   {
-    return _mapData.Points[(int)_mapLocation.x][(int)_mapLocation.y];
+    return _mapData.Points[(int)_mapLocation.y][(int)_mapLocation.x];
   }
 
   void RefreshScene()
@@ -34,9 +38,25 @@ class WorldPathController : MonoBehaviour
     foreach(var arrow in Arrows)
     {
       if(arrow.GetComponent<ArrowController>().PathIndex < 0) {
-        arrow.SetActive(_mapLocation.x > 0);
+        arrow.SetActive(_mapLocation.y > 0);
       } else {
         arrow.SetActive(CurrentMapPoint().Children != null);
+        switch (CurrentMapPoint().Children.Length)
+        {
+          case 0:
+            arrow.SetActive(false);
+            break; 
+          case 1:
+            arrow.SetActive(arrow.GetComponent<ArrowController>().PathIndex == 1);
+            break;
+          case 2:
+            // 0 or 2
+            arrow.SetActive(arrow.GetComponent<ArrowController>().PathIndex % 2 == 0);
+            break;
+          case 3:
+            arrow.SetActive(true);
+            break;
+        }
       }
     }
   }
@@ -47,12 +67,14 @@ class WorldPathController : MonoBehaviour
     if(nextIndex >= 0)
     {
       _pathTaken.Add(_mapLocation);
-      _mapLocation = new Vector2(nextIndex, _mapLocation.y+1);
+      //todo: not sure if this works, that might not always be the correct child
+      // consider storing correct child or storing proper index number in each arrow
+      //todo: Also this is a mess
+      _mapLocation = new Vector2(Array.IndexOf(_mapData.Points[(int)_mapLocation.y+1], CurrentMapPoint().Children[Math.Min(CurrentMapPoint().Children.Length - 1, nextIndex)]), _mapLocation.y+1);
     } else {
       _mapLocation = _pathTaken.Last();
       _pathTaken.Remove(_mapLocation);
     }
-    Debug.Log(_mapLocation);
     var newPoint = _mapData.Points[(int)_mapLocation.y][(int)_mapLocation.x];
 
     if(newPoint.Visited) {
@@ -67,7 +89,7 @@ class WorldPathController : MonoBehaviour
           SceneManager.LoadScene("BattleScene");
           break;
         case PointEvent.Event:
-          SceneDataHandler.UpdateData(new Dictionary<SceneDataKey, object> { [SceneDataKey.Event] = new EventConfig(EventName.WitchHut, WorldPathBackgroundName.WitchHut) });
+          SceneDataHandler.UpdateData(new Dictionary<SceneDataKey, object> { [SceneDataKey.Event] = new EventConfig(EventName.WitchHut, BackgroundName.WitchHut) });
           SceneManager.LoadScene("EventScene");
           break;
       }

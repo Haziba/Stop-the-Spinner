@@ -85,7 +85,7 @@ class WorldPathController : MonoBehaviour
       switch(newPoint.Event)
       {
         case PointEvent.Battle:
-          SceneDataHandler.UpdateData(new Dictionary<SceneDataKey, object> { [SceneDataKey.Enemy] = new EnemyConfig(MonsterName.Witch, newPoint.BackgroundName) });
+          SceneDataHandler.UpdateData(new Dictionary<SceneDataKey, object> { [SceneDataKey.Enemy] = new EnemyConfig(newPoint.MonsterName, newPoint.BackgroundName) });
           SceneManager.LoadScene("BattleScene");
           break;
         case PointEvent.Event:

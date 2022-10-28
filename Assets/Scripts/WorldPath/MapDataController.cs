@@ -2,6 +2,7 @@
 using System.IO;*/
 
 using System;
+using Libraries;
 using UnityEngine;
 
 public class MapDataController : MonoBehaviour
@@ -48,6 +49,7 @@ public class MapPoint
   public PointEvent Event;
   public MapPoint[] Children;
   public BackgroundName BackgroundName;
+  public MonsterName MonsterName;
   public bool Visited;
 
   public MapPoint()

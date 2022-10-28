@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Libraries;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -23,7 +24,7 @@ namespace State
     static void InitMapData()
     {
       var newMapPoints =
-        Enumerable.Range(0, 7).Select(num => new List<MapPoint>
+        Enumerable.Range(0, 4/*7*/).Select(num => new List<MapPoint>
         {
           new MapPoint()
         }).ToArray();
@@ -54,12 +55,11 @@ namespace State
           newMapPoints[i][j].Children = children[j].ToArray();
       }
 
-      foreach (var mapPoint in newMapPoints.SelectMany(nMP => nMP))
+      var allMapPoints = newMapPoints.SelectMany(nMP => nMP).ToArray();
+
+      foreach (var mapPoint in allMapPoints)
       {
-        mapPoint.Visited = true;
-        
-        if(mapPoint.Children == null)
-          Debug.Log(mapPoint);
+        mapPoint.Visited = false;
 
         switch (mapPoint.Children.Length)
         {
@@ -78,6 +78,36 @@ namespace State
         }
       }
 
+      var eventsToDistribute = new Dictionary<PointEvent, int>
+      {
+        [PointEvent.Event] = 3,
+        [PointEvent.Battle] = 4
+      };
+
+      //todo: Big nice easy refactor jobbie to be done here
+      var availableMapPoints = allMapPoints.Where(mP => mP.Event == PointEvent.None && !mP.Children.Any()).ToList();
+      availableMapPoints.Shuffle();
+      for (var i = 0; i < 3; i++)
+      {
+        availableMapPoints[i].Visited = false;
+        availableMapPoints[i].Event = PointEvent.Event;
+        availableMapPoints[i].BackgroundName = BackgroundName.WitchHut;
+      }
+
+      availableMapPoints = allMapPoints.Where(mP => mP.Event == PointEvent.None).ToList();
+      availableMapPoints.Shuffle();
+      var mapPointIndex = 0;
+      foreach (MonsterName monsterName in Enum.GetValues(typeof(MonsterName)))
+      {
+        availableMapPoints[mapPointIndex].Visited = false;
+        availableMapPoints[mapPointIndex].Event = PointEvent.Battle;
+        availableMapPoints[mapPointIndex].MonsterName = monsterName;
+        mapPointIndex++;
+      }
+
+      // todo: Gotta be a better way to make sure the first point doesn't have anything on it
+      newMapPoints.First().First().Event = PointEvent.None;
+      
       _mapData = new MapData
       {
         Points = newMapPoints.Select(layer => layer.ToArray()).ToArray()

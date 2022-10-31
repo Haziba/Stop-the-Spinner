@@ -119,8 +119,6 @@ public class TurnStateController : StateController
   {
     var result = _spinner.GetComponent<SpinnerController>().StopSpinning();
 
-    Debug.Log(result);
-
     _cardEffect.ResolveSpinner(result);
 
     _countdowns.Add(new HUtilities.Countdown(1f, () => {
@@ -142,6 +140,12 @@ public class TurnStateController : StateController
 
   void EndTurn()
   {
+    if (!_meState.Alive() || !_themState.Alive())
+    {
+      ChangeGameState(GameState.EndBattle);
+      return;
+    }
+    
     var mySequence = DOTween.Sequence();
     _playedCard.GetComponent<PlayedCardController>().HideCard();
     mySequence.Append(_playedCard.transform.DOMove(_discardPile.transform.position, 0.5f));

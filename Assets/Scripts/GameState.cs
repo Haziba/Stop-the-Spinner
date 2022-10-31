@@ -2,5 +2,6 @@ public enum GameState
 {
   StartBattle,
   PlayerTurn,
-  EnemyTurn
+  EnemyTurn,
+  EndBattle
 }

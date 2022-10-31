@@ -64,7 +64,7 @@ public class GameController : MonoBehaviour
       new Dictionary<ContextObjects, IContextObject>
       {
         [ContextObjects.PlayerState] = new AgentState(10),
-        [ContextObjects.EnemyState] = new AgentState(10),
+        [ContextObjects.EnemyState] = new AgentState(MonsterLibrary.Monsters[((EnemyConfig)sceneData[SceneDataKey.Enemy]).Name].Health),
         [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Sleppy, BackgroundName.OneWayPath),
       }
     );
@@ -73,6 +73,7 @@ public class GameController : MonoBehaviour
       [GameState.StartBattle] = new StartBattleStateController(context),
       [GameState.PlayerTurn] = new PlayerTurnStateController(context),
       [GameState.EnemyTurn] = new EnemyTurnStateController(context),
+      [GameState.EndBattle] = new EndBattleStateController(context),
     };
 
     SwitchGameState(GameState.StartBattle);

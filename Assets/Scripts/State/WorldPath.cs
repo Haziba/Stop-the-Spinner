@@ -59,7 +59,7 @@ namespace State
 
       foreach (var mapPoint in allMapPoints)
       {
-        mapPoint.Visited = false;
+        mapPoint.Visited = true;
 
         switch (mapPoint.Children.Length)
         {
@@ -77,12 +77,6 @@ namespace State
             break;
         }
       }
-
-      var eventsToDistribute = new Dictionary<PointEvent, int>
-      {
-        [PointEvent.Event] = 3,
-        [PointEvent.Battle] = 4
-      };
 
       //todo: Big nice easy refactor jobbie to be done here
       var availableMapPoints = allMapPoints.Where(mP => mP.Event == PointEvent.None && !mP.Children.Any()).ToList();

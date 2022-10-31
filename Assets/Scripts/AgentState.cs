@@ -73,6 +73,11 @@ public class AgentState : IContextObject
       return _turns <= 0;
     }
   }
+
+  public bool Alive()
+  {
+    return _health > 0;
+  }
 }
 
 [Flags]

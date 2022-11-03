@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBarController : MonoBehaviour
 {
-    public GameObject Background;
+    public GameObject[] Backgrounds;
 
     int _health = 5;
 
@@ -21,7 +19,16 @@ public class HealthBarController : MonoBehaviour
 
     void UpdateHealthbar()
     {
-        Background.GetComponent<Image>().fillAmount = _health / 10f;
+        Debug.Log("Update health bar - " + _health);
+        for (var i = 0; i < Backgrounds.Length; i++)
+        {
+            if (_health >= 10 * (i + 1))
+                Backgrounds[i].GetComponent<Image>().fillAmount = 1;
+            else if (_health <= 10 * (i))
+                Backgrounds[i].GetComponent<Image>().fillAmount = 0;
+            else
+                Backgrounds[i].GetComponent<Image>().fillAmount = (_health % 10) / 10f;
+        }
     }
 
     public void SetHealth(int health)

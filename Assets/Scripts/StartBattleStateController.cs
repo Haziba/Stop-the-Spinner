@@ -48,7 +48,7 @@ public class StartBattleStateController  : StateController
 
   void SetPlayer()
   {
-    _context.Get<GameObject>(ContextObjects.EnemyHealthBar).GetComponent<HealthBarController>().SetHealth(10);
+    _context.Get<GameObject>(ContextObjects.PlayerHealthBar).GetComponent<HealthBarController>().SetHealth(10);
     _context.Get<GameObject>(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(3);
   }
   

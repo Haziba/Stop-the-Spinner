@@ -26,4 +26,7 @@ public enum ContextObjects
   
   EnemyDrawPile,
   EnemyDiscardPile,
+  
+  PlayerManaCounter,
+  EnemyManaCounter,
 }

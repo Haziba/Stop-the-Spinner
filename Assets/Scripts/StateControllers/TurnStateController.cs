@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using DG.Tweening;
+using Libraries;
 
 public class TurnStateController : StateController
 {
@@ -21,6 +23,7 @@ public class TurnStateController : StateController
   protected GameObject _themHealthBar;
   protected GameObject _drawPile;
   protected GameObject _discardPile;
+  protected GameObject _meManaCounter;
 
   protected Vector3 _playedCardTarget;
   protected Vector3 _spinnerTarget;
@@ -38,6 +41,12 @@ public class TurnStateController : StateController
   {
     ChangeGameState(_meGameState);
     _innerState = InnerState.ChoosingCard;
+
+    _meState.RecoverMana();
+    _meManaCounter.GetComponent<ManaCounterController>()
+      .UpdateMana(_meState);
+    
+    _hand.GetComponent<HandController>().DrawCard();
   }
 
   public override void Update()
@@ -65,7 +74,7 @@ public class TurnStateController : StateController
   protected void DebugCard(CardName cardName, AgentStatusEffects meState, AgentStatusEffects themState)
   {
     var handController = _hand.GetComponent<HandController>();
-    var cardToPlay = handController.CardAt(UnityEngine.Random.Range(0, handController.TotalCards()-1));
+    var cardToPlay = handController.CardAt(Random.Range(0, handController.TotalCards()-1));
     handController.RemoveCard(cardToPlay);
 
     _playedCard.GetComponent<PlayedCardController>().PlayCard(Agent.Player, cardName, cardToPlay.Image());
@@ -86,9 +95,18 @@ public class TurnStateController : StateController
       });
   }
 
+  protected int[] AvailableCardIndexes()
+  {
+    var handController = _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>();
+    return handController.AvailableCardIndexes(_meState);
+  }
+  
   void DoCard()
   {
     PerformCard(_playedCard.GetComponent<PlayedCardController>().CardName());
+    _meState.SpendMana(CardLibrary.Cards[_playedCard.GetComponent<PlayedCardController>().CardName()].ManaCost);
+    _meManaCounter.GetComponent<ManaCounterController>()
+      .UpdateMana(_meState);
   }
 
   void PerformCard(CardName cardName)
@@ -154,7 +172,6 @@ public class TurnStateController : StateController
         _hand.GetComponent<HandController>().DiscardCard(_playedCard.GetComponent<PlayedCardController>().CardName());
         _playedCard.GetComponent<PlayedCardController>().RemoveCard();
 
-        _hand.GetComponent<HandController>().DrawCard();
         ChangeGameState(_themGameState);
       });
     mySequence.Play();

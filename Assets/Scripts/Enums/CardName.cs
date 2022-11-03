@@ -7,4 +7,6 @@ public enum CardName
     DistractThem,
     FocusMe,
     IntoxicateThem,
+    ShieldBashThem,
+    RaiseShield
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerTurnStateController : TurnStateController
@@ -15,6 +16,7 @@ public class PlayerTurnStateController : TurnStateController
     _themHealthBar = _context.Get<GameObject>(ContextObjects.EnemyHealthBar);
     _drawPile = _context.Get<GameObject>(ContextObjects.PlayerDrawPile);
     _discardPile = _context.Get<GameObject>(ContextObjects.PlayerDiscardPile);
+    _meManaCounter = _context.Get<GameObject>(ContextObjects.PlayerManaCounter);
     _playedCardTarget = new Vector3(0, -1f, -5f);
     _spinnerTarget = new Vector3(0, -1f, -6f);
     _spinnerOrigin = new Vector3(0, -8f, -6f);
@@ -23,10 +25,15 @@ public class PlayerTurnStateController : TurnStateController
 
     _hand.GetComponent<HandController>().OnCardClicked += OnCardClicked;
   }
-
   public override void Start()
   {
     base.Start();
+    
+    if (!AvailableCardIndexes().Any())
+    {
+      ChangeGameState(_themGameState);
+      return;
+    }
 
     //DebugCard(CardName.BiteThem, AgentStatusEffects.Focused, default(AgentStatusEffects));
   }
@@ -42,10 +49,10 @@ public class PlayerTurnStateController : TurnStateController
 
   public void OnCardClicked(object sender, EventArgs e)
   {
-    if(!IsActiveState() || _innerState != InnerState.ChoosingCard)
-      return;
-
     var cardClickedEvent = e as CardClickedEventArgs;
+
+    if(!IsActiveState() || _innerState != InnerState.ChoosingCard || !_meState.CanPlayCard(cardClickedEvent.CardName()))
+      return;
 
     _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Player, cardClickedEvent.CardName(), cardClickedEvent.HandCard().Image());
     _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().RemoveCard(cardClickedEvent.HandCard());

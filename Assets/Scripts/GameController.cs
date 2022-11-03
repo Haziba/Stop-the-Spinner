@@ -29,12 +29,20 @@ public class GameController : MonoBehaviour
   public GameObject EnemyDrawPile;
   public GameObject EnemyDiscardPile;
 
+  public GameObject PlayerManaCounter;
+  public GameObject EnemyManaCounter;
+
   public GameObject Enemy;
 
   // Start is called before the first frame update
   void Start()
   {
-    var sceneData = SceneDataHandler.GetData();
+    var sceneData = SceneDataHandler.GetData() ?? new Dictionary<SceneDataKey, object>
+    {
+      [SceneDataKey.Enemy] = new EnemyConfig(MonsterName.Trupple, BackgroundName.DeadEnd)
+    };
+
+    var monster = MonsterLibrary.Monsters[((EnemyConfig)sceneData[SceneDataKey.Enemy]).Name];
 
     var context = new ContextManager(
       new Dictionary<ContextObjects, GameObject> {
@@ -59,12 +67,15 @@ public class GameController : MonoBehaviour
 
         [ContextObjects.EnemyDrawPile] = EnemyDrawPile,
         [ContextObjects.EnemyDiscardPile] = EnemyDiscardPile,
+        
+        [ContextObjects.PlayerManaCounter] = PlayerManaCounter,
+        [ContextObjects.EnemyManaCounter] = EnemyManaCounter,
       },
       new Dictionary<ContextObjects, Camera>(),
       new Dictionary<ContextObjects, IContextObject>
       {
-        [ContextObjects.PlayerState] = new AgentState(10),
-        [ContextObjects.EnemyState] = new AgentState(MonsterLibrary.Monsters[((EnemyConfig)sceneData[SceneDataKey.Enemy]).Name].Health),
+        [ContextObjects.PlayerState] = new AgentState(10, 3),
+        [ContextObjects.EnemyState] = new AgentState(monster.Health, monster.Mana),
         [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Sleppy, BackgroundName.OneWayPath),
       }
     );

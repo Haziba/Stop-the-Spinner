@@ -1,17 +1,25 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Libraries;
+using UnityEngine;
 
 public class AgentState : IContextObject
 {
   IList<StatusEffect> _statusEffects;
   int _health;
 
-  public AgentState(int health)
+  int _initialMana;
+  int _mana;
+
+  public AgentState(int health, int mana)
   {
     _statusEffects = new List<StatusEffect>();
     _health = health;
+    _initialMana = mana;
+    _mana = mana;
+
+    Debug.Log("Mana: " + _mana);
   }
 
   public void NextTurn()
@@ -37,6 +45,22 @@ public class AgentState : IContextObject
   public void AddEffect(AgentStatusEffects statusEffect, int turns)
   {
     _statusEffects.Add(new StatusEffect(statusEffect, turns));
+  }
+
+  public int Mana()
+  {
+    return _mana;
+  }
+
+  public void ResetMana()
+  {
+    _mana = _initialMana;
+  }
+
+  public void SpendMana(int mana)
+  {
+    Debug.Log("Have " + _mana + ", Spend " + mana);
+    _mana -= mana;
   }
 
   public AgentStatusEffects StatusEffects()
@@ -77,6 +101,18 @@ public class AgentState : IContextObject
   public bool Alive()
   {
     return _health > 0;
+  }
+
+  public bool CanPlayCard(CardName cardName)
+  {
+    var enoughMana = Mana() >= CardLibrary.Cards[cardName].ManaCost;
+    
+    return enoughMana;
+  }
+
+  public void RecoverMana()
+  {
+    _mana = Math.Min(_mana + 1, _initialMana);
   }
 }
 

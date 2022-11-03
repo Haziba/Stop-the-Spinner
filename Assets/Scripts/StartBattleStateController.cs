@@ -10,6 +10,7 @@ public class StartBattleStateController  : StateController
   public override void Start()
   {
     DealCards();
+    SetPlayer();
     SetEnemy();
     SetBackground();
   }
@@ -45,10 +46,17 @@ public class StartBattleStateController  : StateController
     ChangeGameState(GameState.PlayerTurn);
   }
 
+  void SetPlayer()
+  {
+    _context.Get<GameObject>(ContextObjects.EnemyHealthBar).GetComponent<HealthBarController>().SetHealth(10);
+    _context.Get<GameObject>(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(3);
+  }
+  
   void SetEnemy()
   {
     SetEnemyImage(MonsterName());
     _context.Get<GameObject>(ContextObjects.EnemyHealthBar).GetComponent<HealthBarController>().SetHealth(Monster().Health);
+    _context.Get<GameObject>(ContextObjects.EnemyManaCounter).GetComponent<ManaCounterController>().Init(Monster().Mana);
   }
 
   public void SetEnemyImage(MonsterName monsterName)

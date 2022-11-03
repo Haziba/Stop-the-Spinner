@@ -9,6 +9,7 @@ namespace Libraries
       [MonsterName.Gronk] = new Monster
       {
         Health = 6,
+        Mana = 2,
         Deck = new[]
         {
           CardName.AxeThem,
@@ -27,6 +28,7 @@ namespace Libraries
       [MonsterName.Flaps] = new Monster
       {
         Health = 4,
+        Mana = 1,
         Deck = new []
         {
           CardName.DaggerThem,
@@ -45,6 +47,7 @@ namespace Libraries
       [MonsterName.Sleppy] = new Monster
       {
         Health = 10,
+        Mana = 3,
         Deck = new []
         {
           CardName.BiteThem,
@@ -63,6 +66,7 @@ namespace Libraries
       [MonsterName.Witch] = new Monster
       {
         Health = 6,
+        Mana = 3,
         Deck = new []
         {
           CardName.DaggerThem,
@@ -71,6 +75,21 @@ namespace Libraries
           CardName.DistractThem,
           CardName.IntoxicateThem,
           CardName.IntoxicateThem,
+        },
+        MaxCardsInHand = 4
+      },
+      [MonsterName.Trupple] = new Monster
+      {
+        Health = 15,
+        Mana = 2,
+        Deck = new []
+        {
+          CardName.ShieldBashThem,
+          CardName.ShieldBashThem,
+          CardName.ShieldBashThem,
+          CardName.DistractThem,
+          CardName.RaiseShield,
+          CardName.RaiseShield,
         },
         MaxCardsInHand = 4
       }
@@ -82,12 +101,14 @@ namespace Libraries
     Gronk,
     Flaps,
     Sleppy,
-    Witch
+    Witch,
+    Trupple
   }
 
   public class Monster
   {
     public int Health { get; set;  }
+    public int Mana { get; set; }
     public CardName[] Deck { get; set; }
     public int MaxCardsInHand { get; set;  }
     public ResolutionEventStep.Resolution[] Resolutions { get; set; }

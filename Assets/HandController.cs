@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Libraries;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -63,7 +64,7 @@ public class HandController : MonoBehaviour
       if(_handCards.Count == 0)
         Shuffle();
 
-      for(var i = 0; i < _maxCardsInHand; i++)
+      for(var i = 0; i < _maxCardsInHand - 1; i++)
         DrawCard();
     }
 
@@ -74,6 +75,9 @@ public class HandController : MonoBehaviour
           Shuffle();
         else
           return;
+
+      if (_handCards.Count >= _maxCardsInHand)
+        return;
       
       AddCard(_drawPile.First());
       _drawPile.RemoveAt(0);
@@ -143,5 +147,15 @@ public class HandController : MonoBehaviour
     {
       DrawCounter.GetComponent<Text>().text = _drawPile.Count.ToString();
       DiscardCounter.GetComponent<Text>().text = _discardPile.Count.ToString();
+    }
+
+    // todo: Maybe agentState should live elsewhere
+    public int[] AvailableCardIndexes(AgentState agentState)
+    {
+      if (!_handCards.Any())
+        return Array.Empty<int>();
+      
+      return Enumerable.Range(0, _handCards.Count - 1).Where(i => agentState.CanPlayCard(_handCards[i].CardName()))
+        .ToArray();
     }
 }

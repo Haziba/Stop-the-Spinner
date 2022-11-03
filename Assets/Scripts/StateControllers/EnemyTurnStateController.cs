@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class EnemyTurnStateController : TurnStateController
@@ -14,6 +15,7 @@ public class EnemyTurnStateController : TurnStateController
     _themHealthBar = _context.Get<GameObject>(ContextObjects.PlayerHealthBar);
     _drawPile = _context.Get<GameObject>(ContextObjects.EnemyDrawPile);
     _discardPile = _context.Get<GameObject>(ContextObjects.EnemyDiscardPile);
+    _meManaCounter = _context.Get<GameObject>(ContextObjects.EnemyManaCounter);
     _playedCardTarget = new Vector3(0, 1f, -5f);
     _spinnerTarget = new Vector3(0, 1f, -6f);
     _spinnerOrigin = new Vector3(0, 8f, -6f);
@@ -23,9 +25,15 @@ public class EnemyTurnStateController : TurnStateController
 
   public override void Start()
   {
-    _countdowns.Add(new HUtilities.Countdown(1f, PlayCard));
-
     base.Start();
+    
+    if (!AvailableCardIndexes().Any())
+    {
+      ChangeGameState(_themGameState);
+      return;
+    }
+
+    _countdowns.Add(new HUtilities.Countdown(1f, PlayCard));
   }
 
   protected override void OnPlayedCardInPosition()
@@ -42,7 +50,9 @@ public class EnemyTurnStateController : TurnStateController
   void PlayCard()
   {
     var handController = _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>();
-    var cardToPlay = handController.CardAt(UnityEngine.Random.Range(0, handController.TotalCards()-1));
+    var availableCardIndexes = AvailableCardIndexes();
+    var cardToPlay = handController.CardAt(availableCardIndexes[Random.Range(0, availableCardIndexes.Length-1)]);
+    
     handController.RemoveCard(cardToPlay);
 
     _context.Get<GameObject>(ContextObjects.EnemyPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Enemy, cardToPlay.CardName(), cardToPlay.Image());

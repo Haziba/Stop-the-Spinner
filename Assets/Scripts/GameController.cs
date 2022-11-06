@@ -34,6 +34,9 @@ public class GameController : MonoBehaviour
   public GameObject PlayerManaCounter;
   public GameObject EnemyManaCounter;
 
+  public GameObject PlayerArmourCounter;
+  public GameObject EnemyArmourCounter;
+
   public GameObject Enemy;
 
   public GameObject DamageBallPrefab;
@@ -80,6 +83,9 @@ public class GameController : MonoBehaviour
         [ContextObjects.PlayerManaCounter] = PlayerManaCounter,
         [ContextObjects.EnemyManaCounter] = EnemyManaCounter,
         
+        [ContextObjects.PlayerArmourCounter] = PlayerArmourCounter,
+        [ContextObjects.EnemyArmourCounter] = EnemyArmourCounter,
+        
         [ContextObjects.DamageBallPrefab] = DamageBallPrefab,
         [ContextObjects.PlayerDamageAnchor] = PlayerDamageAnchor,
       },
@@ -89,8 +95,8 @@ public class GameController : MonoBehaviour
       },
       new Dictionary<ContextObjects, IContextObject>
       {
-        [ContextObjects.PlayerState] = new AgentState(10, 3),
-        [ContextObjects.EnemyState] = new AgentState(monster.Health, monster.Mana),
+        [ContextObjects.PlayerState] = new AgentState(10, 0, 3),
+        [ContextObjects.EnemyState] = new AgentState(monster.Health, monster.Armour, monster.Mana),
         [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Sleppy, BackgroundName.OneWayPath),
       }
     );

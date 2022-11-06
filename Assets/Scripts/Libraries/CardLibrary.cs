@@ -100,7 +100,7 @@ namespace Libraries
       }),
       [CardName.RaiseShield] = new Card(1, (meState, themState) =>
       {
-        Debug.Log("Better implement this bad boy");
+        meState.SetArmour(meState.Armour() + 2);
         return new NoOutcome();
       })
     };

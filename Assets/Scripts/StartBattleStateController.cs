@@ -49,6 +49,7 @@ public class StartBattleStateController  : StateController
   void SetPlayer()
   {
     _context.Get<GameObject>(ContextObjects.PlayerHealthBar).GetComponent<HealthBarController>().SetHealth(10);
+    _context.Get<GameObject>(ContextObjects.PlayerArmourCounter).GetComponent<ArmourCounterController>().Init(0);
     _context.Get<GameObject>(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(3);
   }
   
@@ -56,6 +57,7 @@ public class StartBattleStateController  : StateController
   {
     SetEnemyImage(MonsterName());
     _context.Get<GameObject>(ContextObjects.EnemyHealthBar).GetComponent<HealthBarController>().SetHealth(Monster().Health);
+    _context.Get<GameObject>(ContextObjects.EnemyArmourCounter).GetComponent<ArmourCounterController>().Init(Monster().Armour);
     _context.Get<GameObject>(ContextObjects.EnemyManaCounter).GetComponent<ManaCounterController>().Init(Monster().Mana);
   }
 

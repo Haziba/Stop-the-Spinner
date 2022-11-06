@@ -109,6 +109,7 @@ namespace Libraries
   {
     public int Health { get; set;  }
     public int Mana { get; set; }
+    public int Armour { get; set; }
     public CardName[] Deck { get; set; }
     public int MaxCardsInHand { get; set;  }
     public ResolutionEventStep.Resolution[] Resolutions { get; set; }

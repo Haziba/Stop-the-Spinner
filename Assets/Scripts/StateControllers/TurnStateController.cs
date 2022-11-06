@@ -25,6 +25,8 @@ public class TurnStateController : StateController
   protected GameObject _discardPile;
   protected GameObject _meManaCounter;
   protected GameObject _themDamageAnchor;
+  protected GameObject _meArmourCounter;
+  protected GameObject _themArmourCounter;
 
   protected Vector3 _playedCardTarget;
   protected Vector3 _spinnerTarget;
@@ -113,8 +115,12 @@ public class TurnStateController : StateController
   void PerformCard(CardName cardName)
   {
     // todo: Feels janky, maybe the Played Card Name should be held in this class instead idk
-    _cardEffect = new PerformCardEffect(cardName, _meHealthBar, _themHealthBar, _meState, _themState);
+    _cardEffect = new PerformCardEffect(cardName, _meHealthBar, _themHealthBar, _meArmourCounter, _themArmourCounter, _meState, _themState);
     var performOutcome = _cardEffect.Perform();
+
+    // todo: Now this bit is DEFINITELY janky
+    _meArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_meState.Armour());
+    _themArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_themState.Armour());
 
     switch(performOutcome.Outcome())
     {

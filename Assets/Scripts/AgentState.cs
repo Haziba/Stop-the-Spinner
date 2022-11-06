@@ -8,14 +8,16 @@ public class AgentState : IContextObject
 {
   IList<StatusEffect> _statusEffects;
   int _health;
+  int _armour;
 
   int _initialMana;
   int _mana;
 
-  public AgentState(int health, int mana)
+  public AgentState(int health, int armour, int mana)
   {
     _statusEffects = new List<StatusEffect>();
     _health = health;
+    _armour = armour;
     _initialMana = mana;
     _mana = mana;
 
@@ -34,12 +36,29 @@ public class AgentState : IContextObject
 
   public void TakeDamage(int damage)
   {
-    _health -= damage;
+    if (damage < _armour)
+    {
+      _armour -= damage;
+      return;
+    }
+    
+    _health -= damage - _armour;
+    _armour = 0;
   }
 
   public int Health()
   {
     return _health;
+  }
+
+  public void SetArmour(int armour)
+  {
+    _armour = armour;
+  }
+  
+  public int Armour()
+  {
+    return _armour;
   }
 
   public void AddEffect(AgentStatusEffects statusEffect, int turns)

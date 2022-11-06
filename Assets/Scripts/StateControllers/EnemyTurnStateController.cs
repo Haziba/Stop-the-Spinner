@@ -16,6 +16,7 @@ public class EnemyTurnStateController : TurnStateController
     _drawPile = _context.Get<GameObject>(ContextObjects.EnemyDrawPile);
     _discardPile = _context.Get<GameObject>(ContextObjects.EnemyDiscardPile);
     _meManaCounter = _context.Get<GameObject>(ContextObjects.EnemyManaCounter);
+    _themDamageAnchor = _context.Get<GameObject>(ContextObjects.PlayerDamageAnchor);
     _playedCardTarget = new Vector3(0, 1f, -5f);
     _spinnerTarget = new Vector3(0, 1f, -6f);
     _spinnerOrigin = new Vector3(0, 8f, -6f);

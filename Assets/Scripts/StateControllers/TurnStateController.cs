@@ -24,6 +24,7 @@ public class TurnStateController : StateController
   protected GameObject _drawPile;
   protected GameObject _discardPile;
   protected GameObject _meManaCounter;
+  protected GameObject _themDamageAnchor;
 
   protected Vector3 _playedCardTarget;
   protected Vector3 _spinnerTarget;
@@ -139,12 +140,39 @@ public class TurnStateController : StateController
 
     _cardEffect.ResolveSpinner(result);
 
-    _countdowns.Add(new HUtilities.Countdown(1f, () => {
+    if (result != SpinnerResult.Miss)
+    {
+      var damageBall = _context.Get<GameObject>(ContextObjects.Instantiator).GetComponent<InitiatorController>()
+        .Instantiate(_context.Get<GameObject>(ContextObjects.DamageBallPrefab));
+      //todo: Refactor
+      damageBall.GetComponent<DamageBallController>().SetImage(_playedCard.GetComponent<PlayedCardController>().CardName());
+      damageBall.transform.position = _spinner.transform.position + new Vector3(0, 0, -2f);
+      damageBall.transform
+        .DOMove(new Vector3(_themDamageAnchor.transform.position.x, _themDamageAnchor.transform.position.y, damageBall.transform.position.z), 0.5f)
+        .SetEase(Ease.InExpo)
+        .OnComplete(() =>
+        {
+          _context.Get<Camera>(ContextObjects.Camera).GetComponent<CameraController>().Shake(0.5f, 1f, () =>
+          {
+            _context.Get<GameObject>(ContextObjects.Instantiator).GetComponent<InitiatorController>().Destroy(damageBall);
+            HideSpinner();
+          });
+      });
+    }
+    else
+      HideSpinner();
+  }
+
+  void HideSpinner()
+  {
+    var hideSpinnerCountdown = new HUtilities.Countdown(1f, () =>
+    {
       _innerState = InnerState.SpinnerGoingOut;
 
       _spinner.transform.DOMove(_spinnerOrigin, 0.5f)
         .OnComplete(EndTurn);
-    }));
+    });
+    _countdowns.Add(hideSpinnerCountdown);
   }
 
   public bool SpinnerSpinning()
@@ -164,17 +192,17 @@ public class TurnStateController : StateController
       return;
     }
     
-    var mySequence = DOTween.Sequence();
+    var discardCardSequence = DOTween.Sequence();
     _playedCard.GetComponent<PlayedCardController>().HideCard();
-    mySequence.Append(_playedCard.transform.DOMove(_discardPile.transform.position, 0.5f));
-    mySequence.OnComplete(() =>
+    discardCardSequence.Append(_playedCard.transform.DOMove(_discardPile.transform.position, 0.5f));
+    discardCardSequence.OnComplete(() =>
       {
         _hand.GetComponent<HandController>().DiscardCard(_playedCard.GetComponent<PlayedCardController>().CardName());
         _playedCard.GetComponent<PlayedCardController>().RemoveCard();
 
         ChangeGameState(_themGameState);
       });
-    mySequence.Play();
+    discardCardSequence.Play();
   }
 
   protected virtual void OnSpinnerInPosition() { }

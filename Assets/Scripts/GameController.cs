@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
   GameState? _gameState;
   IDictionary<GameState, IStateController> _stateControllers;
 
+  public GameObject Instantiator;
+  
   public GameObject Background;
 
   public GameObject PlayerHealthBar;
@@ -34,6 +36,11 @@ public class GameController : MonoBehaviour
 
   public GameObject Enemy;
 
+  public GameObject DamageBallPrefab;
+  public GameObject PlayerDamageAnchor;
+
+  public Camera Camera;
+
   // Start is called before the first frame update
   void Start()
   {
@@ -46,6 +53,8 @@ public class GameController : MonoBehaviour
 
     var context = new ContextManager(
       new Dictionary<ContextObjects, GameObject> {
+        [ContextObjects.Instantiator] = Instantiator,
+        
         [ContextObjects.PlayerHealthBar] = PlayerHealthBar,
         [ContextObjects.EnemyHealthBar] = EnemyHealthBar,
 
@@ -70,8 +79,14 @@ public class GameController : MonoBehaviour
         
         [ContextObjects.PlayerManaCounter] = PlayerManaCounter,
         [ContextObjects.EnemyManaCounter] = EnemyManaCounter,
+        
+        [ContextObjects.DamageBallPrefab] = DamageBallPrefab,
+        [ContextObjects.PlayerDamageAnchor] = PlayerDamageAnchor,
       },
-      new Dictionary<ContextObjects, Camera>(),
+      new Dictionary<ContextObjects, Camera>
+      {
+        [ContextObjects.Camera] = Camera,
+      },
       new Dictionary<ContextObjects, IContextObject>
       {
         [ContextObjects.PlayerState] = new AgentState(10, 3),
@@ -90,7 +105,7 @@ public class GameController : MonoBehaviour
     SwitchGameState(GameState.StartBattle);
   }
 
-	// Update is called once per frame
+  // Update is called once per frame
 	void Update()
 	{
     CurrentGameState().Update();

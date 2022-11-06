@@ -1,5 +1,8 @@
 public enum ContextObjects
 {
+  Instantiator,
+  Camera,
+  
   PlayerHealthBar,
   EnemyHealthBar,
 
@@ -29,4 +32,7 @@ public enum ContextObjects
   
   PlayerManaCounter,
   EnemyManaCounter,
+  
+  DamageBallPrefab,
+  PlayerDamageAnchor,
 }

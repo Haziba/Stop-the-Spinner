@@ -128,6 +128,36 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6492242739029200306, guid: d27f37fabd766421b841b701a62431e0, type: 3}
   m_PrefabInstance: {fileID: 6492242738914528336}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &290779766
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 290779767}
+  m_Layer: 0
+  m_Name: PlayerDamageAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &290779767
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290779766}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1010121220}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &371300128 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5752556120997362781, guid: abf1e1709ec7f4455b717b118866645d, type: 3}
@@ -700,11 +730,85 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 700243652748746642, guid: 8dcde6864e23747e795eb8b49e2fb63d, type: 3}
   m_PrefabInstance: {fileID: 401390417}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1010121219
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1010121220}
+  m_Layer: 0
+  m_Name: Anchors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1010121220
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010121219}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 290779767}
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1032591612 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6195350521272721870, guid: abf1e1709ec7f4455b717b118866645d, type: 3}
   m_PrefabInstance: {fileID: 5752556121775438147}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1047511383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1047511385}
+  - component: {fileID: 1047511384}
+  m_Layer: 0
+  m_Name: Instantiator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1047511384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047511383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3cbc63d31024e83bfe37ba0e736bc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1047511385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047511383}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1139143030
 GameObject:
   m_ObjectHideFlags: 0
@@ -1567,6 +1671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe5fd92463ff48b4b4b4f65d1ac0d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Instantiator: {fileID: 1047511383}
   Background: {fileID: 965298371}
   PlayerHealthBar: {fileID: 1218498144}
   EnemyHealthBar: {fileID: 1683479829}
@@ -1583,6 +1688,8 @@ MonoBehaviour:
   PlayerManaCounter: {fileID: 868418732}
   EnemyManaCounter: {fileID: 1949106650}
   Enemy: {fileID: 1139143030}
+  DamageBallPrefab: {fileID: 8412945431243712594, guid: cc7b9d03c585e4b6c8b5a3243b27024e, type: 3}
+  PlayerDamageAnchor: {fileID: 290779766}
 --- !u!4 &1837778940
 Transform:
   m_ObjectHideFlags: 0

@@ -158,7 +158,18 @@ public class TurnStateController : StateController
         .SetEase(Ease.InExpo)
         .OnComplete(() =>
         {
-          _context.Get<Camera>(ContextObjects.Camera).GetComponent<CameraController>().Shake(0.5f, 1f, () =>
+          // todo: This really, really doesn't belong. Maybe both characters have a state manager that would handle this, and it handles health / mana / armour as well
+          if(this is PlayerTurnStateController)
+            _context.Get<GameObject>(ContextObjects.Enemy).GetComponent<MonsterController>().UpdateState(_context.Get<IContextObject>(ContextObjects.EnemyState) as AgentState);
+          
+          // todo: Oh wow even more stuff that doesn't belong here looks like an anti-pattern emerging
+          _meHealthBar.GetComponent<HealthBarController>().SetHealth(_meState.Health());
+          _themHealthBar.GetComponent<HealthBarController>().SetHealth(_themState.Health());
+          
+          _meArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_meState.Armour());
+          _themArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_themState.Armour());
+          
+          _context.Get<Camera>(ContextObjects.Camera).GetComponent<CameraController>().Shake(0.2f, 0.5f, () =>
           {
             _context.Get<GameObject>(ContextObjects.Instantiator).GetComponent<InitiatorController>().Destroy(damageBall);
             HideSpinner();

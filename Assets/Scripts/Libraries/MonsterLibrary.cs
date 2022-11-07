@@ -80,7 +80,8 @@ namespace Libraries
       },
       [MonsterName.Trupple] = new Monster
       {
-        Health = 15,
+        Health = 5,
+        Armour = 1,
         Mana = 2,
         Deck = new []
         {
@@ -91,9 +92,18 @@ namespace Libraries
           CardName.RaiseShield,
           CardName.RaiseShield,
         },
-        MaxCardsInHand = 4
+        MaxCardsInHand = 4,
+        ExtraSprites = new []
+        {
+          new ExtraSprite("ArmourBar0", ResolutionType.Armour, ExtraSpriteType.RemoveOverlay, 0)
+        }
       }
     };
+  }
+
+  public enum ExtraSpriteType
+  {
+    RemoveOverlay
   }
 
   public enum MonsterName
@@ -112,6 +122,33 @@ namespace Libraries
     public int Armour { get; set; }
     public CardName[] Deck { get; set; }
     public int MaxCardsInHand { get; set;  }
+    public ExtraSprite[] ExtraSprites { get; set; }
     public ResolutionEventStep.Resolution[] Resolutions { get; set; }
+    public int ManaRecoveryRate { get; set; } = 1;
+  }
+
+  public class ExtraSprite
+  {
+    public string Name { get; }
+    public ResolutionType ResolutionType { get; }
+    public ExtraSpriteType Type { get; }
+    public int TriggerLimit { get; }
+
+    bool _triggered;
+    public bool Triggered => _triggered;
+
+    public ExtraSprite(string name, ResolutionType resolutionType, ExtraSpriteType type, int triggerLimit)
+    {
+      Name = name;
+      ResolutionType = resolutionType;
+      Type = type;
+      TriggerLimit = triggerLimit;
+      _triggered = false;
+    }
+
+    public void Trigger()
+    {
+      _triggered = true;
+    }
   }
 }

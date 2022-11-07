@@ -12,14 +12,16 @@ public class AgentState : IContextObject
 
   int _initialMana;
   int _mana;
+  int _manaRecoveryRate;
 
-  public AgentState(int health, int armour, int mana)
+  public AgentState(int health, int armour, int mana, int manaRecoveryRate)
   {
     _statusEffects = new List<StatusEffect>();
     _health = health;
     _armour = armour;
     _initialMana = mana;
     _mana = mana;
+    _manaRecoveryRate = manaRecoveryRate;
 
     Debug.Log("Mana: " + _mana);
   }
@@ -131,7 +133,7 @@ public class AgentState : IContextObject
 
   public void RecoverMana()
   {
-    _mana = Math.Min(_mana + 1, _initialMana);
+    _mana = Math.Min(_mana + _manaRecoveryRate, _initialMana);
   }
 }
 

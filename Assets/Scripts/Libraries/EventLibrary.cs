@@ -161,6 +161,7 @@ public class ResolutionEventStep : EventStep<ResolutionEventStep.EventData>
 public enum ResolutionType
 {
   Health,
+  Armour,
   GainCard,
   Gold
 }

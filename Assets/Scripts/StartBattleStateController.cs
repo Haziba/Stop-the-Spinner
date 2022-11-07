@@ -55,28 +55,10 @@ public class StartBattleStateController  : StateController
   
   void SetEnemy()
   {
-    SetEnemyImage(MonsterName());
+    _context.Get<GameObject>(ContextObjects.Enemy).GetComponent<MonsterController>().Init(MonsterName());
     _context.Get<GameObject>(ContextObjects.EnemyHealthBar).GetComponent<HealthBarController>().SetHealth(Monster().Health);
     _context.Get<GameObject>(ContextObjects.EnemyArmourCounter).GetComponent<ArmourCounterController>().Init(Monster().Armour);
     _context.Get<GameObject>(ContextObjects.EnemyManaCounter).GetComponent<ManaCounterController>().Init(Monster().Mana);
-  }
-
-  public void SetEnemyImage(MonsterName monsterName)
-  {
-    HideAllEnemyImages();
-    ShowEnemyImage(monsterName);
-  }
-
-  void HideAllEnemyImages()
-  {
-    for(var i = 0; i < _context.Get<GameObject>(ContextObjects.Enemy).transform.childCount; i++){
-      _context.Get<GameObject>(ContextObjects.Enemy).transform.GetChild(i).gameObject.SetActive(false);
-    }
-  }
-
-  void ShowEnemyImage(MonsterName monsterName)
-  {
-    _context.Get<GameObject>(ContextObjects.Enemy).transform.Find(monsterName.ToString()).gameObject.SetActive(true);;
   }
 
   MonsterName MonsterName()

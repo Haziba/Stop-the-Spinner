@@ -974,6 +974,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1139143031}
+  - component: {fileID: 1139143032}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -1000,6 +1001,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1139143032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139143030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 601b2dbe871449c3b238e015ffd08937, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1203470804 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5752556120675186839, guid: abf1e1709ec7f4455b717b118866645d, type: 3}
@@ -1874,7 +1887,7 @@ GameObject:
   - component: {fileID: 1847858773}
   - component: {fileID: 1847858774}
   m_Layer: 0
-  m_Name: HealthBar1
+  m_Name: ArmourBar0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

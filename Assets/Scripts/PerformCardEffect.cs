@@ -30,12 +30,6 @@ public class PerformCardEffect
   public void ResolveSpinner(SpinnerResult result)
   {
     CardLibrary.Cards[_cardName].Resolve(result, _meState, _themState);
-    
-    _meHealthBar.GetComponent<HealthBarController>().SetHealth(_meState.Health());
-    _themHealthBar.GetComponent<HealthBarController>().SetHealth(_themState.Health());
-    
-    _meArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_meState.Armour());
-    _themArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_themState.Armour());
   }
 }
 

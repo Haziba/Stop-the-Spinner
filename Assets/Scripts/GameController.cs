@@ -53,6 +53,7 @@ public class GameController : MonoBehaviour
     };
 
     var monster = MonsterLibrary.Monsters[((EnemyConfig)sceneData[SceneDataKey.Enemy]).Name];
+    Player.Init();
 
     var context = new ContextManager(
       new Dictionary<ContextObjects, GameObject> {

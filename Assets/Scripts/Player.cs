@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
+using Libraries;
 
 public static class Player
 {
   static bool _inited;
-  
-  public static IList<CardName> Deck { get; private set; }
+
+  static IList<CardName> _baseDeck;
+  public static IList<CardName> Deck => _baseDeck.Concat(ItemCards()).ToList();
+  public static IDictionary<ItemSlot, Item> Items { get; private set; }
   public static int MaxCardsInHand { get; private set; }
   public static int MaxHealth { get; private set; }
   public static int Health { get; private set; }
@@ -19,19 +23,17 @@ public static class Player
       return;
     
     // todo: Load this from a file
-    Deck = new List<CardName>
+    _baseDeck = new List<CardName>
     {
-      CardName.SwordThem,
-      CardName.SwordThem,
-      CardName.AxeThem,
-      CardName.AxeThem,
       CardName.IntoxicateThem,
-      CardName.FocusMe,
       CardName.DistractThem,
-      CardName.SwordThem,
-      CardName.AxeThem,
-      CardName.FocusMe,
       CardName.DistractThem
+    };
+
+    Items = new Dictionary<ItemSlot, Item>
+    {
+      [ItemSlot.Head] = ItemLibrary.Items[ItemName.FancyHat],
+      [ItemSlot.LeftArm] = ItemLibrary.Items[ItemName.RustySword]
     };
 
     MaxCardsInHand = 5;
@@ -42,5 +44,10 @@ public static class Player
     Armour = 0;
 
     _inited = true;
+  }
+
+  static IEnumerable<CardName> ItemCards()
+  {
+    return Items.Values.SelectMany(item => item.Cards);
   }
 }

@@ -10,8 +10,6 @@ public class StartBattleStateController  : StateController
 
   public override void Start()
   {
-    Player.Init();
-    
     DealCards();
     SetPlayer();
     SetEnemy();

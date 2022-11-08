@@ -1,3 +1,4 @@
+using System.Linq;
 using Libraries;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class StartBattleStateController  : StateController
 
   public override void Start()
   {
+    Player.Init();
+    
     DealCards();
     SetPlayer();
     SetEnemy();
@@ -25,19 +28,7 @@ public class StartBattleStateController  : StateController
 
   public void DealCards()
   {
-    _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(new CardName[] {
-        CardName.SwordThem,
-        CardName.SwordThem,
-        CardName.AxeThem,
-        CardName.AxeThem,
-        CardName.IntoxicateThem,
-        CardName.FocusMe,
-        CardName.DistractThem,
-        CardName.SwordThem,
-        CardName.AxeThem,
-        CardName.FocusMe,
-        CardName.DistractThem
-    }, 5);
+    _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(Player.Deck.ToArray(), Player.MaxCardsInHand);
 
     var enemy = Monster();
 
@@ -48,9 +39,9 @@ public class StartBattleStateController  : StateController
 
   void SetPlayer()
   {
-    _context.Get<GameObject>(ContextObjects.PlayerHealthBar).GetComponent<HealthBarController>().SetHealth(10);
-    _context.Get<GameObject>(ContextObjects.PlayerArmourCounter).GetComponent<ArmourCounterController>().Init(0);
-    _context.Get<GameObject>(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(3);
+    _context.Get<GameObject>(ContextObjects.PlayerHealthBar).GetComponent<HealthBarController>().SetHealth(Player.Health);
+    _context.Get<GameObject>(ContextObjects.PlayerArmourCounter).GetComponent<ArmourCounterController>().Init(Player.Armour);
+    _context.Get<GameObject>(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(Player.MaxMana);
   }
   
   void SetEnemy()

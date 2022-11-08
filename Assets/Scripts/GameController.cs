@@ -95,7 +95,7 @@ public class GameController : MonoBehaviour
       },
       new Dictionary<ContextObjects, IContextObject>
       {
-        [ContextObjects.PlayerState] = new AgentState(10, 0, 3, 2),
+        [ContextObjects.PlayerState] = new AgentState(Player.Health, Player.Armour, Player.MaxMana, Player.ManaRecoveryAmount),
         [ContextObjects.EnemyState] = new AgentState(monster.Health, monster.Armour, monster.Mana, monster.ManaRecoveryRate),
         [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Sleppy, BackgroundName.OneWayPath),
       }

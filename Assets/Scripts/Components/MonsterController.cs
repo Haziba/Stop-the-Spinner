@@ -18,6 +18,8 @@ public class MonsterController : MonoBehaviour
 
   public void UpdateState(AgentState state)
   {
+    if (Monster().ExtraSprites == null)
+      return;
     foreach (var extraSprite in Monster().ExtraSprites.Where(eS => !eS.Triggered).ToArray())
     {
       switch (extraSprite.Type)

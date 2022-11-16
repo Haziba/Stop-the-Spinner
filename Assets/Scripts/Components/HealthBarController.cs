@@ -1,11 +1,15 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBarController : MonoBehaviour
 {
     public GameObject[] Backgrounds;
+    public GameObject ArmourCover;
+    public GameObject ArmourText;
 
     int _health = 5;
+    int _armour = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +23,6 @@ public class HealthBarController : MonoBehaviour
 
     void UpdateHealthbar()
     {
-        Debug.Log("Update health bar - " + _health);
         for (var i = 0; i < Backgrounds.Length; i++)
         {
             if (_health >= 10 * (i + 1))
@@ -31,9 +34,22 @@ public class HealthBarController : MonoBehaviour
         }
     }
 
-    public void SetHealth(int health)
+    void UpdateArmour()
+    {
+        if (_armour > 0)
+        {
+            ArmourText.GetComponent<TextMeshProUGUI>().text = _armour.ToString();
+            ArmourCover.SetActive(true);
+        }
+        else
+            ArmourCover.SetActive(false);
+    }
+
+    public void SetHealthAndArmour(int health, int armour)
     {
         _health = health;
+        _armour = armour;
         UpdateHealthbar();
+        UpdateArmour();
     }
 }

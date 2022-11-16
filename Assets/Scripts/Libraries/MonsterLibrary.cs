@@ -81,7 +81,7 @@ namespace Libraries
       [MonsterName.Trupple] = new Monster
       {
         Health = 5,
-        Armour = 1,
+        Armour = 5,
         Mana = 2,
         Deck = new []
         {

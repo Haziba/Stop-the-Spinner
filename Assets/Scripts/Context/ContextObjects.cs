@@ -33,9 +33,6 @@ public enum ContextObjects
   PlayerManaCounter,
   EnemyManaCounter,
   
-  PlayerArmourCounter,
-  EnemyArmourCounter,
-  
   DamageBallPrefab,
   PlayerDamageAnchor,
 }

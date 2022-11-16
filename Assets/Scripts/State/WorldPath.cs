@@ -91,12 +91,17 @@ namespace State
       availableMapPoints = allMapPoints.Where(mP => mP.Event == PointEvent.None).ToList();
       availableMapPoints.Shuffle();
       var mapPointIndex = 0;
+      // todo: Could do with shuffling the monster names
       foreach (MonsterName monsterName in Enum.GetValues(typeof(MonsterName)))
       {
         availableMapPoints[mapPointIndex].Visited = false;
         availableMapPoints[mapPointIndex].Event = PointEvent.Battle;
         availableMapPoints[mapPointIndex].MonsterName = monsterName;
         mapPointIndex++;
+        
+        //todo: Eh I don't really like this but maybe all of this functionality needs refactoring
+        if(mapPointIndex >= availableMapPoints.Count)
+          break;
       }
 
       // todo: Gotta be a better way to make sure the first point doesn't have anything on it

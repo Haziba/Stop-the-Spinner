@@ -18,8 +18,6 @@ public class PlayerTurnStateController : TurnStateController
     _discardPile = _context.Get<GameObject>(ContextObjects.PlayerDiscardPile);
     _meManaCounter = _context.Get<GameObject>(ContextObjects.PlayerManaCounter);
     _themDamageAnchor = _context.Get<GameObject>(ContextObjects.Enemy);
-    _meArmourCounter = _context.Get<GameObject>(ContextObjects.PlayerArmourCounter);
-    _themArmourCounter = _context.Get<GameObject>(ContextObjects.EnemyArmourCounter);
     _playedCardTarget = new Vector3(0, -1f, -5f);
     _spinnerTarget = new Vector3(0, -1f, -6f);
     _spinnerOrigin = new Vector3(0, -8f, -6f);

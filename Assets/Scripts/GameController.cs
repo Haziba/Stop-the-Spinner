@@ -34,9 +34,6 @@ public class GameController : MonoBehaviour
   public GameObject PlayerManaCounter;
   public GameObject EnemyManaCounter;
 
-  public GameObject PlayerArmourCounter;
-  public GameObject EnemyArmourCounter;
-
   public GameObject Enemy;
 
   public GameObject DamageBallPrefab;
@@ -83,9 +80,6 @@ public class GameController : MonoBehaviour
         
         [ContextObjects.PlayerManaCounter] = PlayerManaCounter,
         [ContextObjects.EnemyManaCounter] = EnemyManaCounter,
-        
-        [ContextObjects.PlayerArmourCounter] = PlayerArmourCounter,
-        [ContextObjects.EnemyArmourCounter] = EnemyArmourCounter,
         
         [ContextObjects.DamageBallPrefab] = DamageBallPrefab,
         [ContextObjects.PlayerDamageAnchor] = PlayerDamageAnchor,

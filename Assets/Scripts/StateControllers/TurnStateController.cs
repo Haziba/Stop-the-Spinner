@@ -118,10 +118,6 @@ public class TurnStateController : StateController
     _cardEffect = new PerformCardEffect(cardName, _meHealthBar, _themHealthBar, _meArmourCounter, _themArmourCounter, _meState, _themState);
     var performOutcome = _cardEffect.Perform();
 
-    // todo: Now this bit is DEFINITELY janky
-    _meArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_meState.Armour());
-    _themArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_themState.Armour());
-
     switch(performOutcome.Outcome())
     {
       case EffectOutcome.Continue:
@@ -163,11 +159,8 @@ public class TurnStateController : StateController
             _context.Get<GameObject>(ContextObjects.Enemy).GetComponent<MonsterController>().UpdateState(_context.Get<IContextObject>(ContextObjects.EnemyState) as AgentState);
           
           // todo: Oh wow even more stuff that doesn't belong here looks like an anti-pattern emerging
-          _meHealthBar.GetComponent<HealthBarController>().SetHealth(_meState.Health());
-          _themHealthBar.GetComponent<HealthBarController>().SetHealth(_themState.Health());
-          
-          _meArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_meState.Armour());
-          _themArmourCounter.GetComponent<ArmourCounterController>().SetArmour(_themState.Armour());
+          _meHealthBar.GetComponent<HealthBarController>().SetHealthAndArmour(_meState.Health(), _meState.Armour());
+          _themHealthBar.GetComponent<HealthBarController>().SetHealthAndArmour(_themState.Health(), _themState.Armour());
           
           _context.Get<Camera>(ContextObjects.Camera).GetComponent<CameraController>().Shake(0.2f, 0.5f, () =>
           {

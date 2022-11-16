@@ -19,6 +19,8 @@ namespace Libraries
         Cards = new List<CardName>
         {
           CardName.SwordThem,
+          CardName.SwordThem,
+          CardName.SwordThem,
           CardName.SwordThem
         }
       }

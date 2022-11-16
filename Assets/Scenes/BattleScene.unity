@@ -254,6 +254,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyManaCounter
       objectReference: {fileID: 0}
+    - target: {fileID: 7061382068092854849, guid: d03fa1096e0ee42d8a6c7def55c4337e, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d03fa1096e0ee42d8a6c7def55c4337e, type: 3}
 --- !u!1 &69615172 stripped
@@ -391,6 +395,10 @@ PrefabInstance:
     - target: {fileID: 6561641043943810962, guid: d03fa1096e0ee42d8a6c7def55c4337e, type: 3}
       propertyPath: m_Name
       value: PlayerManaCounter
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061382068092854849, guid: d03fa1096e0ee42d8a6c7def55c4337e, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d03fa1096e0ee42d8a6c7def55c4337e, type: 3}
@@ -1399,7 +1407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3183514186358883534, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 116.999985
+      value: 117
       objectReference: {fileID: 0}
     - target: {fileID: 3183514186358883534, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1451,7 +1459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7043782157094066890, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 116.99997
+      value: 117
       objectReference: {fileID: 0}
     - target: {fileID: 7043782157094066890, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1511,7 +1519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8214213424608324984, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 116.999985
+      value: 117
       objectReference: {fileID: 0}
     - target: {fileID: 8214213424608324984, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1528,6 +1536,10 @@ PrefabInstance:
     - target: {fileID: 8476857462310014218, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_PlaneDistance
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8476857462310014221, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8476857462454409072, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: Backgrounds.Array.size
@@ -1639,7 +1651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8476857462982056856, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 116.999985
+      value: 117
       objectReference: {fileID: 0}
     - target: {fileID: 8476857462982056856, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1703,7 +1715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8476857463299410788, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 117.000015
+      value: 117
       objectReference: {fileID: 0}
     - target: {fileID: 8476857463299410788, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2259,7 +2271,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5752556120687208150, guid: abf1e1709ec7f4455b717b118866645d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 235.92007
+      value: 235.92004
       objectReference: {fileID: 0}
     - target: {fileID: 5752556120747591970, guid: abf1e1709ec7f4455b717b118866645d, type: 3}
       propertyPath: m_Name
@@ -2711,6 +2723,10 @@ PrefabInstance:
     - target: {fileID: 8476857462310014218, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_PlaneDistance
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8476857462310014221, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8476857462454409073, guid: a8f261e2efa19489a9497c6a52373477, type: 3}
       propertyPath: m_RootOrder

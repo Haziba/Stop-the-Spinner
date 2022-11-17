@@ -11,7 +11,8 @@ namespace Libraries
       [CardName.SwordThem] = new Card(2, (meState, themState) =>
       {
         return new SpinWheelOutcome(new SpinnerConfiguration(0.5f, 0.1f));
-      }, (spinnerResult, meState, themState) =>
+      }, new DamageToolTip(1, 2), 
+        (spinnerResult, meState, themState) =>
       {
         switch (spinnerResult)
         {
@@ -26,7 +27,8 @@ namespace Libraries
       [CardName.AxeThem] = new Card(3, (meState, themState) =>
       {
         return new SpinWheelOutcome(new SpinnerConfiguration(0.4f, 0.2f));
-      }, (spinnerResult, meState, themState) =>
+      }, new DamageToolTip(2, 3), 
+        (spinnerResult, meState, themState) =>
       {
         switch (spinnerResult)
         {
@@ -41,7 +43,8 @@ namespace Libraries
       [CardName.DaggerThem] = new Card(1, (meState, themState) =>
       {
         return new SpinWheelOutcome(new SpinnerConfiguration(0.6f, 0.03f));
-      }, (spinnerResult, meState, themState) =>
+      }, new DamageToolTip(1, 3), 
+        (spinnerResult, meState, themState) =>
       {
         switch (spinnerResult)
         {
@@ -56,7 +59,8 @@ namespace Libraries
       [CardName.BiteThem] = new Card(3, (meState, themState) =>
       {
         return new SpinWheelOutcome(new SpinnerConfiguration(0.35f, 0.1f));
-      }, (spinnerResult, meState, themState) =>
+      }, new DamageToolTip(2, 4), 
+        (spinnerResult, meState, themState) =>
       {
         switch (spinnerResult)
         {
@@ -72,21 +76,22 @@ namespace Libraries
       {
         themState.AddEffect(AgentStatusEffects.Distracted, 2);
         return new NoOutcome();
-      }), 
+      }, new StatusEffectToolTip(AgentStatusEffects.Distracted, false)), 
       [CardName.FocusMe] = new Card(1, (meState, themState) =>
       {
         meState.AddEffect(AgentStatusEffects.Focused, 2);
         return new NoOutcome();
-      }),
+      }, new StatusEffectToolTip(AgentStatusEffects.Focused, true)), 
       [CardName.IntoxicateThem] = new Card(2, (meState, themState) =>
       {
         themState.AddEffect(AgentStatusEffects.Intoxicated, 2);
         return new NoOutcome();
-      }), 
+      }, new StatusEffectToolTip(AgentStatusEffects.Intoxicated, false)), 
       [CardName.ShieldBashThem] = new Card(2, (meState, themState) =>
       {
         return new SpinWheelOutcome(new SpinnerConfiguration(0.5f, 0.1f));
-      }, (spinnerResult, meState, themState) =>
+      }, new DamageToolTip(1, 2), 
+        (spinnerResult, meState, themState) =>
       {
         switch (spinnerResult)
         {
@@ -102,7 +107,7 @@ namespace Libraries
       {
         meState.SetArmour(meState.Armour() + 2);
         return new NoOutcome();
-      })
+      }, new ArmourToolTip(2))
     };
   }
 }
@@ -117,10 +122,13 @@ public class Card
   public Func<AgentState, AgentState, ICardOutcome> Perform => _perform;
   public Action<SpinnerResult, AgentState, AgentState> Resolve => _resolve;
   
-  public Card(int manaCost, Func<AgentState, AgentState, ICardOutcome> perform, Action<SpinnerResult, AgentState, AgentState> resolve = null)
+  public IToolTip ToolTip { get; }
+
+  public Card(int manaCost, Func<AgentState, AgentState, ICardOutcome> perform, IToolTip toolTip, Action<SpinnerResult, AgentState, AgentState> resolve = null)
   {
     _manaCost = manaCost;
     _perform = perform;
+    ToolTip = toolTip;
     _resolve = resolve;
   }
 }

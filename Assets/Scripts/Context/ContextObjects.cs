@@ -24,6 +24,8 @@ public enum ContextObjects
   
   Background,
   
+  ToolTip,
+  
   PlayerDrawPile,
   PlayerDiscardPile,
   

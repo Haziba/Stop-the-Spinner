@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
   public GameObject Instantiator;
   
   public GameObject Background;
+  public GameObject ToolTip;
 
   public GameObject PlayerHealthBar;
   public GameObject EnemyHealthBar;
@@ -71,6 +72,7 @@ public class GameController : MonoBehaviour
         [ContextObjects.Enemy] = Enemy,
         
         [ContextObjects.Background] = Background,
+        [ContextObjects.ToolTip] = ToolTip,
 
         [ContextObjects.PlayerDrawPile] = PlayerDrawPile,
         [ContextObjects.PlayerDiscardPile] = PlayerDiscardPile,

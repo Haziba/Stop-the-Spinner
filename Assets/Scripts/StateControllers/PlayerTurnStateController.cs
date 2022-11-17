@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerTurnStateController : TurnStateController
 {
+  CardClickedEventArgs _cardClickedEventArgs;
+  float _cardClickTimer;
+  bool _cardBeingDragged;
+
   public PlayerTurnStateController(ContextManager context) : base(context)
   {
     _meGameState = GameState.PlayerTurn;
@@ -44,8 +48,60 @@ public class PlayerTurnStateController : TurnStateController
     if(_innerState == InnerState.SpinnerSpinning)
       if(Input.GetKeyDown("space") || Input.touchCount > 0)
         SpacePressed();
+    
+    if (_cardClickedEventArgs != null)
+      HandleCardBeingClicked();
 
     base.Update();
+  }
+
+  void HandleCardBeingClicked()
+  {
+    if (_cardClickTimer >= 0)
+    {
+      if (!Input.touches.Any())
+      {
+        ShowCardTooltip(_cardClickedEventArgs.CardName());
+        _cardClickedEventArgs = null;
+        return;
+      }
+      
+      _cardClickTimer -= Time.deltaTime;
+      if (_cardClickTimer > 0)
+        return;
+      
+      _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Player, _cardClickedEventArgs.CardName(), _cardClickedEventArgs.HandCard().Image());
+      _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().RemoveCard(_cardClickedEventArgs.HandCard());
+      _cardBeingDragged = true;
+    }
+    
+    if (_cardBeingDragged)
+    {
+      if (Input.touches.Any())
+      {
+        var cardNewPosition = _context.Get<Camera>(ContextObjects.Camera).ScreenToWorldPoint(Input.GetTouch(0).position);
+        cardNewPosition.z = 0;
+        _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).transform.position = cardNewPosition;
+      }
+      else
+      {
+        _cardBeingDragged = false;
+        _cardClickedEventArgs = null;
+        if(_playedCard.transform.position.y >= -3)
+          PlayCardFromHand();
+        else
+        {
+          _playedCard.GetComponent<PlayedCardController>().RemoveCard();
+          _hand.GetComponent<HandController>().AddCard(_playedCard.GetComponent<PlayedCardController>().CardName());
+        }
+      }
+    }
+  }
+
+  void ShowCardTooltip(CardName cardName)
+  {
+    Debug.Log("Show tooltip - " + cardName);
+    _context.Get<GameObject>(ContextObjects.ToolTip).GetComponent<ToolTipController>().ShowToolTip(cardName);
   }
 
   public void OnCardClicked(object sender, EventArgs e)
@@ -55,10 +111,8 @@ public class PlayerTurnStateController : TurnStateController
     if(!IsActiveState() || _innerState != InnerState.ChoosingCard || !_meState.CanPlayCard(cardClickedEvent.CardName()))
       return;
 
-    _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Player, cardClickedEvent.CardName(), cardClickedEvent.HandCard().Image());
-    _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().RemoveCard(cardClickedEvent.HandCard());
-
-    PlayCardFromHand();
+    _cardClickedEventArgs = cardClickedEvent;
+    _cardClickTimer = 0.2f;
   }
 
 	public void SpacePressed()

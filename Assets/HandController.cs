@@ -84,7 +84,7 @@ public class HandController : MonoBehaviour
       UpdateCounters();
     }
 
-    void AddCard(CardName cardName)
+    public void AddCard(CardName cardName)
     {
       // todo: This whole thing is janky, does HandCard need to exist?
       var card = Instantiate(CardPrefab, transform.position, Quaternion.identity);

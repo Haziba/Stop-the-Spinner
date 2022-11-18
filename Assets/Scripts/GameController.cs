@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
   
   public GameObject Background;
   public GameObject ToolTip;
+  public GameObject EndTurnButton;
 
   public GameObject PlayerHealthBar;
   public GameObject EnemyHealthBar;
@@ -73,6 +74,7 @@ public class GameController : MonoBehaviour
         
         [ContextObjects.Background] = Background,
         [ContextObjects.ToolTip] = ToolTip,
+        [ContextObjects.EndTurnButton] = EndTurnButton,
 
         [ContextObjects.PlayerDrawPile] = PlayerDrawPile,
         [ContextObjects.PlayerDiscardPile] = PlayerDiscardPile,

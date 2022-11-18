@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class EnemyTurnStateController : TurnStateController
 {
+  HUtilities.Countdown _playCardCountdown;
+  
   public EnemyTurnStateController(ContextManager context) : base(context)
   {
     _meGameState = GameState.EnemyTurn;
@@ -33,8 +35,19 @@ public class EnemyTurnStateController : TurnStateController
       ChangeGameState(_themGameState);
       return;
     }
+  }
 
-    _countdowns.Add(new HUtilities.Countdown(1f, PlayCard));
+  public override void Update()
+  {
+    base.Update();
+    
+    // todo: I don't like this. Maybe there should be an event on TurnStateController, but that feels
+    // janky too. Maybe an overridable method? Ah whatever, this will do for now
+    if (_innerState != InnerState.ChoosingCard || (_playCardCountdown != null && _playCardCountdown.Running()))
+      return;
+    
+    _playCardCountdown = new HUtilities.Countdown(1f, PlayCard);
+    _countdowns.Add(_playCardCountdown);
   }
 
   protected override void OnPlayedCardInPosition()
@@ -52,6 +65,13 @@ public class EnemyTurnStateController : TurnStateController
   {
     var handController = _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>();
     var availableCardIndexes = AvailableCardIndexes();
+
+    if (!availableCardIndexes.Any())
+    {
+      EndTurn();
+      return;
+    }
+
     var cardToPlay = handController.CardAt(availableCardIndexes[Random.Range(0, availableCardIndexes.Length-1)]);
     
     handController.RemoveCard(cardToPlay);

@@ -121,7 +121,7 @@ public class TurnStateController : StateController
     switch(performOutcome.Outcome())
     {
       case EffectOutcome.Continue:
-        EndTurn();
+        EndPlayCard();
         break;
       case EffectOutcome.SpinWheel:
         _innerState = InnerState.SpinnerComingIn;
@@ -134,6 +134,26 @@ public class TurnStateController : StateController
           });
         break;
     }
+  }
+
+  void EndPlayCard()
+  {
+    if (!_meState.Alive() || !_themState.Alive())
+    {
+      ChangeGameState(GameState.EndBattle);
+      return;
+    }
+    
+    var discardCardSequence = DOTween.Sequence();
+    _playedCard.GetComponent<PlayedCardController>().HideCard();
+    discardCardSequence.Append(_playedCard.transform.DOMove(_discardPile.transform.position, 0.5f));
+    discardCardSequence.OnComplete(() =>
+      {
+        _hand.GetComponent<HandController>().DiscardCard(_playedCard.GetComponent<PlayedCardController>().CardName());
+        _playedCard.GetComponent<PlayedCardController>().RemoveCard();
+        _innerState = InnerState.ChoosingCard;
+      });
+    discardCardSequence.Play();
   }
 
   protected void StopSpinning()
@@ -180,7 +200,7 @@ public class TurnStateController : StateController
       _innerState = InnerState.SpinnerGoingOut;
 
       _spinner.transform.DOMove(_spinnerOrigin, 0.5f)
-        .OnComplete(EndTurn);
+        .OnComplete(EndPlayCard);
     });
     _countdowns.Add(hideSpinnerCountdown);
   }
@@ -194,25 +214,9 @@ public class TurnStateController : StateController
   {
   }
 
-  void EndTurn()
+  protected void EndTurn()
   {
-    if (!_meState.Alive() || !_themState.Alive())
-    {
-      ChangeGameState(GameState.EndBattle);
-      return;
-    }
-    
-    var discardCardSequence = DOTween.Sequence();
-    _playedCard.GetComponent<PlayedCardController>().HideCard();
-    discardCardSequence.Append(_playedCard.transform.DOMove(_discardPile.transform.position, 0.5f));
-    discardCardSequence.OnComplete(() =>
-      {
-        _hand.GetComponent<HandController>().DiscardCard(_playedCard.GetComponent<PlayedCardController>().CardName());
-        _playedCard.GetComponent<PlayedCardController>().RemoveCard();
-
-        ChangeGameState(_themGameState);
-      });
-    discardCardSequence.Play();
+    ChangeGameState(_themGameState);
   }
 
   protected virtual void OnSpinnerInPosition() { }

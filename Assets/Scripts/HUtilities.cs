@@ -45,11 +45,18 @@ public static class HUtilities
 
     public bool Update()
     {
-      if(_timeLength > 0 && _timeLength <= Time.deltaTime) {
+      if(_timeLength > 0 && _timeLength <= Time.deltaTime)
+      {
+        _timeLength = 0;
         _func();
         return false;
       }
       _timeLength -= Time.deltaTime;
+      return _timeLength > 0;
+    }
+
+    public bool Running()
+    {
       return _timeLength > 0;
     }
   }

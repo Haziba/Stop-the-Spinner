@@ -29,6 +29,8 @@ public class PlayerTurnStateController : TurnStateController
     _themState = _context.Get<IContextObject>(ContextObjects.EnemyState) as AgentState;
 
     _hand.GetComponent<HandController>().OnCardClicked += OnCardClicked;
+    _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().OnClicked +=
+      OnEndTurnClicked;
   }
   public override void Start()
   {
@@ -40,7 +42,14 @@ public class PlayerTurnStateController : TurnStateController
       return;
     }
 
+    _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().EnableButton();
+
     //DebugCard(CardName.BiteThem, AgentStatusEffects.Focused, default(AgentStatusEffects));
+  }
+
+  public override void End()
+  {
+    _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().DisableButton();
   }
 
   public override void Update()
@@ -51,6 +60,12 @@ public class PlayerTurnStateController : TurnStateController
     
     if (_cardClickedEventArgs != null)
       HandleCardBeingClicked();
+    
+    //todo: There should be some sort of event firer when the turn state changes. Maybe an overridable method
+    if(_innerState == InnerState.ChoosingCard)
+      _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().EnableButton();
+    else
+      _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().DisableButton();
 
     base.Update();
   }
@@ -113,6 +128,11 @@ public class PlayerTurnStateController : TurnStateController
 
     _cardClickedEventArgs = cardClickedEvent;
     _cardClickTimer = 0.2f;
+  }
+
+  void OnEndTurnClicked(object sender, EventArgs e)
+  {
+    EndTurn();
   }
 
 	public void SpacePressed()

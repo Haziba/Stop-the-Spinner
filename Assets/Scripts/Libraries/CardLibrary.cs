@@ -103,11 +103,11 @@ namespace Libraries
             break;
         }
       }),
-      [CardName.RaiseShield] = new Card(1, (meState, themState) =>
+      [CardName.RaiseShield] = new Card(2, (meState, themState) =>
       {
-        meState.SetArmour(meState.Armour() + 2);
+        meState.SetArmour(meState.Armour() + 1);
         return new NoOutcome();
-      }, new ArmourToolTip(2))
+      }, new ArmourToolTip(1))
     };
   }
 }

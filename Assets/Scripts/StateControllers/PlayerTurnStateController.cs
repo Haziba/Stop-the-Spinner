@@ -95,7 +95,7 @@ public class PlayerTurnStateController : TurnStateController
       if (Input.touches.Any())
       {
         var cardNewPosition = _context.Get<Camera>(ContextObjects.Camera).ScreenToWorldPoint(Input.GetTouch(0).position);
-        cardNewPosition.z = 0;
+        cardNewPosition.z = _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).transform.position.z;
         _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).transform.position = cardNewPosition;
       }
       else

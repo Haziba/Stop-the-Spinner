@@ -26,26 +26,26 @@ public class StartBattleStateController  : StateController
 
   public void DealCards()
   {
-    _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(Player.Deck.ToArray(), Player.MaxCardsInHand);
+    _context.GO(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(Player.Deck.ToArray(), Player.MaxCardsInHand);
 
     var enemy = Monster();
 
-    _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>().SetDeck(enemy.Deck, enemy.MaxCardsInHand);
+    _context.GO(ContextObjects.EnemyHand).GetComponent<HandController>().SetDeck(enemy.Deck, enemy.MaxCardsInHand);
     
     ChangeGameState(GameState.PlayerTurn);
   }
 
   void SetPlayer()
   {
-    _context.Get<GameObject>(ContextObjects.PlayerHealthBar).GetComponent<HealthBarController>().SetHealthAndArmour(Player.Health, Player.Armour);
-    _context.Get<GameObject>(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(Player.MaxMana);
+    _context.GO(ContextObjects.PlayerHealthBar).GetComponent<HealthBarController>().SetHealthAndArmour(Player.Health, Player.Armour);
+    _context.GO(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(Player.MaxMana);
   }
   
   void SetEnemy()
   {
-    _context.Get<GameObject>(ContextObjects.Enemy).GetComponent<MonsterController>().Init(MonsterName());
-    _context.Get<GameObject>(ContextObjects.EnemyHealthBar).GetComponent<HealthBarController>().SetHealthAndArmour(Monster().Health, Monster().Armour);
-    _context.Get<GameObject>(ContextObjects.EnemyManaCounter).GetComponent<ManaCounterController>().Init(Monster().Mana);
+    _context.GO(ContextObjects.Enemy).GetComponent<MonsterController>().Init(MonsterName());
+    _context.GO(ContextObjects.EnemyHealthBar).GetComponent<HealthBarController>().SetHealthAndArmour(Monster().Health, Monster().Armour);
+    _context.GO(ContextObjects.EnemyManaCounter).GetComponent<ManaCounterController>().Init(Monster().Mana);
   }
 
   MonsterName MonsterName()
@@ -63,6 +63,6 @@ public class StartBattleStateController  : StateController
   void SetBackground()
   {
     var config = _context.Get<IContextObject>(ContextObjects.EnemyConfig) as EnemyConfig;
-    _context.Get<GameObject>(ContextObjects.Background).GetComponent<BackgroundController>().SetImage(config.BackgroundName);
+    _context.GO(ContextObjects.Background).GetComponent<BackgroundController>().SetImage(config.BackgroundName);
   }
 }

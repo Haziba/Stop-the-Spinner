@@ -13,15 +13,15 @@ public class PlayerTurnStateController : TurnStateController
     _meGameState = GameState.PlayerTurn;
     _themGameState = GameState.EnemyTurn;
     _doCardPauseLength = 1f;
-    _hand = _context.Get<GameObject>(ContextObjects.PlayerHand);
-    _spinner = _context.Get<GameObject>(ContextObjects.PlayerSpinner);
-    _playedCard = _context.Get<GameObject>(ContextObjects.PlayerPlayedCard);
-    _meHealthBar = _context.Get<GameObject>(ContextObjects.PlayerHealthBar);
-    _themHealthBar = _context.Get<GameObject>(ContextObjects.EnemyHealthBar);
-    _drawPile = _context.Get<GameObject>(ContextObjects.PlayerDrawPile);
-    _discardPile = _context.Get<GameObject>(ContextObjects.PlayerDiscardPile);
-    _meManaCounter = _context.Get<GameObject>(ContextObjects.PlayerManaCounter);
-    _themDamageAnchor = _context.Get<GameObject>(ContextObjects.Enemy);
+    _hand = _context.GO(ContextObjects.PlayerHand);
+    _spinner = _context.GO(ContextObjects.PlayerSpinner);
+    _playedCard = _context.GO(ContextObjects.PlayerPlayedCard);
+    _meHealthBar = _context.GO(ContextObjects.PlayerHealthBar);
+    _themHealthBar = _context.GO(ContextObjects.EnemyHealthBar);
+    _drawPile = _context.GO(ContextObjects.PlayerDrawPile);
+    _discardPile = _context.GO(ContextObjects.PlayerDiscardPile);
+    _meManaCounter = _context.GO(ContextObjects.PlayerManaCounter);
+    _themDamageAnchor = _context.GO(ContextObjects.Enemy);
     _playedCardTarget = new Vector3(0, -1f, -5f);
     _spinnerTarget = new Vector3(0, -1f, -6f);
     _spinnerOrigin = new Vector3(0, -8f, -6f);
@@ -29,7 +29,7 @@ public class PlayerTurnStateController : TurnStateController
     _themState = _context.Get<IContextObject>(ContextObjects.EnemyState) as AgentState;
 
     _hand.GetComponent<HandController>().OnCardClicked += OnCardClicked;
-    _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().OnClicked +=
+    _context.GO(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().OnClicked +=
       OnEndTurnClicked;
   }
   public override void Start()
@@ -42,14 +42,14 @@ public class PlayerTurnStateController : TurnStateController
       return;
     }
 
-    _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().EnableButton();
+    _context.GO(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().EnableButton();
 
     //DebugCard(CardName.BiteThem, AgentStatusEffects.Focused, default(AgentStatusEffects));
   }
 
   public override void End()
   {
-    _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().DisableButton();
+    _context.GO(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().DisableButton();
   }
 
   public override void Update()
@@ -63,9 +63,9 @@ public class PlayerTurnStateController : TurnStateController
     
     //todo: There should be some sort of event firer when the turn state changes. Maybe an overridable method
     if(_innerState == InnerState.ChoosingCard)
-      _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().EnableButton();
+      _context.GO(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().EnableButton();
     else
-      _context.Get<GameObject>(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().DisableButton();
+      _context.GO(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().DisableButton();
 
     base.Update();
   }
@@ -85,8 +85,8 @@ public class PlayerTurnStateController : TurnStateController
       if (_cardClickTimer > 0)
         return;
       
-      _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Player, _cardClickedEventArgs.CardName(), _cardClickedEventArgs.HandCard().Image());
-      _context.Get<GameObject>(ContextObjects.PlayerHand).GetComponent<HandController>().RemoveCard(_cardClickedEventArgs.HandCard());
+      _context.GO(ContextObjects.PlayerPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Player, _cardClickedEventArgs.CardName(), _cardClickedEventArgs.HandCard().Image());
+      _context.GO(ContextObjects.PlayerHand).GetComponent<HandController>().RemoveCard(_cardClickedEventArgs.HandCard());
       _cardBeingDragged = true;
     }
     
@@ -95,8 +95,8 @@ public class PlayerTurnStateController : TurnStateController
       if (Input.touches.Any())
       {
         var cardNewPosition = _context.Get<Camera>(ContextObjects.Camera).ScreenToWorldPoint(Input.GetTouch(0).position);
-        cardNewPosition.z = _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).transform.position.z;
-        _context.Get<GameObject>(ContextObjects.PlayerPlayedCard).transform.position = cardNewPosition;
+        cardNewPosition.z = _context.GO(ContextObjects.PlayerPlayedCard).transform.position.z;
+        _context.GO(ContextObjects.PlayerPlayedCard).transform.position = cardNewPosition;
       }
       else
       {
@@ -116,7 +116,7 @@ public class PlayerTurnStateController : TurnStateController
   void ShowCardTooltip(CardName cardName)
   {
     Debug.Log("Show tooltip - " + cardName);
-    _context.Get<GameObject>(ContextObjects.ToolTip).GetComponent<ToolTipController>().ShowToolTip(cardName);
+    _context.GO(ContextObjects.ToolTip).GetComponent<ToolTipController>().ShowToolTip(cardName);
   }
 
   public void OnCardClicked(object sender, EventArgs e)

@@ -12,7 +12,7 @@ public class CloudHandler : MonoBehaviour
 		var width = transform.GetChild(0).GetComponent<SpriteRenderer>().bounds.size.x;
 
 		var cloudNums = new[] { 0, 1 };/*Enumerable
-			.Range(0, _context.Get<GameObject>(ContextObjects.Background).transform.childCount)
+			.Range(0, _context.GO(ContextObjects.Background).transform.childCount)
 			.ToArray();*/
 		Array
 			.ForEach(cloudNums, (num) => {

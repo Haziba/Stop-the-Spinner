@@ -30,4 +30,9 @@ public class ContextManager
 
     return null;
   }
+
+  public GameObject GO(ContextObjects contextObject)
+  {
+    return Get<GameObject>(contextObject);
+  }
 }

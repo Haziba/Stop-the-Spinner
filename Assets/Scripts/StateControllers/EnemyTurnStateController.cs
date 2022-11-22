@@ -10,15 +10,15 @@ public class EnemyTurnStateController : TurnStateController
     _meGameState = GameState.EnemyTurn;
     _themGameState = GameState.PlayerTurn;
     _doCardPauseLength = 2f;
-    _hand = _context.Get<GameObject>(ContextObjects.EnemyHand);
-    _spinner = _context.Get<GameObject>(ContextObjects.EnemySpinner);
-    _playedCard = _context.Get<GameObject>(ContextObjects.EnemyPlayedCard);
-    _meHealthBar = _context.Get<GameObject>(ContextObjects.EnemyHealthBar);
-    _themHealthBar = _context.Get<GameObject>(ContextObjects.PlayerHealthBar);
-    _drawPile = _context.Get<GameObject>(ContextObjects.EnemyDrawPile);
-    _discardPile = _context.Get<GameObject>(ContextObjects.EnemyDiscardPile);
-    _meManaCounter = _context.Get<GameObject>(ContextObjects.EnemyManaCounter);
-    _themDamageAnchor = _context.Get<GameObject>(ContextObjects.PlayerDamageAnchor);
+    _hand = _context.GO(ContextObjects.EnemyHand);
+    _spinner = _context.GO(ContextObjects.EnemySpinner);
+    _playedCard = _context.GO(ContextObjects.EnemyPlayedCard);
+    _meHealthBar = _context.GO(ContextObjects.EnemyHealthBar);
+    _themHealthBar = _context.GO(ContextObjects.PlayerHealthBar);
+    _drawPile = _context.GO(ContextObjects.EnemyDrawPile);
+    _discardPile = _context.GO(ContextObjects.EnemyDiscardPile);
+    _meManaCounter = _context.GO(ContextObjects.EnemyManaCounter);
+    _themDamageAnchor = _context.GO(ContextObjects.PlayerDamageAnchor);
     _playedCardTarget = new Vector3(0, 1f, -5f);
     _spinnerTarget = new Vector3(0, 1f, -6f);
     _spinnerOrigin = new Vector3(0, 8f, -6f);
@@ -63,7 +63,7 @@ public class EnemyTurnStateController : TurnStateController
 
   void PlayCard()
   {
-    var handController = _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>();
+    var handController = _context.GO(ContextObjects.EnemyHand).GetComponent<HandController>();
     var availableCardIndexes = AvailableCardIndexes();
 
     if (!availableCardIndexes.Any())
@@ -76,7 +76,7 @@ public class EnemyTurnStateController : TurnStateController
     
     handController.RemoveCard(cardToPlay);
 
-    _context.Get<GameObject>(ContextObjects.EnemyPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Enemy, cardToPlay.CardName(), cardToPlay.Image());
+    _context.GO(ContextObjects.EnemyPlayedCard).GetComponent<PlayedCardController>().PlayCard(Agent.Enemy, cardToPlay.CardName(), cardToPlay.Image());
 
     PlayCardFromHand();
   }

@@ -100,7 +100,7 @@ public class TurnStateController : StateController
 
   protected int[] AvailableCardIndexes()
   {
-    var handController = _context.Get<GameObject>(ContextObjects.EnemyHand).GetComponent<HandController>();
+    var handController = _context.GO(ContextObjects.EnemyHand).GetComponent<HandController>();
     return handController.AvailableCardIndexes(_meState);
   }
   
@@ -164,8 +164,8 @@ public class TurnStateController : StateController
 
     if (result != SpinnerResult.Miss)
     {
-      var damageBall = _context.Get<GameObject>(ContextObjects.Instantiator).GetComponent<InitiatorController>()
-        .Instantiate(_context.Get<GameObject>(ContextObjects.DamageBallPrefab));
+      var damageBall = _context.GO(ContextObjects.Instantiator).GetComponent<InitiatorController>()
+        .Instantiate(_context.GO(ContextObjects.DamageBallPrefab));
       //todo: Refactor
       damageBall.GetComponent<DamageBallController>().SetImage(_playedCard.GetComponent<PlayedCardController>().CardName());
       damageBall.transform.position = _spinner.transform.position + new Vector3(0, 0, -2f);
@@ -176,7 +176,7 @@ public class TurnStateController : StateController
         {
           // todo: This really, really doesn't belong. Maybe both characters have a state manager that would handle this, and it handles health / mana / armour as well
           if(this is PlayerTurnStateController)
-            _context.Get<GameObject>(ContextObjects.Enemy).GetComponent<MonsterController>().UpdateState(_context.Get<IContextObject>(ContextObjects.EnemyState) as AgentState);
+            _context.GO(ContextObjects.Enemy).GetComponent<MonsterController>().UpdateState(_context.Get<IContextObject>(ContextObjects.EnemyState) as AgentState);
           
           // todo: Oh wow even more stuff that doesn't belong here looks like an anti-pattern emerging
           _meHealthBar.GetComponent<HealthBarController>().SetHealthAndArmour(_meState.Health(), _meState.Armour());
@@ -184,7 +184,7 @@ public class TurnStateController : StateController
           
           _context.Get<Camera>(ContextObjects.Camera).GetComponent<CameraController>().Shake(0.2f, 0.5f, () =>
           {
-            _context.Get<GameObject>(ContextObjects.Instantiator).GetComponent<InitiatorController>().Destroy(damageBall);
+            _context.GO(ContextObjects.Instantiator).GetComponent<InitiatorController>().Destroy(damageBall);
             HideSpinner();
           });
       });

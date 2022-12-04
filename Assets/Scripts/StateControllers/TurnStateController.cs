@@ -43,7 +43,7 @@ public class TurnStateController : StateController
   public override void Start()
   {
     ChangeGameState(_meGameState);
-    _innerState = InnerState.ChoosingCard;
+    UpdateInnerState(InnerState.ChoosingCard);
 
     _meState.RecoverMana();
     _meManaCounter.GetComponent<ManaCounterController>()
@@ -89,7 +89,7 @@ public class TurnStateController : StateController
 
   protected void PlayCardFromHand()
   {
-    _innerState = InnerState.PlayedCardMovingToPosition;
+    UpdateInnerState(InnerState.PlayedCardMovingToPosition);
 
     _playedCard.transform.DOMove(_playedCardTarget, 0.5f)
       .OnComplete(() => {
@@ -124,11 +124,11 @@ public class TurnStateController : StateController
         EndPlayCard();
         break;
       case EffectOutcome.SpinWheel:
-        _innerState = InnerState.SpinnerComingIn;
+        UpdateInnerState(InnerState.SpinnerComingIn);
         _spinner.GetComponent<SpinnerController>().UpdateConfig(performOutcome.Data() as SpinnerConfiguration);
         _spinner.transform.DOMove(_spinnerTarget, 0.5f)
           .OnComplete(() => {
-            _innerState = InnerState.SpinnerSpinning;
+            UpdateInnerState(InnerState.SpinnerSpinning);
             _spinner.GetComponent<SpinnerController>().StartSpinning(_meState.StatusEffects());
             OnSpinnerInPosition();
           });
@@ -151,7 +151,7 @@ public class TurnStateController : StateController
       {
         _hand.GetComponent<HandController>().DiscardCard(_playedCard.GetComponent<PlayedCardController>().CardName());
         _playedCard.GetComponent<PlayedCardController>().RemoveCard();
-        _innerState = InnerState.ChoosingCard;
+        UpdateInnerState(InnerState.ChoosingCard);
       });
     discardCardSequence.Play();
   }
@@ -197,7 +197,7 @@ public class TurnStateController : StateController
   {
     var hideSpinnerCountdown = new HUtilities.Countdown(1f, () =>
     {
-      _innerState = InnerState.SpinnerGoingOut;
+      UpdateInnerState(InnerState.SpinnerGoingOut);
 
       _spinner.transform.DOMove(_spinnerOrigin, 0.5f)
         .OnComplete(EndPlayCard);
@@ -217,6 +217,11 @@ public class TurnStateController : StateController
   protected void EndTurn()
   {
     ChangeGameState(_themGameState);
+  }
+
+  protected virtual void UpdateInnerState(InnerState newState)
+  {
+    _innerState = newState;
   }
 
   protected virtual void OnSpinnerInPosition() { }

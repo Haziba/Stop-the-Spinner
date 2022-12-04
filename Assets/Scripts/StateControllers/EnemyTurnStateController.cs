@@ -37,17 +37,15 @@ public class EnemyTurnStateController : TurnStateController
     }
   }
 
-  public override void Update()
+  protected override void UpdateInnerState(InnerState newState)
   {
-    base.Update();
-    
-    // TODO:: I don't like this. Maybe there should be an event on TurnStateController, but that feels
-    // janky too. Maybe an overridable method? Ah whatever, this will do for now
-    if (_innerState != InnerState.ChoosingCard || (_playCardCountdown != null && _playCardCountdown.Running()))
-      return;
-    
-    _playCardCountdown = new HUtilities.Countdown(1f, PlayCard);
-    _countdowns.Add(_playCardCountdown);
+    if (newState == InnerState.ChoosingCard)
+    {
+      _playCardCountdown = new HUtilities.Countdown(1f, PlayCard);
+      _countdowns.Add(_playCardCountdown);
+    }
+
+    base.UpdateInnerState(newState);
   }
 
   protected override void OnPlayedCardInPosition()

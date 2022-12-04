@@ -58,7 +58,7 @@ public class TurnStateController : StateController
       if(!_countdowns[i].Update())
         _countdowns.RemoveAt(i);
     
-    // todo: This may not be fit for purpose anymore
+    // TODO:: This may not be fit for purpose anymore
     switch(_innerState)
     {
       case InnerState.ChoosingCard:
@@ -114,7 +114,7 @@ public class TurnStateController : StateController
 
   void PerformCard(CardName cardName)
   {
-    // todo: Feels janky, maybe the Played Card Name should be held in this class instead idk
+    // TODO:: Feels janky, maybe the Played Card Name should be held in this class instead idk
     _cardEffect = new PerformCardEffect(cardName, _meHealthBar, _themHealthBar, _meArmourCounter, _themArmourCounter, _meState, _themState);
     var performOutcome = _cardEffect.Perform();
 
@@ -166,7 +166,7 @@ public class TurnStateController : StateController
     {
       var damageBall = _context.GO(ContextObjects.Instantiator).GetComponent<InitiatorController>()
         .Instantiate(_context.GO(ContextObjects.DamageBallPrefab));
-      //todo: Refactor
+      // TODO:: Refactor
       damageBall.GetComponent<DamageBallController>().SetImage(_playedCard.GetComponent<PlayedCardController>().CardName());
       damageBall.transform.position = _spinner.transform.position + new Vector3(0, 0, -2f);
       damageBall.transform
@@ -174,11 +174,11 @@ public class TurnStateController : StateController
         .SetEase(Ease.InExpo)
         .OnComplete(() =>
         {
-          // todo: This really, really doesn't belong. Maybe both characters have a state manager that would handle this, and it handles health / mana / armour as well
+          // TODO:: This really, really doesn't belong. Maybe both characters have a state manager that would handle this, and it handles health / mana / armour as well
           if(this is PlayerTurnStateController)
             _context.GO(ContextObjects.Enemy).GetComponent<MonsterController>().UpdateState(_context.Get<IContextObject>(ContextObjects.EnemyState) as AgentState);
           
-          // todo: Oh wow even more stuff that doesn't belong here looks like an anti-pattern emerging
+          // TODO:: Oh wow even more stuff that doesn't belong here looks like an anti-pattern emerging
           _meHealthBar.GetComponent<HealthBarController>().SetHealthAndArmour(_meState.Health(), _meState.Armour());
           _themHealthBar.GetComponent<HealthBarController>().SetHealthAndArmour(_themState.Health(), _themState.Armour());
           

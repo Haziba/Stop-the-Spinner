@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 
-// todo: Delete this whole class, all it really does is hold onto the cardName
+// TODO:: Delete this whole class, all it really does is hold onto the cardName
 public class HandCard
 {
   CardName _cardName;
@@ -17,7 +17,7 @@ public class HandCard
     _card = card;
     _hand = hand;
 
-    // todo: Should this really live here? This whole class is starting to smell
+    // TODO:: Should this really live here? This whole class is starting to smell
     _card.GetComponent<CardHandler>().OnCardClicked += CardClicked;
     _card.transform.parent = _hand.transform;
     _card.GetComponent<CardHandler>().SetCardImage(_cardName);
@@ -28,10 +28,10 @@ public class HandCard
     OnCardClicked?.Invoke(sender, new CardClickedEventArgs(_cardName, this) as EventArgs);
   }
 
-  // todo: This feels a bit rusty, handing the image in to get it back out. Do people use tuples?
+  // TODO:: This feels a bit rusty, handing the image in to get it back out. Do people use tuples?
   public GameObject Image()
   {
-    // todo: Also this should be renamed `_cardImage`, or `_image`
+    // TODO:: Also this should be renamed `_cardImage`, or `_image`
     return _card;
   }
 

@@ -86,7 +86,7 @@ public class HandController : MonoBehaviour
 
     public void AddCard(CardName cardName)
     {
-      // todo: This whole thing is janky, does HandCard need to exist?
+      // TODO:: This whole thing is janky, does HandCard need to exist?
       var card = Instantiate(CardPrefab, transform.position, Quaternion.identity);
       var handCard = new HandCard(cardName, card, gameObject);
       if(!PlayerHand)
@@ -149,7 +149,7 @@ public class HandController : MonoBehaviour
       DiscardCounter.GetComponent<Text>().text = _discardPile.Count.ToString();
     }
 
-    // todo: Maybe agentState should live elsewhere
+    // TODO:: Maybe agentState should live elsewhere
     public int[] AvailableCardIndexes(AgentState agentState)
     {
       if (!_handCards.Any())

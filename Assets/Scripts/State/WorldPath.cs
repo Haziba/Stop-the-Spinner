@@ -32,7 +32,7 @@ namespace State
       var extraPoints = new[] { 1, 2, 2, 3, 3, 3, 4 };
       extraPoints.Shuffle();
       
-      // todo: Refactor into nice functions or something
+      // TODO:: Refactor into nice functions or something
       for (var i = 0; i < newMapPoints.Count() - 2; i++)
       {
         var children = newMapPoints[i].Select(newMapPoint => new List<MapPoint>()).ToArray();
@@ -78,7 +78,7 @@ namespace State
         }
       }
 
-      //todo: Big nice easy refactor jobbie to be done here
+      // TODO:: Big nice easy refactor jobbie to be done here
       var availableMapPoints = allMapPoints.Where(mP => mP.Event == PointEvent.None && !mP.Children.Any()).ToList();
       availableMapPoints.Shuffle();
       for (var i = 0; i < 3; i++)
@@ -91,7 +91,7 @@ namespace State
       availableMapPoints = allMapPoints.Where(mP => mP.Event == PointEvent.None).ToList();
       availableMapPoints.Shuffle();
       var mapPointIndex = 0;
-      // todo: Could do with shuffling the monster names
+      // TODO:: Could do with shuffling the monster names
       foreach (MonsterName monsterName in Enum.GetValues(typeof(MonsterName)))
       {
         availableMapPoints[mapPointIndex].Visited = false;
@@ -99,12 +99,12 @@ namespace State
         availableMapPoints[mapPointIndex].MonsterName = monsterName;
         mapPointIndex++;
         
-        //todo: Eh I don't really like this but maybe all of this functionality needs refactoring
+        // TODO:: Eh I don't really like this but maybe all of this functionality needs refactoring
         if(mapPointIndex >= availableMapPoints.Count)
           break;
       }
 
-      // todo: Gotta be a better way to make sure the first point doesn't have anything on it
+      // TODO:: Gotta be a better way to make sure the first point doesn't have anything on it
       newMapPoints.First().First().Event = PointEvent.None;
       
       _mapData = new MapData

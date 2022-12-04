@@ -61,7 +61,7 @@ public class PlayerTurnStateController : TurnStateController
     if (_cardClickedEventArgs != null)
       HandleCardBeingClicked();
     
-    //todo: There should be some sort of event firer when the turn state changes. Maybe an overridable method
+    // TODO:: There should be some sort of event firer when the turn state changes. Maybe an overridable method
     if(_innerState == InnerState.ChoosingCard)
       _context.GO(ContextObjects.EndTurnButton).GetComponent<EndTurnButtonController>().EnableButton();
     else

@@ -68,9 +68,9 @@ class WorldPathController : MonoBehaviour
     if(nextIndex >= 0)
     {
       _pathTaken.Add(_mapLocation);
-      //todo: not sure if this works, that might not always be the correct child
+      // TODO:: not sure if this works, that might not always be the correct child
       // consider storing correct child or storing proper index number in each arrow
-      //todo: Also this is a mess
+      // TODO:: Also this is a mess
       _mapLocation = new Vector2(Array.IndexOf(_mapData.Points[(int)_mapLocation.y+1], CurrentMapPoint().Children[Math.Min(CurrentMapPoint().Children.Length - 1, nextIndex)]), _mapLocation.y+1);
     } else {
       _mapLocation = _pathTaken.Last();

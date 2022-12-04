@@ -68,7 +68,7 @@ public class EventController : MonoBehaviour
     switch(_currentEventStep.Type)
     {
       case EventStepType.Text:
-        // todo: Smell
+        // TODO:: Smell
         UpdateText(((_currentEventStep as TextEventStep).Data as TextEventStep.EventData).Text);
         break;
       case EventStepType.Question:

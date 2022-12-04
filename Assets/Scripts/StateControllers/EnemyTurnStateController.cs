@@ -41,7 +41,7 @@ public class EnemyTurnStateController : TurnStateController
   {
     base.Update();
     
-    // todo: I don't like this. Maybe there should be an event on TurnStateController, but that feels
+    // TODO:: I don't like this. Maybe there should be an event on TurnStateController, but that feels
     // janky too. Maybe an overridable method? Ah whatever, this will do for now
     if (_innerState != InnerState.ChoosingCard || (_playCardCountdown != null && _playCardCountdown.Running()))
       return;

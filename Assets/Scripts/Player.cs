@@ -22,7 +22,7 @@ public static class Player
     if (_inited)
       return;
     
-    // todo: Load this from a file
+    // TODO:: Load this from a file
     _baseDeck = new List<CardName>
     {
       CardName.IntoxicateThem,

@@ -17,10 +17,10 @@ namespace Libraries
         switch (spinnerResult)
         {
           case SpinnerResult.Hit:
-            themState.TakeDamage(1);
+            themState.TakeDamage(2);
             break;
           case SpinnerResult.Crit:
-            themState.TakeDamage(2);
+            themState.TakeDamage(3);
             break;
         }
       }),
@@ -36,7 +36,7 @@ namespace Libraries
             themState.TakeDamage(2);
             break;
           case SpinnerResult.Crit:
-            themState.TakeDamage(3);
+            themState.TakeDamage(4);
             break;
         }
       }),

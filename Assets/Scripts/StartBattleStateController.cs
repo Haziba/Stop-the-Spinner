@@ -59,7 +59,6 @@ public class StartBattleStateController  : StateController
     return MonsterLibrary.Monsters[MonsterName()];
   }
   
-  // TODO:: Hmm not sure this belongs
   void SetBackground()
   {
     var config = _context.Get<IContextObject>(ContextObjects.EnemyConfig) as EnemyConfig;

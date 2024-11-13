@@ -10,6 +10,13 @@ namespace State
   public static class WorldPath
   {
     static MapData _mapData;
+    
+    static MapPoint _forcedPoint = /* null; */new MapPoint
+      {
+        Event = PointEvent.Event,
+        Visited = false,
+        BackgroundName = BackgroundName.WitchHut
+      };
 
     public static MapData MapData
     {
@@ -28,6 +35,22 @@ namespace State
         {
           new MapPoint()
         }).ToArray();
+
+      if (_forcedPoint != null)
+      {
+        _mapData = new MapData
+        {
+          Points = new[]
+          {
+            new []
+            {
+              new MapPoint { BackgroundName = BackgroundName.OneWayPath, Children = new [] { _forcedPoint }, Visited = false }
+            }, new [] { _forcedPoint }
+          }
+        };
+
+        return;
+      }
 
       var extraPoints = new[] { 1, 2, 2, 3, 3, 3, 4 };
       extraPoints.Shuffle();

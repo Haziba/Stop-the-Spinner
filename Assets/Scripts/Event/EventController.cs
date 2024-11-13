@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +15,8 @@ public class EventController : MonoBehaviour
   EventName _event = EventName.WitchHut;
   int _currentStepNumber;
   EventStep _currentEventStep;
+  int _lastTouchCount;
+  bool _readyForInput = false;
 
   IList<GameObject> _options = new List<GameObject>();
 
@@ -51,6 +52,8 @@ public class EventController : MonoBehaviour
     _currentStepNumber = newStep;
     _currentEventStep = EventLibrary.Events[_event].Steps[_currentStepNumber];
     StartEventStep();
+    UpdateLastTouchCount();
+    _readyForInput = true;
   }
 
   void EndStep()
@@ -101,7 +104,9 @@ public class EventController : MonoBehaviour
     opt.transform.SetParent(OptionsCanvas.transform, false);
     opt.transform.position = new Vector3(0, -1.7f + 1f * i, 0);
     opt.transform.Find("Text").gameObject.GetComponent<Text>().text = option.Text;
-    opt.GetComponent<EventOptionController>().OnOptionClicked += (object sender, EventArgs e) => {
+    opt.GetComponent<EventOptionController>().OnOptionClicked += (object sender, EventArgs e) =>
+    {
+      Debug.Log("Option clicked!");
       var nextStepId = (sender as EventOptionController).NextStepId();
       StartStep(nextStepId);
     };
@@ -111,25 +116,40 @@ public class EventController : MonoBehaviour
 
   void UpdateStep()
   {
-    var goNextPressed = GoNextPressed();
-
-    if(goNextPressed && _currentEventStep.FinalStep) {
-      StartStep(-1);
-      return;
-    }
-
-    switch(_currentEventStep.Type)
+    if (GoNextPressed() && _readyForInput)
     {
-      case EventStepType.Text:
-        if(goNextPressed)
+      Debug.Log("Ready for input and go next clicked");
+      _readyForInput = false;
+      
+      if (_currentEventStep.FinalStep)
+      {
+        StartStep(-1);
+        return;
+      }
+      
+      switch(_currentEventStep.Type)
+      {
+        case EventStepType.Text:
           StartStep(_currentStepNumber + 1);
-        break;
+          break;
+      }
     }
+  }
+
+  void UpdateLastTouchCount()
+  {
+    _lastTouchCount = Input.touchCount;
   }
 
   bool GoNextPressed()
   {
-    return Input.GetKeyDown("space") || Input.touchCount > 0;
+    var newTouch = Input.touchCount > _lastTouchCount;
+    UpdateLastTouchCount();
+
+    if (!_readyForInput)
+      return false;
+    
+    return Input.GetKeyDown("space") || newTouch;
   }
 
   void UpdateText(string text)

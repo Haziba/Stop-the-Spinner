@@ -100,7 +100,8 @@ class WorldPathController : MonoBehaviour
     }
   }
 
-  public void Update()
+  public void ClickDeck()
   {
+    SceneManager.LoadScene("DeckScene");
   }
 }

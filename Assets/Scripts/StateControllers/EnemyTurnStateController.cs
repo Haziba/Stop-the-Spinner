@@ -9,7 +9,7 @@ public class EnemyTurnStateController : TurnStateController
   {
     _meGameState = GameState.EnemyTurn;
     _themGameState = GameState.PlayerTurn;
-    _doCardPauseLength = 2f;
+    _doCardPauseLength = 1f;
     _hand = _context.GO(ContextObjects.EnemyHand);
     _spinner = _context.GO(ContextObjects.EnemySpinner);
     _playedCard = _context.GO(ContextObjects.EnemyPlayedCard);

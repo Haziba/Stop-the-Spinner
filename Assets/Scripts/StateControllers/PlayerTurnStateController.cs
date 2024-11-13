@@ -12,7 +12,7 @@ public class PlayerTurnStateController : TurnStateController
   {
     _meGameState = GameState.PlayerTurn;
     _themGameState = GameState.EnemyTurn;
-    _doCardPauseLength = 1f;
+    _doCardPauseLength = 0.2f;
     _hand = _context.GO(ContextObjects.PlayerHand);
     _spinner = _context.GO(ContextObjects.PlayerSpinner);
     _playedCard = _context.GO(ContextObjects.PlayerPlayedCard);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Libraries
@@ -44,11 +45,12 @@ public enum ItemSlot
   Feet
 }
 
+[Serializable]
 public class Item
 {
-  public ItemName Name { get; }
-  public ItemSlot ItemSlot { get; }
-  public IList<CardName> Cards { get; internal set; }
+  public ItemName Name { get; set; }
+  public ItemSlot ItemSlot { get; set; }
+  public List<CardName> Cards { get; set; }
   
   public Item(ItemName name, ItemSlot itemSlot)
   {

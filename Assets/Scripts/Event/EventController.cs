@@ -80,7 +80,28 @@ public class EventController : MonoBehaviour
         break;
       case EventStepType.Resolution:
         UpdateText(((_currentEventStep as ResolutionEventStep).Data as ResolutionEventStep.EventData).Text);
+        foreach (var resolution in
+                 ((_currentEventStep as ResolutionEventStep).Data as ResolutionEventStep.EventData).Resolutions)
+          HandleResolution(resolution);
         break;
+    }
+  }
+
+  void HandleResolution(ResolutionEventStep.Resolution resolution)
+  {
+    switch(resolution.Type)
+    {
+      case ResolutionType.Health:
+        throw new NotImplementedException();
+      case ResolutionType.Armour:
+        throw new NotImplementedException();
+      case ResolutionType.GainCard:
+        Player.Instance.GainCard((CardName)resolution.Change);
+        break;
+      case ResolutionType.Gold:
+        throw new NotImplementedException();
+      default:
+        throw new NotImplementedException();
     }
   }
 

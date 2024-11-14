@@ -1,6 +1,5 @@
 using System.Linq;
 using Libraries;
-using UnityEngine;
 
 public class StartBattleStateController  : StateController
 {
@@ -26,7 +25,7 @@ public class StartBattleStateController  : StateController
 
   public void DealCards()
   {
-    _context.GO(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(Player.Deck.ToArray(), Player.MaxCardsInHand);
+    _context.GO(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(Player.Instance.Deck.ToArray(), Player.Instance.MaxCardsInHand);
 
     var enemy = Monster();
 
@@ -37,8 +36,8 @@ public class StartBattleStateController  : StateController
 
   void SetPlayer()
   {
-    _context.GO(ContextObjects.PlayerHealthBar).GetComponent<HealthBarController>().SetHealthAndArmour(Player.Health, Player.Armour);
-    _context.GO(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(Player.MaxMana);
+    _context.GO(ContextObjects.PlayerHealthBar).GetComponent<HealthBarController>().SetHealthAndArmour(Player.Instance.Health, Player.Instance.Armour);
+    _context.GO(ContextObjects.PlayerManaCounter).GetComponent<ManaCounterController>().Init(Player.Instance.MaxMana);
   }
   
   void SetEnemy()

@@ -14,9 +14,7 @@ namespace Deck
     
     public void Start()
     {
-      Player.Init();
-      
-      AddCardsToDeckPane(Player.Deck.ToList());
+      AddCardsToDeckPane(Player.Instance.Deck.ToList());
     }
 
     void AddCardsToDeckPane(IList<CardName> cards)

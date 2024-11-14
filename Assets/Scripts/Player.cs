@@ -1,53 +1,109 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Libraries;
+using Newtonsoft.Json;
+using UnityEngine;
 
-public static class Player
+public class Player
 {
-  static bool _inited;
+  static Player _instance;
 
   static IList<CardName> _baseDeck;
-  public static IList<CardName> Deck => _baseDeck.Concat(ItemCards()).ToList();
-  public static IDictionary<ItemSlot, Item> Items { get; private set; }
-  public static int MaxCardsInHand { get; private set; }
-  public static int MaxHealth { get; private set; }
-  public static int Health { get; private set; }
-  public static int MaxMana { get; private set; }
-  public static int ManaRecoveryAmount { get; private set; }
-  public static int Armour { get; private set; }
+  public IList<CardName> Deck => _baseDeck.Concat(ItemCards()).ToList();
+  public IDictionary<ItemSlot, Item> Items { get; }
+  public int MaxCardsInHand { get; }
+  public int MaxHealth { get; }
+  public int Health { get; }
+  public int MaxMana { get; }
+  public int ManaRecoveryAmount { get; }
+  public int Armour { get; }
 
+  public static Player Instance => _instance ??= Init();
 
-  public static void Init()
+  Player(SaveData data)
   {
-    if (_inited)
-      return;
-    
-    // TODO:: Load this from a file
-    _baseDeck = new List<CardName>
-    {
-      CardName.IntoxicateThem,
-      CardName.DistractThem,
-      CardName.DistractThem
-    };
-
-    Items = new Dictionary<ItemSlot, Item>
-    {
-      [ItemSlot.Head] = ItemLibrary.Items[ItemName.FancyHat],
-      [ItemSlot.LeftArm] = ItemLibrary.Items[ItemName.RustySword]
-    };
-
-    MaxCardsInHand = 5;
-    MaxHealth = 10;
-    Health = 10;
-    MaxMana = 3;
-    ManaRecoveryAmount = 2;
+    _baseDeck = data.baseDeck.ToList();
+    Items = data.items;
+    MaxCardsInHand = data.maxCardsInHand;
+    MaxHealth = data.maxHealth;
+    Health = data.health;
+    MaxMana = data.maxMana;
+    ManaRecoveryAmount = data.manaRecoveryAmount;
     Armour = 0;
-
-    _inited = true;
   }
 
-  static IEnumerable<CardName> ItemCards()
+  static Player Init()
+  {
+    Debug.Log("Init!");
+    var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
+    if (System.IO.File.Exists(path))
+    {
+      var json = System.IO.File.ReadAllText(path);
+      var data = JsonConvert.DeserializeObject<SaveData>(json);
+
+      return new Player(data);
+    }
+
+    var newData = new SaveData
+    {
+      baseDeck = new List<CardName>
+      {
+        CardName.IntoxicateThem,
+        CardName.DistractThem,
+        CardName.DistractThem
+      },
+      items = new Dictionary<ItemSlot, Item>
+      {
+        [ItemSlot.Head] = ItemLibrary.Items[ItemName.FancyHat],
+        [ItemSlot.LeftArm] = ItemLibrary.Items[ItemName.RustySword]
+      },
+      maxCardsInHand = 5,
+      maxHealth = 10,
+      health = 10,
+      maxMana = 3,
+      manaRecoveryAmount = 2,
+    };
+
+    return new Player(newData);
+  }
+
+  IEnumerable<CardName> ItemCards()
   {
     return Items.Values.SelectMany(item => item.Cards);
+  }
+
+  public void GainCard(CardName cardName)
+  {
+    _baseDeck.Add(cardName);
+    Save();
+  }
+
+  void Save()
+  {
+    var json = JsonConvert.SerializeObject(new SaveData
+    {
+      baseDeck = _baseDeck.ToList(),
+      items = Items,
+      maxCardsInHand = MaxCardsInHand,
+      maxHealth = MaxHealth,
+      health = Health,
+      maxMana = MaxMana,
+      manaRecoveryAmount = ManaRecoveryAmount
+    });
+    var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
+    System.IO.File.WriteAllText(path, json);
+  }
+
+  [Serializable]
+  public class SaveData
+  {
+    public List<CardName> baseDeck;
+    public IDictionary<ItemSlot, Item> items;
+    public int maxCardsInHand;
+    public int maxHealth;
+    public int health;
+    public int maxMana;
+    public int manaRecoveryAmount;
   }
 }

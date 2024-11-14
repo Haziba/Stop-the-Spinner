@@ -52,7 +52,6 @@ public class GameController : MonoBehaviour
     };
 
     var monster = MonsterLibrary.Monsters[((EnemyConfig)sceneData[SceneDataKey.Enemy]).Name];
-    Player.Init();
 
     var context = new ContextManager(
       new Dictionary<ContextObjects, GameObject> {
@@ -94,7 +93,7 @@ public class GameController : MonoBehaviour
       },
       new Dictionary<ContextObjects, IContextObject>
       {
-        [ContextObjects.PlayerState] = new AgentState(Player.Health, Player.Armour, Player.MaxMana, Player.ManaRecoveryAmount),
+        [ContextObjects.PlayerState] = new AgentState(Player.Instance.Health, Player.Instance.Armour, Player.Instance.MaxMana, Player.Instance.ManaRecoveryAmount),
         [ContextObjects.EnemyState] = new AgentState(monster.Health, monster.Armour, monster.Mana, monster.ManaRecoveryRate),
         [ContextObjects.EnemyConfig] = sceneData != null ? (EnemyConfig)sceneData[SceneDataKey.Enemy] : new EnemyConfig(MonsterName.Sleppy, BackgroundName.OneWayPath),
       }

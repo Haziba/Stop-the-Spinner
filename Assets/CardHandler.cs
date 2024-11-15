@@ -35,8 +35,12 @@ public class CardHandler : MonoBehaviour
 
   void HideAllCardImages()
   {
-    for(var i = 0; i < transform.childCount; i++){
-      transform.GetChild(i).gameObject.SetActive(false);
+    for(var i = 0; i < transform.childCount; i++)
+    {
+      if (transform.GetChild(i).gameObject.name == "CardBackground")
+        transform.GetChild(i).gameObject.SetActive(true);
+      else
+        transform.GetChild(i).gameObject.SetActive(false);
     }
   }
 
@@ -47,6 +51,7 @@ public class CardHandler : MonoBehaviour
 
   void ShowCardBack()
   {
+    transform.Find("CardBackground").gameObject.SetActive(false);
     transform.Find("Back").gameObject.SetActive(true);
   }
 

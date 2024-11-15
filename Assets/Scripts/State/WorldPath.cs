@@ -11,12 +11,12 @@ namespace State
   {
     static MapData _mapData;
     
-    static MapPoint _forcedPoint = /* null; */new MapPoint
+    static MapPoint _forcedPoint = null; /*new MapPoint
       {
         Event = PointEvent.Event,
         Visited = false,
         BackgroundName = BackgroundName.WitchHut
-      };
+      };*/
 
     public static MapData MapData
     {

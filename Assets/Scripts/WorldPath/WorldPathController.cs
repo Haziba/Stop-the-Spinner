@@ -17,7 +17,6 @@ class WorldPathController : MonoBehaviour
 
   public void Start()
   {
-    Debug.Log(_mapLocation);
     Random.InitState(5);
     _mapData = State.WorldPath.MapData;
     
@@ -77,9 +76,6 @@ class WorldPathController : MonoBehaviour
       _pathTaken.Remove(_mapLocation);
     }
     var newPoint = _mapData.Points[(int)_mapLocation.y][(int)_mapLocation.x];
-
-    Debug.Log(_mapLocation);
-    Debug.Log(newPoint.Visited);
 
     if(newPoint.Visited || newPoint.Event == PointEvent.None) {
       RefreshScene();

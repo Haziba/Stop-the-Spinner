@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour
   {
     var sceneData = SceneDataHandler.GetData() ?? new Dictionary<SceneDataKey, object>
     {
-      [SceneDataKey.Enemy] = new EnemyConfig(MonsterName.Trupple, BackgroundName.DeadEnd)
+      [SceneDataKey.Enemy] = new EnemyConfig(MonsterName.Gronk, BackgroundName.DeadEnd)
     };
 
     var monster = MonsterLibrary.Monsters[((EnemyConfig)sceneData[SceneDataKey.Enemy]).Name];

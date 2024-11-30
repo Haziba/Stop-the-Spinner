@@ -100,4 +100,9 @@ class WorldPathController : MonoBehaviour
   {
     SceneManager.LoadScene("DeckScene");
   }
+
+  public void ClickPlayerInfo()
+  {
+    SceneManager.LoadScene("PlayerInfoScene");
+  }
 }

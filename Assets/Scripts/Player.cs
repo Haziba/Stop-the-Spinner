@@ -12,6 +12,7 @@ public class Player
   static IList<CardName> _baseDeck;
   public IList<CardName> Deck => _baseDeck.Concat(ItemCards()).ToList();
   public IDictionary<ItemSlot, Item> Items { get; }
+  public List<Item> Inventory { get;  }
   public int MaxCardsInHand { get; }
   public int MaxHealth { get; }
   public int Health { get; }
@@ -25,6 +26,7 @@ public class Player
   {
     _baseDeck = data.baseDeck.ToList();
     Items = data.items;
+    Inventory = data.inventory;
     MaxCardsInHand = data.maxCardsInHand;
     MaxHealth = data.maxHealth;
     Health = data.health;
@@ -35,7 +37,6 @@ public class Player
 
   static Player Init()
   {
-    Debug.Log("Init!");
     var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
     if (System.IO.File.Exists(path))
     {
@@ -56,7 +57,14 @@ public class Player
       items = new Dictionary<ItemSlot, Item>
       {
         [ItemSlot.Head] = ItemLibrary.Items[ItemName.FancyHat],
-        [ItemSlot.LeftArm] = ItemLibrary.Items[ItemName.RustySword]
+        [ItemSlot.LeftArm] = ItemLibrary.Items[ItemName.RustySword],
+        [ItemSlot.RightArm] = ItemLibrary.Items[ItemName.RustySword]
+      },
+      inventory = new List<Item>
+      {
+        ItemLibrary.Items[ItemName.RustyAxe],
+        ItemLibrary.Items[ItemName.RustyAxe],
+        ItemLibrary.Items[ItemName.FancyHat],
       },
       maxCardsInHand = 5,
       maxHealth = 10,
@@ -79,12 +87,33 @@ public class Player
     Save();
   }
 
+  public void EquipItem(ItemSlot slot, Item item)
+  {
+    Debug.Log(slot);
+    if(Items.ContainsKey(slot))
+      AddInventoryItem(Items[slot]);
+    RemoveInventoryItem(item);
+    Items[slot] = item;
+    Save();
+  }
+
+  public void AddInventoryItem(Item item)
+  {
+    Inventory.Add(item);
+  }
+
+  public void RemoveInventoryItem(Item item)
+  {
+    Inventory.Remove(item);
+  }
+
   void Save()
   {
     var json = JsonConvert.SerializeObject(new SaveData
     {
       baseDeck = _baseDeck.ToList(),
       items = Items,
+      inventory = Inventory,
       maxCardsInHand = MaxCardsInHand,
       maxHealth = MaxHealth,
       health = Health,
@@ -100,6 +129,7 @@ public class Player
   {
     public List<CardName> baseDeck;
     public IDictionary<ItemSlot, Item> items;
+    public List<Item> inventory;
     public int maxCardsInHand;
     public int maxHealth;
     public int health;

@@ -15,7 +15,7 @@ namespace Libraries
           CardName.FocusMe
         }
       },
-      [ItemName.RustySword] = new Item(ItemName.RustySword, ItemSlot.RightArm)
+      [ItemName.RustySword] = new Item(ItemName.RustySword, ItemSlot.RightArm | ItemSlot.LeftArm)
       {
         Cards = new List<CardName>
         {
@@ -23,6 +23,16 @@ namespace Libraries
           CardName.SwordThem,
           CardName.SwordThem,
           CardName.SwordThem
+        }
+      },
+      [ItemName.RustyAxe] = new Item(ItemName.RustyAxe, ItemSlot.RightArm | ItemSlot.LeftArm)
+      {
+        Cards = new List<CardName>
+        {
+          CardName.AxeThem,
+          CardName.AxeThem,
+          CardName.AxeThem,
+          CardName.AxeThem
         }
       }
     };
@@ -32,17 +42,19 @@ namespace Libraries
 public enum ItemName
 {
   FancyHat,
-  RustySword
+  RustySword,
+  RustyAxe
 }
 
+[Flags]
 public enum ItemSlot
 {
-  Head,
-  Chest,
-  LeftArm,
-  RightArm,
-  Legs,
-  Feet
+  Head = 1,
+  Chest = 2,
+  LeftArm = 4,
+  RightArm = 8,
+  Legs = 16,
+  Feet = 32
 }
 
 [Serializable]

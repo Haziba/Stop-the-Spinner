@@ -57,14 +57,23 @@ public class Player
       items = new Dictionary<ItemSlot, Item>
       {
         [ItemSlot.Head] = ItemLibrary.Items[ItemName.FancyHat],
-        [ItemSlot.LeftArm] = ItemLibrary.Items[ItemName.RustySword],
-        [ItemSlot.RightArm] = ItemLibrary.Items[ItemName.RustySword]
+        [ItemSlot.LeftArm] = ItemLibrary.Items[ItemName.Sword],
+        [ItemSlot.RightArm] = ItemLibrary.Items[ItemName.Sword]
       },
       inventory = new List<Item>
       {
-        ItemLibrary.Items[ItemName.RustyAxe],
-        ItemLibrary.Items[ItemName.RustyAxe],
         ItemLibrary.Items[ItemName.FancyHat],
+        ItemLibrary.Items[ItemName.Sword],
+        ItemLibrary.Items[ItemName.Axe],
+        ItemLibrary.Items[ItemName.Dagger],
+        ItemLibrary.Items[ItemName.Bow],
+        ItemLibrary.Items[ItemName.Wand],
+        
+        ItemLibrary.Items[ItemName.BasicHat],
+        ItemLibrary.Items[ItemName.PeasantShirt],
+        ItemLibrary.Items[ItemName.PeasantJorts],
+        ItemLibrary.Items[ItemName.PeasantBoots],
+        ItemLibrary.Items[ItemName.ChestArmour],
       },
       maxCardsInHand = 5,
       maxHealth = 10,

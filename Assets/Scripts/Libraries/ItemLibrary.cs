@@ -5,7 +5,7 @@ namespace Libraries
 {
   public static class ItemLibrary
   {
-    public static IDictionary<ItemName, Item> Items = new Dictionary<ItemName, Item>
+    public static readonly IDictionary<ItemName, Item> Items = new Dictionary<ItemName, Item>
     {
       [ItemName.FancyHat] = new Item(ItemName.FancyHat, ItemSlot.Head)
       {
@@ -15,7 +15,7 @@ namespace Libraries
           CardName.FocusMe
         }
       },
-      [ItemName.RustySword] = new Item(ItemName.RustySword, ItemSlot.RightArm | ItemSlot.LeftArm)
+      [ItemName.Sword] = new Item(ItemName.Sword, ItemSlot.RightArm | ItemSlot.LeftArm)
       {
         Cards = new List<CardName>
         {
@@ -25,7 +25,7 @@ namespace Libraries
           CardName.SwordThem
         }
       },
-      [ItemName.RustyAxe] = new Item(ItemName.RustyAxe, ItemSlot.RightArm | ItemSlot.LeftArm)
+      [ItemName.Axe] = new Item(ItemName.Axe, ItemSlot.RightArm | ItemSlot.LeftArm)
       {
         Cards = new List<CardName>
         {
@@ -34,7 +34,39 @@ namespace Libraries
           CardName.AxeThem,
           CardName.AxeThem
         }
-      }
+      },
+      [ItemName.Dagger] = new Item(ItemName.Dagger, ItemSlot.RightArm | ItemSlot.LeftArm)
+      {
+        Cards = new List<CardName>()
+      },
+      [ItemName.Bow] = new Item(ItemName.Bow, ItemSlot.RightArm | ItemSlot.LeftArm)
+      {
+        Cards = new List<CardName>()
+      },
+      [ItemName.Wand] = new Item(ItemName.Wand, ItemSlot.RightArm | ItemSlot.LeftArm)
+      {
+        Cards = new List<CardName>()
+      },
+      [ItemName.BasicHat] = new Item(ItemName.BasicHat, ItemSlot.Head)
+      {
+        Cards = new List<CardName>()
+      },
+      [ItemName.PeasantShirt] = new Item(ItemName.PeasantShirt, ItemSlot.Chest)
+      {
+        Cards = new List<CardName>()
+      },
+      [ItemName.PeasantJorts] = new Item(ItemName.PeasantJorts, ItemSlot.Legs)
+      {
+        Cards = new List<CardName>()
+      },
+      [ItemName.PeasantBoots] = new Item(ItemName.PeasantBoots, ItemSlot.Feet)
+      {
+        Cards = new List<CardName>()
+      },
+      [ItemName.ChestArmour] = new Item(ItemName.ChestArmour, ItemSlot.Chest)
+      {
+        Cards = new List<CardName>()
+      },
     };
   }
 }
@@ -42,8 +74,17 @@ namespace Libraries
 public enum ItemName
 {
   FancyHat,
-  RustySword,
-  RustyAxe
+  Sword,
+  Axe,
+  Dagger,
+  Bow,
+  Wand,
+  
+  BasicHat,
+  PeasantShirt,
+  PeasantJorts,
+  PeasantBoots,
+  ChestArmour,
 }
 
 [Flags]

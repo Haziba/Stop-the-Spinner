@@ -49,6 +49,7 @@ namespace PlayerInfo
       image.transform.localScale = Vector3.one;
       image.GetComponent<EquipmentHandler>().SetItem(item, ItemSprites.First(x => x.Name == item.Name).Sprite);
       image.GetComponent<EquipmentHandler>().OnItemClicked += ClickItem;
+      image.GetComponent<EquipmentHandler>().OnItemLongPress += LongPressItem;
 
       _inventoryItems.Add(image);
     }
@@ -66,6 +67,11 @@ namespace PlayerInfo
       (sender as EquipmentHandler).Select();
       ItemSlots.ForEach((slot) => slot.GameObject.GetComponent<Image>().color = (sender as EquipmentHandler).Item.ItemSlot.HasFlag(slot.Slot) ? Color.white : Color.red);
       _selectedItem = (sender as EquipmentHandler).gameObject;
+    }
+
+    void LongPressItem(object sender, EventArgs e)
+    {
+      Debug.Log("Long press item");
     }
 
     void OnItemSlotClick(InventoryItemSlot slot)

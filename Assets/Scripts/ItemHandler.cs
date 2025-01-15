@@ -1,8 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using PlayerInfo;
 using UnityEngine;
 
 public class ItemHandler : MonoBehaviour
 {
   ItemName _itemName;
+
+  public List<ItemGameObject> ItemSprites;
+  public GameObject ItemBackground;
   
   public void SetItemImage(ItemName itemName)
   {
@@ -13,12 +20,12 @@ public class ItemHandler : MonoBehaviour
 
   void HideAllItemImages()
   {
-    for(var i = 0; i < transform.childCount; i++)
-      transform.GetChild(i).gameObject.SetActive(false);
+    ItemSprites.ForEach(sprite => sprite.GameObject.SetActive(false));
   }
 
   void ShowItemImage(ItemName itemName)
   {
-    transform.Find(itemName.ToString()).gameObject.SetActive(true);;
+    ItemSprites.ForEach(sprite => sprite.GameObject.SetActive(false));
+    ItemSprites.First(sprite => sprite.Name == itemName).GameObject.SetActive(true);
   }
 }

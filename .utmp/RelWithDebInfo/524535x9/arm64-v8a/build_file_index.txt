@@ -1,0 +1,2 @@
+/Users/harry/git/Stop-the-Spinner/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/CMakeLists.txt
+/Users/harry/git/Stop-the-Spinner/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/FramePacing/CMakeLists.txt

@@ -1,0 +1,5 @@
+/Users/harry/git/Stop-the-Spinner/.utmp/RelWithDebInfo/524535x9/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/harry/git/Stop-the-Spinner/.utmp/RelWithDebInfo/524535x9/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/harry/git/Stop-the-Spinner/.utmp/RelWithDebInfo/524535x9/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+/Users/harry/git/Stop-the-Spinner/.utmp/RelWithDebInfo/524535x9/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+/Users/harry/git/Stop-the-Spinner/.utmp/RelWithDebInfo/524535x9/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir

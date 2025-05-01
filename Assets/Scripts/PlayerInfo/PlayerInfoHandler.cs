@@ -40,6 +40,20 @@ namespace PlayerInfo
     {
       foreach(var item in Player.Instance.Inventory)
         AddInventoryItem(item);
+      foreach(var item in Player.Instance.Inventory)
+        AddInventoryItem(item);
+      foreach(var item in Player.Instance.Inventory)
+        AddInventoryItem(item);
+      foreach(var item in Player.Instance.Inventory)
+        AddInventoryItem(item);
+      foreach(var item in Player.Instance.Inventory)
+        AddInventoryItem(item);
+      foreach(var item in Player.Instance.Inventory)
+        AddInventoryItem(item);
+      foreach(var item in Player.Instance.Inventory)
+        AddInventoryItem(item);
+      foreach(var item in Player.Instance.Inventory)
+        AddInventoryItem(item);
     }
 
     void AddInventoryItem(Item item)

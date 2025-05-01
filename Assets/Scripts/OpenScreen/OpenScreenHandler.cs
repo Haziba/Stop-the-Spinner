@@ -12,11 +12,12 @@ public class OpenScreenHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log("Update");
     }
 
     public void ClickPlay()
     {
+      Debug.Log("ClickPlay");
       SceneManager.LoadScene("WorldPathScene");
     }
 }

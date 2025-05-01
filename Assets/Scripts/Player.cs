@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Libraries;
-using Newtonsoft.Json;
 using UnityEngine;
 
 public class Player
@@ -41,7 +40,7 @@ public class Player
     if (System.IO.File.Exists(path))
     {
       var json = System.IO.File.ReadAllText(path);
-      var data = JsonConvert.DeserializeObject<SaveData>(json);
+      var data = JsonUtility.FromJson<SaveData>(json);
 
       return new Player(data);
     }
@@ -78,7 +77,7 @@ public class Player
 
   IEnumerable<CardName> ItemCards()
   {
-    return Items.Values.SelectMany(item => item.Cards);
+    return Items?.Values.SelectMany(item => item.Cards) ?? new List<CardName>();
   }
 
   public void GainCard(CardName cardName)
@@ -109,7 +108,7 @@ public class Player
 
   void Save()
   {
-    var json = JsonConvert.SerializeObject(new SaveData
+    var json = JsonUtility.ToJson(new SaveData
     {
       baseDeck = _baseDeck.ToList(),
       items = Items,

@@ -4,11 +4,22 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace PlayerInfo
 {
   public class PlayerInfoHandler : MonoBehaviour
   {
+    public GameObject Page;
+
+    public GameObject StatsButton;
+    public GameObject InventoryButton;
+    public GameObject DeckButton;
+
+    public GameObject DeckContent;
+    public GameObject BackpackContent;
+    public List<CardSpritePair> CardSprites;
+
     public GameObject InventoryContent;
     public GameObject InventoryItemPrefab;
     public List<InventoryItemSlot> ItemSlots;
@@ -22,6 +33,8 @@ namespace PlayerInfo
     {
       ItemSlots.ForEach(InitSlot);
       SetItemInventory();
+      SetDeck();
+      SetBackpack();
     }
 
     void InitSlot(InventoryItemSlot slot)
@@ -101,9 +114,77 @@ namespace PlayerInfo
       UpdateSlotImage(slot);
     }
 
+    /// Deck handler
+    public void SetDeck()
+    {
+      AddCardsToDeckContent(Player.Instance.Deck.ToList());
+    }
+
+    void AddCardsToDeckContent(IList<CardName> cards)
+    {
+      for (var i = 0; i < cards.Count(); i++)
+      {
+        var image = new GameObject("CardImage");
+        image.transform.SetParent(DeckContent.transform);
+        image.transform.localScale = Vector3.one * 2;
+        image.transform.localRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-8, 8));
+        var imageComponent = image.AddComponent<UnityEngine.UI.Image>();
+        imageComponent.sprite = CardSprites.First(x => x.CardName == cards[i]).Sprite;
+      }
+    }
+
+    public void SetBackpack()
+    {
+      AddCardsToBackpackContent(Player.Instance.Deck.ToList());
+    }
+
+    void AddCardsToBackpackContent(IList<CardName> cards)
+    {
+      for (var i = 0; i < cards.Count(); i++)
+      {
+        var image = new GameObject("CardImage");
+        image.transform.SetParent(BackpackContent.transform);
+        image.transform.localScale = Vector3.one * 2;
+        image.transform.localRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-4, 4));
+        var imageComponent = image.AddComponent<UnityEngine.UI.Image>();
+        imageComponent.sprite = CardSprites.First(x => x.CardName == cards[i]).Sprite;
+      }
+    }
+    
     public void ClickBack()
     {
       SceneManager.LoadScene("WorldPathScene");
     }
+
+    public void ClickStats()
+    {
+      Page.transform.DOMove(new Vector3(1.8f, 0, 0), 0.5f);
+      StatsButton.GetComponent<Button>().interactable = false;
+      InventoryButton.GetComponent<Button>().interactable = true;
+      DeckButton.GetComponent<Button>().interactable = true;
+    }
+
+    public void ClickInventory()
+    {
+      Page.transform.DOMove(new Vector3(0, 0, 0), 0.5f);
+      StatsButton.GetComponent<Button>().interactable = true;
+      InventoryButton.GetComponent<Button>().interactable = false;
+      DeckButton.GetComponent<Button>().interactable = true;
+    }
+
+    public void ClickDeck()
+    {
+      Page.transform.DOMove(new Vector3(-3.8f, 0, 0), 0.5f);
+      StatsButton.GetComponent<Button>().interactable = true;
+      InventoryButton.GetComponent<Button>().interactable = true;
+      DeckButton.GetComponent<Button>().interactable = false;
+    }
+  }
+
+  [Serializable]
+  public class CardSpritePair
+  {
+    public CardName CardName;
+    public Sprite Sprite;
   }
 }

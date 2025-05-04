@@ -12,7 +12,6 @@ namespace Libraries
         Cards = new List<CardName>
         {
           CardName.FocusMe,
-          CardName.FocusMe
         }
       },
       [ItemName.RustySword] = new Item(ItemName.RustySword, ItemSlot.RightArm | ItemSlot.LeftArm)
@@ -22,7 +21,6 @@ namespace Libraries
           CardName.SwordThem,
           CardName.SwordThem,
           CardName.SwordThem,
-          CardName.SwordThem
         }
       },
       [ItemName.RustyAxe] = new Item(ItemName.RustyAxe, ItemSlot.RightArm | ItemSlot.LeftArm)
@@ -32,7 +30,6 @@ namespace Libraries
           CardName.AxeThem,
           CardName.AxeThem,
           CardName.AxeThem,
-          CardName.AxeThem
         }
       }
     };

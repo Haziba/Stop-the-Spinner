@@ -8,8 +8,11 @@ public class Player
 {
   static Player _instance;
 
-  static IList<CardName> _baseDeck;
-  public IList<CardName> Deck => _baseDeck.Concat(ItemCards()).ToList();
+  IList<PlayerBackpackCardDetails> _backpack;
+  IList<PlayerCardDetails> _deck;
+  
+  public IList<PlayerBackpackCardDetails> Backpack => _backpack;
+  public IList<PlayerCardDetails> Deck => _deck;
   public IDictionary<ItemSlot, Item> Items { get; }
   public List<Item> Inventory { get;  }
   public int MaxCardsInHand { get; }
@@ -23,7 +26,8 @@ public class Player
 
   Player(SaveData data)
   {
-    _baseDeck = data.baseDeck.ToList();
+    _backpack = data.backpack.ToList();
+    _deck = data.deck.ToList();
     Items = data.items;
     Inventory = data.inventory;
     MaxCardsInHand = data.maxCardsInHand;
@@ -36,29 +40,24 @@ public class Player
 
   static Player Init()
   {
-    var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
+    /*var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
     if (System.IO.File.Exists(path))
     {
       var json = System.IO.File.ReadAllText(path);
       var data = JsonUtility.FromJson<SaveData>(json);
 
       return new Player(data);
-    }
+    }*/
 
     var newData = new SaveData
     {
-      baseDeck = new List<CardName>
+      backpack = new List<PlayerBackpackCardDetails>
       {
-        CardName.IntoxicateThem,
-        CardName.DistractThem,
-        CardName.DistractThem
+        new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = CardName.IntoxicateThem },
+        new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = CardName.DistractThem },
+        new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = CardName.DistractThem }
       },
-      items = new Dictionary<ItemSlot, Item>
-      {
-        [ItemSlot.Head] = ItemLibrary.Items[ItemName.FancyHat],
-        [ItemSlot.LeftArm] = ItemLibrary.Items[ItemName.RustySword],
-        [ItemSlot.RightArm] = ItemLibrary.Items[ItemName.RustySword]
-      },
+      items = new Dictionary<ItemSlot, Item>(),
       inventory = new List<Item>
       {
         ItemLibrary.Items[ItemName.RustyAxe],
@@ -72,7 +71,15 @@ public class Player
       manaRecoveryAmount = 2,
     };
 
-    return new Player(newData);
+    newData.deck = newData.backpack.ToList<PlayerCardDetails>();
+
+    var player = new Player(newData);
+    
+    player.EquipItem(ItemSlot.Head, ItemLibrary.Items[ItemName.FancyHat]);
+    player.EquipItem(ItemSlot.LeftArm, ItemLibrary.Items[ItemName.RustySword]);
+    player.EquipItem(ItemSlot.RightArm, ItemLibrary.Items[ItemName.RustySword]);
+    
+    return player;
   }
 
   IEnumerable<CardName> ItemCards()
@@ -82,17 +89,19 @@ public class Player
 
   public void GainCard(CardName cardName)
   {
-    _baseDeck.Add(cardName);
+    _backpack.Add(new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = cardName });
     Save();
   }
 
   public void EquipItem(ItemSlot slot, Item item)
   {
-    Debug.Log(slot);
+    // de-quip old item
     if(Items.ContainsKey(slot))
       AddInventoryItem(Items[slot]);
     RemoveInventoryItem(item);
+    // equip new item
     Items[slot] = item;
+    item.Cards.ForEach(card => _deck.Add(new PlayerItemCardDetails { Id = Guid.NewGuid(), CardName = card, ItemSlot = slot }));
     Save();
   }
 
@@ -104,15 +113,17 @@ public class Player
   public void RemoveInventoryItem(Item item)
   {
     Inventory.Remove(item);
+    _deck.ToList().RemoveAll(card => card is PlayerItemCardDetails itemCard && itemCard.ItemSlot == item.ItemSlot);
   }
 
   void Save()
   {
     var json = JsonUtility.ToJson(new SaveData
     {
-      baseDeck = _baseDeck.ToList(),
+      backpack = _backpack.ToList(),
       items = Items,
       inventory = Inventory,
+      deck = _deck.ToList(),
       maxCardsInHand = MaxCardsInHand,
       maxHealth = MaxHealth,
       health = Health,
@@ -126,7 +137,8 @@ public class Player
   [Serializable]
   public class SaveData
   {
-    public List<CardName> baseDeck;
+    public List<PlayerBackpackCardDetails> backpack;
+    public List<PlayerCardDetails> deck;
     public IDictionary<ItemSlot, Item> items;
     public List<Item> inventory;
     public int maxCardsInHand;
@@ -135,4 +147,20 @@ public class Player
     public int maxMana;
     public int manaRecoveryAmount;
   }
+}
+
+[Serializable]
+public class PlayerCardDetails
+{
+  public Guid Id;
+  public CardName CardName;
+}
+
+[Serializable]
+public class PlayerBackpackCardDetails : PlayerCardDetails {}
+
+[Serializable]
+public class PlayerItemCardDetails : PlayerCardDetails
+{
+  public ItemSlot ItemSlot;
 }

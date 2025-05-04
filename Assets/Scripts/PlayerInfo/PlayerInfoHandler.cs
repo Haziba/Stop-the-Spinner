@@ -18,6 +18,8 @@ namespace PlayerInfo
 
     public GameObject DeckContent;
     public GameObject BackpackContent;
+
+    public List<GameObject> DeckCards;
     public List<CardSpritePair> CardSprites;
 
     public GameObject InventoryContent;
@@ -104,10 +106,22 @@ namespace PlayerInfo
 
       if (!item.ItemSlot.HasFlag(slot.Slot))
         return;
-
-      if(Player.Instance.Items.ContainsKey(slot.Slot))
+        
+      if(Player.Instance.Items.ContainsKey(slot.Slot)) {
         AddInventoryItem(Player.Instance.Items[slot.Slot]);
+
+        var itemCards = DeckCards.Where(card => ((card.GetComponent<DeckCardHandler>().Card as PlayerItemCardDetails)?.ItemSlot & slot.Slot) != 0).ToList();
+        var serializedItemSlots = JsonUtility.ToJson(itemCards.Select(card => (card.GetComponent<DeckCardHandler>().Card)).ToList());
+        
+        foreach(var itemCard in itemCards) {
+          Destroy(itemCard);
+          DeckCards.Remove(itemCard);
+        }
+      }
       Player.Instance.EquipItem(slot.Slot, item);
+      foreach(var itemCard in item.Cards) {
+        AddCardToDeckContent(new PlayerItemCardDetails { Id = Guid.NewGuid(), CardName = itemCard, ItemSlot = slot.Slot });
+      }
       Destroy(_selectedItem);
       _inventoryItems.Remove(_selectedItem);
       UnselectInventoryItems();
@@ -120,22 +134,23 @@ namespace PlayerInfo
       AddCardsToDeckContent(Player.Instance.Deck.ToList());
     }
 
-    void AddCardsToDeckContent(IList<CardName> cards)
+    void AddCardsToDeckContent(IList<PlayerCardDetails> cards)
     {
-      for (var i = 0; i < cards.Count(); i++)
-      {
-        var image = new GameObject("CardImage");
-        image.transform.SetParent(DeckContent.transform);
-        image.transform.localScale = Vector3.one * 2;
-        image.transform.localRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-8, 8));
-        var imageComponent = image.AddComponent<UnityEngine.UI.Image>();
-        imageComponent.sprite = CardSprites.First(x => x.CardName == cards[i]).Sprite;
-      }
+      foreach(var card in cards)
+        AddCardToDeckContent(card);
+    }
+
+    void AddCardToDeckContent(PlayerCardDetails card)
+    {
+      var image = new GameObject("CardImage");
+      image.transform.SetParent(DeckContent.transform);
+      image.AddComponent<DeckCardHandler>().SetCard(CardSprites, card);
+      DeckCards.Add(image);
     }
 
     public void SetBackpack()
     {
-      AddCardsToBackpackContent(Player.Instance.Deck.ToList());
+      AddCardsToBackpackContent(Player.Instance.Backpack.Select(card => card.CardName).ToList());
     }
 
     void AddCardsToBackpackContent(IList<CardName> cards)

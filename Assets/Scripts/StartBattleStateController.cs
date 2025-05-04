@@ -25,7 +25,7 @@ public class StartBattleStateController  : StateController
 
   public void DealCards()
   {
-    _context.GO(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(Player.Instance.Deck.ToArray(), Player.Instance.MaxCardsInHand);
+    _context.GO(ContextObjects.PlayerHand).GetComponent<HandController>().SetDeck(Player.Instance.Deck.Select(card => card.CardName).ToArray(), Player.Instance.MaxCardsInHand);
 
     var enemy = Monster();
 

@@ -127,6 +127,9 @@ namespace PlayerInfo
     public void SetBackpack()
     {
       AddCardsToBackpackContent(Player.Instance.Backpack.ToList());
+      Debug.Log(BackpackCards.Count);
+      Debug.Log(BackpackCards.Count(x => x.GetComponent<BackpackCardHandler>() != null));
+      Debug.Log(BackpackCards.Select(x => x.GetComponent<BackpackCardHandler>()).Count(x => x.Card != null));
       BackpackCards.ForEach(card => card
         .GetComponent<BackpackCardHandler>()
         .SetInDeck(Player.Instance.Deck.Select(x => x.Id).Contains(card.GetComponent<BackpackCardHandler>().Card.Id)));
@@ -142,6 +145,7 @@ namespace PlayerInfo
     {
       var image = new GameObject("CardImage");
       image.transform.SetParent(BackpackContent.transform);
+      image.AddComponent<DraggableCardHandler>();
       image.AddComponent<BackpackCardHandler>().SetCard(CardSprites, card);
       BackpackCards.Add(image);
     }

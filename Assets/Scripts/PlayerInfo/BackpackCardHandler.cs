@@ -6,21 +6,24 @@ using System;
 
 namespace PlayerInfo
 {
-  public class BackpackCardHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+  public class BackpackCardHandler : MonoBehaviour
   {
-    public PlayerBackpackCardDetails Card { get; private set; }
+    public PlayerBackpackCardDetails Card { get; set; }
     bool _inDeck;
     bool _dragging;
     
     public void SetCard(IList<CardSpritePair> cardSprites, PlayerBackpackCardDetails card)
     {
-        Card = card;
-
         transform.localScale = Vector3.one * 2;
         transform.localRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-2, 2));
         var imageComponent = gameObject.AddComponent<UnityEngine.UI.Image>();
         imageComponent.sprite = cardSprites.First(x => x.CardName == card.CardName).Sprite;
         gameObject.AddComponent<CanvasGroup>();
+
+        Card = card;
+        GetComponent<DraggableCardHandler>().Card = card;
+        GetComponent<DraggableCardHandler>().OnDrop += OnCardDropped;
+        GetComponent<DraggableCardHandler>().OnStartDrag += OnStartDrag;
     }
 
     public void SetInDeck(bool inDeck)
@@ -28,42 +31,30 @@ namespace PlayerInfo
         _inDeck = inDeck;
         var canvasGroup = gameObject.GetComponent<CanvasGroup>();
         
-        if (inDeck)
+        if (inDeck) {
             Blur();
-        else
+            GetComponent<DraggableCardHandler>().enabled = false;
+        }
+        else {
             Unblur();
+            GetComponent<DraggableCardHandler>().enabled = true;
+        }
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnStartDrag(object sender, PointerEventData e)
     {
-        if (_inDeck)
-            return;
-
-        var imageComponent = gameObject.GetComponent<UnityEngine.UI.Image>();
-        DragBackpackCardHandler.Instance.StartDrag(Card, imageComponent.sprite);
         Blur();
-        _dragging = true;
     }
 
-    public void OnDrag(PointerEventData eventData)
+    public void OnCardDropped(object sender, PointerEventData e)
     {
-        if (!_dragging)
-            return;
+        Debug.Log("OnCardDropped");
 
-        DragBackpackCardHandler.Instance.UpdateDrag(eventData.position);
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if (!_dragging)
-            return;
-
-        var wasCardAdded = DragBackpackCardHandler.Instance.EndDrag(eventData);
+        var wasCardAdded = DragBackpackCardHandler.Instance.EndDrag(e);
         if (!wasCardAdded)
             Unblur();
         else
-            _inDeck = true;
-        _dragging = false;
+            SetInDeck(true);
     }
 
     void Blur()

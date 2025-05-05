@@ -7,7 +7,10 @@ public class CardHandler : MonoBehaviour
 {
   public event EventHandler OnCardClicked;
 
+  public PlayerCardDetails Card => _card;
+
   CardName _cardName;
+  PlayerCardDetails _card;
 
   // Start is called before the first frame update
   void Start()
@@ -21,9 +24,10 @@ public class CardHandler : MonoBehaviour
     
   }
 
-  public void SetCardImage(CardName cardName)
+  public void SetCardImage(CardName cardName, PlayerCardDetails card = null)
   {
     _cardName = cardName;
+    _card = card;
     HideAllCardImages();
     ShowCardImage(cardName);
   }

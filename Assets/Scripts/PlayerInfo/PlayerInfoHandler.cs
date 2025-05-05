@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 
 namespace PlayerInfo
@@ -16,10 +17,12 @@ namespace PlayerInfo
     public GameObject InventoryButton;
     public GameObject DeckButton;
 
-    public GameObject DeckContent;
+    public Canvas canvas;
+    public Camera worldCamera;
+
     public GameObject BackpackContent;
 
-    public List<GameObject> DeckCards;
+    public List<GameObject> BackpackCards;
     public List<CardSpritePair> CardSprites;
 
     public GameObject InventoryContent;
@@ -35,7 +38,6 @@ namespace PlayerInfo
     {
       ItemSlots.ForEach(InitSlot);
       SetItemInventory();
-      SetDeck();
       SetBackpack();
     }
 
@@ -109,18 +111,12 @@ namespace PlayerInfo
         
       if(Player.Instance.Items.ContainsKey(slot.Slot)) {
         AddInventoryItem(Player.Instance.Items[slot.Slot]);
-
-        var itemCards = DeckCards.Where(card => ((card.GetComponent<DeckCardHandler>().Card as PlayerItemCardDetails)?.ItemSlot & slot.Slot) != 0).ToList();
-        var serializedItemSlots = JsonUtility.ToJson(itemCards.Select(card => (card.GetComponent<DeckCardHandler>().Card)).ToList());
         
-        foreach(var itemCard in itemCards) {
-          Destroy(itemCard);
-          DeckCards.Remove(itemCard);
-        }
+        DeckListHandler.Instance.UnequipSlot(slot.Slot);
       }
       Player.Instance.EquipItem(slot.Slot, item);
       foreach(var itemCard in item.Cards) {
-        AddCardToDeckContent(new PlayerItemCardDetails { Id = Guid.NewGuid(), CardName = itemCard, ItemSlot = slot.Slot });
+        DeckListHandler.Instance.AddCard(new PlayerItemCardDetails { Id = Guid.NewGuid(), CardName = itemCard, ItemSlot = slot.Slot });
       }
       Destroy(_selectedItem);
       _inventoryItems.Remove(_selectedItem);
@@ -128,42 +124,26 @@ namespace PlayerInfo
       UpdateSlotImage(slot);
     }
 
-    /// Deck handler
-    public void SetDeck()
-    {
-      AddCardsToDeckContent(Player.Instance.Deck.ToList());
-    }
-
-    void AddCardsToDeckContent(IList<PlayerCardDetails> cards)
-    {
-      foreach(var card in cards)
-        AddCardToDeckContent(card);
-    }
-
-    void AddCardToDeckContent(PlayerCardDetails card)
-    {
-      var image = new GameObject("CardImage");
-      image.transform.SetParent(DeckContent.transform);
-      image.AddComponent<DeckCardHandler>().SetCard(CardSprites, card);
-      DeckCards.Add(image);
-    }
-
     public void SetBackpack()
     {
-      AddCardsToBackpackContent(Player.Instance.Backpack.Select(card => card.CardName).ToList());
+      AddCardsToBackpackContent(Player.Instance.Backpack.ToList());
+      BackpackCards.ForEach(card => card
+        .GetComponent<BackpackCardHandler>()
+        .SetInDeck(Player.Instance.Deck.Select(x => x.Id).Contains(card.GetComponent<BackpackCardHandler>().Card.Id)));
     }
 
-    void AddCardsToBackpackContent(IList<CardName> cards)
+    void AddCardsToBackpackContent(IList<PlayerBackpackCardDetails> cards)
     {
-      for (var i = 0; i < cards.Count(); i++)
-      {
-        var image = new GameObject("CardImage");
-        image.transform.SetParent(BackpackContent.transform);
-        image.transform.localScale = Vector3.one * 2;
-        image.transform.localRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-4, 4));
-        var imageComponent = image.AddComponent<UnityEngine.UI.Image>();
-        imageComponent.sprite = CardSprites.First(x => x.CardName == cards[i]).Sprite;
-      }
+      foreach(var card in cards)
+        AddCardToBackpackContent(card);
+    }
+
+    void AddCardToBackpackContent(PlayerBackpackCardDetails card)
+    {
+      var image = new GameObject("CardImage");
+      image.transform.SetParent(BackpackContent.transform);
+      image.AddComponent<BackpackCardHandler>().SetCard(CardSprites, card);
+      BackpackCards.Add(image);
     }
     
     public void ClickBack()

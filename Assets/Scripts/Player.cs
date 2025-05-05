@@ -71,7 +71,7 @@ public class Player
       manaRecoveryAmount = 2,
     };
 
-    newData.deck = newData.backpack.ToList<PlayerCardDetails>();
+    newData.deck = newData.backpack.Take(2).ToList<PlayerCardDetails>();
 
     var player = new Player(newData);
     
@@ -103,6 +103,11 @@ public class Player
     Items[slot] = item;
     item.Cards.ForEach(card => _deck.Add(new PlayerItemCardDetails { Id = Guid.NewGuid(), CardName = card, ItemSlot = slot }));
     Save();
+  }
+
+  public void AddCardToDeck(PlayerCardDetails card)
+  {
+    _deck.Add(card);
   }
 
   public void AddInventoryItem(Item item)

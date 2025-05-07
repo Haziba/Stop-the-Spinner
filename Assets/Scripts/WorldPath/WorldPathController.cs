@@ -96,11 +96,6 @@ class WorldPathController : MonoBehaviour
     }
   }
 
-  public void ClickDeck()
-  {
-    SceneManager.LoadScene("DeckScene");
-  }
-
   public void ClickPlayerInfo()
   {
     SceneManager.LoadScene("PlayerInfoScene");

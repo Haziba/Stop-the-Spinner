@@ -6,15 +6,14 @@ namespace PlayerInfo
 {
     public class DraggableCardHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        public PlayerCardDetails Card { get; set; }
+        public PlayerCardDetails Details { get; set; }
         bool _dragging;
         public event EventHandler<PointerEventData> OnStartDrag;
         public event EventHandler<PointerEventData> OnDrop;
         
         public void OnBeginDrag(PointerEventData eventData)
         {
-            var imageComponent = gameObject.GetComponent<UnityEngine.UI.Image>();
-            DragBackpackCardHandler.Instance.StartDrag(Card, imageComponent.sprite);
+            DragBackpackCardHandler.Instance.StartDrag(Details);
             _dragging = true;
 
             OnStartDrag?.Invoke(this, eventData);

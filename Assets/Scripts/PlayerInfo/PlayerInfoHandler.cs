@@ -22,8 +22,8 @@ namespace PlayerInfo
 
     public GameObject BackpackContent;
 
+    public GameObject CardPrefab;
     public List<GameObject> BackpackCards;
-    public List<CardSpritePair> CardSprites;
 
     public GameObject InventoryContent;
     public GameObject InventoryItemPrefab;
@@ -143,10 +143,11 @@ namespace PlayerInfo
 
     void AddCardToBackpackContent(PlayerBackpackCardDetails card)
     {
-      var image = new GameObject("CardImage");
+      var image = Instantiate(CardPrefab, BackpackContent.transform);
+      image.GetComponent<CardHandler>().SetCardImage(card.CardName, card);
       image.transform.SetParent(BackpackContent.transform);
-      image.AddComponent<DraggableCardHandler>();
-      image.AddComponent<BackpackCardHandler>().SetCard(CardSprites, card);
+      image.AddComponent<BackpackCardHandler>().SetCard(card);
+      image.transform.rotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-6, 6));
       BackpackCards.Add(image);
     }
     

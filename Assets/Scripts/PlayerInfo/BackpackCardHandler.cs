@@ -12,16 +12,12 @@ namespace PlayerInfo
     bool _inDeck;
     bool _dragging;
     
-    public void SetCard(IList<CardSpritePair> cardSprites, PlayerBackpackCardDetails card)
+    public void SetCard(PlayerBackpackCardDetails card)
     {
-        transform.localScale = Vector3.one * 2;
-        transform.localRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-2, 2));
-        var imageComponent = gameObject.AddComponent<UnityEngine.UI.Image>();
-        imageComponent.sprite = cardSprites.First(x => x.CardName == card.CardName).Sprite;
         gameObject.AddComponent<CanvasGroup>();
 
         Card = card;
-        GetComponent<DraggableCardHandler>().Card = card;
+        GetComponent<DraggableCardHandler>().Details = card;
         GetComponent<DraggableCardHandler>().OnDrop += OnCardDropped;
         GetComponent<DraggableCardHandler>().OnStartDrag += OnStartDrag;
     }

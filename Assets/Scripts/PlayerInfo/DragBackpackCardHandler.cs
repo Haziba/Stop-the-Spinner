@@ -11,7 +11,7 @@ namespace PlayerInfo
       [Header("References")]
       public Canvas canvas;                   // Assign your main Canvas here
       public RectTransform dragImage;        // Assign a RectTransform with Image (usually invisible by default)
-      public Image dragImageComponent;      // The Image component on dragImage
+      public GameObject dragImageComponent;      // The Image component on dragImage
       public GameObject Deck;
 
       private PlayerCardDetails currentItem;
@@ -29,10 +29,11 @@ namespace PlayerInfo
           }
       }
 
-      public void StartDrag(PlayerCardDetails item, Sprite sprite)
+      public void StartDrag(PlayerCardDetails item)
       {
           currentItem = item;
-          dragImageComponent.sprite = sprite;
+          Debug.Log(item.CardName);
+          dragImageComponent.GetComponent<CardHandler>().SetCardImage(item.CardName, item);
           dragImage.gameObject.SetActive(true);
       }
 

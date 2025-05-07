@@ -836,9 +836,10 @@ GameObject:
   - component: {fileID: 3232831344168483255}
   - component: {fileID: 4252922006203891229}
   - component: {fileID: 3384885276593539267}
+  - component: {fileID: 2539137483277490223}
   m_Layer: 0
   m_Name: UICard
-  m_TagString: Untagged
+  m_TagString: UICard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -931,3 +932,15 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.15, y: 1.7}
   m_EdgeRadius: 0
+--- !u!114 &2539137483277490223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9043477028967370230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f2e7df659f04892a30b24466ad580c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

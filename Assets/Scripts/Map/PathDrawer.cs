@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class PathDrawer : MonoBehaviour
 {
     public Material pathMaterial;
-    public float pathWidth = 0.5f;
+    public float pathWidth = 20f;
     public int segments = 50;
 
     public Transform startPoint;

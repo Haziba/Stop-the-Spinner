@@ -40,14 +40,14 @@ public class Player
 
   static Player Init()
   {
-    /*var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
+    var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
     if (System.IO.File.Exists(path))
     {
       var json = System.IO.File.ReadAllText(path);
       var data = JsonUtility.FromJson<SaveData>(json);
 
       return new Player(data);
-    }*/
+    }
 
     var newData = new SaveData
     {

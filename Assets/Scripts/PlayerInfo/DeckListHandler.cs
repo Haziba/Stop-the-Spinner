@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using System.Linq;
 
 namespace PlayerInfo
@@ -29,10 +28,7 @@ namespace PlayerInfo
         image.GetComponent<CardHandler>().SetCardImage(card.CardName, card);
         image.transform.rotation = Quaternion.Euler(0, 0, Random.Range(-6, 6));
         _cards.Add(image);
-
-        image.GetComponent<DraggableCardHandler>().enabled = false;
       }
-
 
       public void RemoveCard(PlayerCardDetails card)
       {

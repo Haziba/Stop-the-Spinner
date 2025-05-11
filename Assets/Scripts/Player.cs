@@ -24,12 +24,14 @@ public class Player
 
   public static Player Instance => _instance ??= Init();
 
-  Player(SaveData data)
+  Player(SaveData data, CardName[] backpack = null, ItemName[] inventory = null,
+    Tuple<ItemSlot, ItemName>[] equipment = null)
   {
-    _backpack = data.backpack.ToList();
-    _deck = data.deck.ToList();
-    Items = data.items;
-    Inventory = data.inventory;
+    _backpack = backpack?.Select(cardName => new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = cardName })
+      .ToList() ?? data.backpack.ToList();
+    _deck = backpack != null ? _backpack.Take(3).Select(x => x as PlayerCardDetails).ToList() : data.deck.ToList();
+    Items = equipment?.ToDictionary(x => x.Item1, x => ItemLibrary.Items[x.Item2]) ?? data.items;
+    Inventory = inventory?.Select(name => ItemLibrary.Items[name]).ToList() ?? data.inventory;
     MaxCardsInHand = data.maxCardsInHand;
     MaxHealth = data.maxHealth;
     Health = data.health;
@@ -38,7 +40,14 @@ public class Player
     Armour = 0;
   }
 
-  static Player Init()
+  public static Player ReplaceInstance(CardName[] backpack = null, ItemName[] inventory = null,
+    Tuple<ItemSlot, ItemName>[] equipment = null)
+  {
+    _instance = Init(backpack, inventory, equipment);
+    return _instance;
+  }
+
+  static Player Init(CardName[] backpack = null, ItemName[] inventory = null, Tuple<ItemSlot, ItemName>[] equipment = null)
   {
     var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
     if (System.IO.File.Exists(path))
@@ -46,24 +55,20 @@ public class Player
       var json = System.IO.File.ReadAllText(path);
       var data = JsonUtility.FromJson<SaveData>(json);
 
-      return new Player(data);
+      return new Player(data, backpack, inventory, equipment);
     }
 
     var newData = new SaveData
     {
-      backpack = new List<PlayerBackpackCardDetails>
-      {
-        new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = CardName.IntoxicateThem },
-        new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = CardName.DistractThem },
-        new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = CardName.DistractThem }
-      },
-      items = new Dictionary<ItemSlot, Item>(),
-      inventory = new List<Item>
+      backpack = (backpack ?? new[] { CardName.IntoxicateThem, CardName.DistractThem, CardName.DistractThem })
+        .Select(card => new PlayerBackpackCardDetails { Id = Guid.NewGuid(), CardName = card }).ToList(),
+      items = equipment?.ToDictionary(equip => equip.Item1, equip => new Item(equip.Item2, equip.Item1)) ?? new Dictionary<ItemSlot, Item>(),
+      inventory = (inventory?.Select(item => ItemLibrary.Items[item]) ?? new List<Item>
       {
         ItemLibrary.Items[ItemName.RustyAxe],
         ItemLibrary.Items[ItemName.RustyAxe],
         ItemLibrary.Items[ItemName.FancyHat],
-      },
+      }).ToList(),
       maxCardsInHand = 5,
       maxHealth = 10,
       health = 10,
@@ -71,7 +76,7 @@ public class Player
       manaRecoveryAmount = 2,
     };
 
-    newData.deck = newData.backpack.Take(2).ToList<PlayerCardDetails>();
+    newData.deck = newData.backpack.Take(3).ToList<PlayerCardDetails>();
 
     var player = new Player(newData);
     
@@ -137,6 +142,15 @@ public class Player
     });
     var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
     System.IO.File.WriteAllText(path, json);
+  }
+
+  public static void NewGame()
+  {
+    var path = System.IO.Path.Combine(Application.persistentDataPath, "playerData.json");
+    if (System.IO.File.Exists(path))
+    {
+      System.IO.File.Delete(path);
+    }
   }
 
   [Serializable]

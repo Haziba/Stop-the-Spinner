@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using Libraries;
 
 namespace PlayerInfo
 {
@@ -49,26 +50,12 @@ namespace PlayerInfo
 
     void UpdateSlotImage(InventoryItemSlot slot)
     {
-      var item = Player.Instance.Items.FirstOrDefault(pair => pair.Key == slot.Slot).Value;
+      var item = Player.Instance.Items?.FirstOrDefault(pair => pair.Key == slot.Slot).Value;
       slot.GameObject.GetComponent<Image>().sprite = item != null ? ItemSprites.First(x => x.Name == item.Name).Sprite : null;
     }
 
     void SetItemInventory()
     {
-      foreach(var item in Player.Instance.Inventory)
-        AddInventoryItem(item);
-      foreach(var item in Player.Instance.Inventory)
-        AddInventoryItem(item);
-      foreach(var item in Player.Instance.Inventory)
-        AddInventoryItem(item);
-      foreach(var item in Player.Instance.Inventory)
-        AddInventoryItem(item);
-      foreach(var item in Player.Instance.Inventory)
-        AddInventoryItem(item);
-      foreach(var item in Player.Instance.Inventory)
-        AddInventoryItem(item);
-      foreach(var item in Player.Instance.Inventory)
-        AddInventoryItem(item);
       foreach(var item in Player.Instance.Inventory)
         AddInventoryItem(item);
     }
@@ -109,7 +96,8 @@ namespace PlayerInfo
       if (!item.ItemSlot.HasFlag(slot.Slot))
         return;
         
-      if(Player.Instance.Items.ContainsKey(slot.Slot)) {
+      if(Player.Instance.Items.ContainsKey(slot.Slot))
+      {
         AddInventoryItem(Player.Instance.Items[slot.Slot]);
         
         DeckListHandler.Instance.UnequipSlot(slot.Slot);

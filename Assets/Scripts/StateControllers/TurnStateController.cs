@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 using Libraries;
+using Random = UnityEngine.Random;
 
 public class TurnStateController : StateController
 {
@@ -17,7 +18,7 @@ public class TurnStateController : StateController
   protected float _doCardPauseLength;
 
   protected GameObject _hand;
-  protected GameObject _spinner;
+  protected IDictionary<SpinnerType, GameObject> _spinners;
   protected GameObject _playedCard;
   protected GameObject _meHealthBar;
   protected GameObject _themHealthBar;
@@ -27,6 +28,7 @@ public class TurnStateController : StateController
   protected GameObject _themDamageAnchor;
   protected GameObject _meArmourCounter;
   protected GameObject _themArmourCounter;
+  protected GameObject _hitResult;
 
   protected Vector3 _playedCardTarget;
   protected Vector3 _spinnerTarget;
@@ -34,10 +36,13 @@ public class TurnStateController : StateController
 
   protected AgentState _meState;
   protected AgentState _themState;
+  
+  private ISpinnerController _spinnerController;
 
   public TurnStateController(ContextManager context) : base(context)
   {
     _countdowns = new List<HUtilities.Countdown>();
+    _hitResult = context.GO(ContextObjects.HitResult);
   }
 
   public override void Start()
@@ -124,12 +129,13 @@ public class TurnStateController : StateController
         EndPlayCard();
         break;
       case EffectOutcome.SpinWheel:
+        SetSpinnerController(performOutcome.Data() as ISpinnerConfiguration);
         UpdateInnerState(InnerState.SpinnerComingIn);
-        _spinner.GetComponent<SpinnerController>().UpdateConfig(performOutcome.Data() as SpinnerConfiguration);
-        _spinner.transform.DOMove(_spinnerTarget, 0.5f)
+        _spinnerController.UpdateConfig(performOutcome.Data() as ISpinnerConfiguration);
+        _spinners[_spinnerController.SpinnerType].transform.DOMove(_spinnerTarget, 0.5f)
           .OnComplete(() => {
             UpdateInnerState(InnerState.SpinnerSpinning);
-            _spinner.GetComponent<SpinnerController>().StartSpinning(_meState.StatusEffects());
+            _spinnerController.StartSpinning(_meState.StatusEffects());
             OnSpinnerInPosition();
           });
         break;
@@ -158,9 +164,25 @@ public class TurnStateController : StateController
 
   protected void StopSpinning()
   {
-    var result = _spinner.GetComponent<SpinnerController>().StopSpinning();
-
+    var result = _spinnerController.StopSpinning();
+    if (result == SpinnerResult.StillSpinning) return;
+    
     _cardEffect.ResolveSpinner(result);
+
+    _hitResult.GetComponent<SpriteFromEnumController>().ShowEnumValue(result.ToString());
+    var hitResultRenderer = _hitResult.GetComponent<SpriteFromEnumController>().SpriteRenderer;
+    
+    _hitResult.transform.localScale = new Vector3(0.9f, 0.9f, 1f);
+    var color = hitResultRenderer.color;
+    color.a = 0;
+    hitResultRenderer.color = color;
+
+    Sequence seq = DOTween.Sequence();
+
+    seq.Append(_hitResult.transform.DOScale(1.2f, 0.2f))
+      .Join(hitResultRenderer.DOFade(1f, 0.2f))
+      .Append(_hitResult.transform.DOScale(1f, 0.5f))
+      .Join(hitResultRenderer.DOFade(0f, 0.5f));
 
     if (result != SpinnerResult.Miss)
     {
@@ -168,7 +190,7 @@ public class TurnStateController : StateController
         .Instantiate(_context.GO(ContextObjects.DamageBallPrefab));
       // TODO:: Refactor
       damageBall.GetComponent<DamageBallController>().SetImage(_playedCard.GetComponent<PlayedCardController>().CardName());
-      damageBall.transform.position = _spinner.transform.position + new Vector3(0, 0, -2f);
+      damageBall.transform.position = _spinners[_spinnerController.SpinnerType].transform.position + new Vector3(0, 0, -2f);
       damageBall.transform
         .DOMove(new Vector3(_themDamageAnchor.transform.position.x, _themDamageAnchor.transform.position.y, damageBall.transform.position.z), 0.5f)
         .SetEase(Ease.InExpo)
@@ -199,7 +221,7 @@ public class TurnStateController : StateController
     {
       UpdateInnerState(InnerState.SpinnerGoingOut);
 
-      _spinner.transform.DOMove(_spinnerOrigin, 0.5f)
+      _spinners[_spinnerController.SpinnerType].transform.DOMove(_spinnerOrigin, 0.5f)
         .OnComplete(EndPlayCard);
     });
     _countdowns.Add(hideSpinnerCountdown);
@@ -207,7 +229,27 @@ public class TurnStateController : StateController
 
   public bool SpinnerSpinning()
   {
-    return _spinner.GetComponent<SpinnerController>().IsSpinning();
+    return _spinnerController.IsSpinning();
+  }
+
+  public void SetSpinnerController(ISpinnerConfiguration outcome)
+  {
+    switch (outcome.SpinnerType)
+    {
+      case SpinnerType.Wheel:
+        _spinnerController = _spinners[outcome.SpinnerType].GetComponent<SpinnerController>();
+        break;
+      case SpinnerType.Music:
+        _spinnerController = _spinners[outcome.SpinnerType].GetComponent<MusicSpinnerController>();
+        break;
+      default:
+        throw new ArgumentOutOfRangeException();
+    }
+  }
+
+  public ISpinnerController GetSpinnerController()
+  {
+    return _spinnerController;
   }
 
   public override void End()

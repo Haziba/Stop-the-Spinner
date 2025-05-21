@@ -5,7 +5,7 @@ namespace Libraries
 {
   public static class ItemLibrary
   {
-    public static IDictionary<ItemName, Item> Items = new Dictionary<ItemName, Item>
+    public static readonly IDictionary<ItemName, Item> Items = new Dictionary<ItemName, Item>
     {
       [ItemName.FancyHat] = new Item(ItemName.FancyHat, ItemSlot.Head)
       {
@@ -31,6 +31,15 @@ namespace Libraries
           CardName.AxeThem,
           CardName.AxeThem,
         }
+      },
+      [ItemName.OldLute] = new(ItemName.OldLute, ItemSlot.RightArm)
+      {
+        Cards = new List<CardName>
+        {
+          CardName.OldLute,
+          CardName.OldLute,
+          CardName.OldLute,
+        }
       }
     };
   }
@@ -40,7 +49,8 @@ public enum ItemName
 {
   FancyHat,
   RustySword,
-  RustyAxe
+  RustyAxe,
+  OldLute,
 }
 
 [Flags]

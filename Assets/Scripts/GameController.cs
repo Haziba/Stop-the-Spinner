@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour
   public GameObject EnemyHealthBar;
 
   public GameObject PlayerSpinner;
+  public GameObject PlayerMusicSpinner;
   public GameObject EnemySpinner;
 
   public GameObject PlayerHand;
@@ -38,6 +39,7 @@ public class GameController : MonoBehaviour
 
   public GameObject Enemy;
 
+  public GameObject HitResult;
   public GameObject DamageBallPrefab;
   public GameObject PlayerDamageAnchor;
 
@@ -61,6 +63,7 @@ public class GameController : MonoBehaviour
         [ContextObjects.EnemyHealthBar] = EnemyHealthBar,
 
         [ContextObjects.PlayerSpinner] = PlayerSpinner,
+        [ContextObjects.PlayerMusicSpinner] = PlayerMusicSpinner,
         [ContextObjects.EnemySpinner] = EnemySpinner,
 
         [ContextObjects.PlayerHand] = PlayerHand,
@@ -84,6 +87,7 @@ public class GameController : MonoBehaviour
         [ContextObjects.PlayerManaCounter] = PlayerManaCounter,
         [ContextObjects.EnemyManaCounter] = EnemyManaCounter,
         
+        [ContextObjects.HitResult] = HitResult,
         [ContextObjects.DamageBallPrefab] = DamageBallPrefab,
         [ContextObjects.PlayerDamageAnchor] = PlayerDamageAnchor,
       },

@@ -1,5 +1,7 @@
-public class SpinnerConfiguration
+public class SpinnerConfiguration : ISpinnerConfiguration
 {
+    public SpinnerType SpinnerType => SpinnerType.Wheel;
+    
     float _hit;
     float _crit;
 

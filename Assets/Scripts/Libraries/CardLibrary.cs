@@ -72,6 +72,20 @@ namespace Libraries
             break;
         }
       }),
+      [CardName.OldLute] = new Card(3, 
+      (meState, themState) => new SpinWheelOutcome(new SpinnerMusicConfiguration(3)), new DamageToolTip(2, 5),
+      (spinnerResult, meState, themState) =>
+      {
+        switch (spinnerResult)
+        {
+          case SpinnerResult.Hit:
+            themState.TakeDamage(2);
+            break;
+          case SpinnerResult.Crit:
+            themState.TakeDamage(5);
+            break;
+        }
+      }),
       [CardName.DistractThem] = new Card(1, (meState, themState) =>
       {
         themState.AddEffect(AgentStatusEffects.Distracted, 2);

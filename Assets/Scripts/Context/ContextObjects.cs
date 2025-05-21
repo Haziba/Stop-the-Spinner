@@ -7,6 +7,7 @@ public enum ContextObjects
   EnemyHealthBar,
 
   PlayerSpinner,
+  PlayerMusicSpinner,
   EnemySpinner,
 
   PlayerHand,
@@ -36,6 +37,7 @@ public enum ContextObjects
   PlayerManaCounter,
   EnemyManaCounter,
   
+  HitResult,
   DamageBallPrefab,
   PlayerDamageAnchor,
 }

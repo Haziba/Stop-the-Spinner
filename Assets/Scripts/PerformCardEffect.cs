@@ -47,15 +47,15 @@ public class NoOutcome : ICardOutcome
 
 public class SpinWheelOutcome : ICardOutcome
 {
-  SpinnerConfiguration _config;
+  private readonly ISpinnerConfiguration _config;
 
-  public SpinWheelOutcome(SpinnerConfiguration config)
+  public SpinWheelOutcome(ISpinnerConfiguration config)
   {
     _config = config;
   }
 
-  public EffectOutcome Outcome() { return EffectOutcome.SpinWheel; }
-  public object Data() { return _config; }
+  public EffectOutcome Outcome() => EffectOutcome.SpinWheel;
+  public object Data() => _config;
 }
 
 public enum EffectOutcome

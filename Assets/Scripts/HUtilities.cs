@@ -8,6 +8,7 @@ public static class HUtilities
   static System.Random rng = new System.Random();
 
   // Xeno's paradox baybeee
+  // On reflection this might just be "lerp"
   public static float MoveTowards(float startPoint, float endPoint, float speed) {
       return Math.Min(
           Math.Max(((endPoint - startPoint) / 2), -speed * Time.deltaTime),
@@ -31,6 +32,13 @@ public static class HUtilities
   {
     return Math.Abs(gameObjectPosition.x - target.x) < 0.1f && Math.Abs(gameObjectPosition.y - target.y) < 0.1f;
   }
+
+  public static bool DidMouseDown() => Input.GetKeyDown("space") || Input.GetMouseButtonDown(0) ||
+                                       Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
+  
+  public static bool IsMouseDown() => Input.GetMouseButton(0) || Input.touchCount > 0;
+  
+  public static Vector2 MousePosition() => Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition;
 
   public class Countdown
   {

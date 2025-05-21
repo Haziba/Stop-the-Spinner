@@ -27,14 +27,12 @@ public class ToolTipController : MonoBehaviour
     
   public void ShowToolTip(CardName cardName)
   {
-    Debug.Log("Show tooltip");
     gameObject.SetActive(true);
     Details.GetComponent<TextMeshProUGUI>().text = CardLibrary.Cards[cardName].ToolTip.Text();
   }
 
   void HideToolTip()
   {
-    Debug.Log("Hide tooltip");
     gameObject.SetActive(false);
   }
 }

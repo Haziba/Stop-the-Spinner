@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -14,7 +15,12 @@ public class PlayerTurnStateController : TurnStateController
     _themGameState = GameState.EnemyTurn;
     _doCardPauseLength = 0.2f;
     _hand = _context.GO(ContextObjects.PlayerHand);
-    _spinner = _context.GO(ContextObjects.PlayerSpinner);
+    // todo: Get rid of spinner
+    _spinners = new Dictionary<SpinnerType, GameObject>
+    {
+      [SpinnerType.Wheel] = _context.GO(ContextObjects.PlayerSpinner),
+      [SpinnerType.Music] = _context.GO(ContextObjects.PlayerMusicSpinner),
+    };
     _playedCard = _context.GO(ContextObjects.PlayerPlayedCard);
     _meHealthBar = _context.GO(ContextObjects.PlayerHealthBar);
     _themHealthBar = _context.GO(ContextObjects.EnemyHealthBar);
@@ -54,10 +60,12 @@ public class PlayerTurnStateController : TurnStateController
 
   public override void Update()
   {
-    if(_innerState == InnerState.SpinnerSpinning)
-      if(Input.GetKeyDown("space") || Input.touchCount > 0)
+    if (_innerState == InnerState.SpinnerSpinning)
+    {
+      if(HUtilities.DidMouseDown())
         SpacePressed();
-    
+    }
+
     if (_cardClickedEventArgs != null)
       HandleCardBeingClicked();
 
@@ -78,7 +86,7 @@ public class PlayerTurnStateController : TurnStateController
   {
     if (_cardClickTimer >= 0)
     {
-      if (!Input.touches.Any())
+      if (!HUtilities.IsMouseDown())
       {
         ShowCardTooltip(_cardClickedEventArgs.CardName());
         _cardClickedEventArgs = null;
@@ -96,9 +104,9 @@ public class PlayerTurnStateController : TurnStateController
     
     if (_cardBeingDragged)
     {
-      if (Input.touches.Any())
+      if (HUtilities.IsMouseDown())
       {
-        var cardNewPosition = _context.Get<Camera>(ContextObjects.Camera).ScreenToWorldPoint(Input.GetTouch(0).position);
+        var cardNewPosition = _context.Get<Camera>(ContextObjects.Camera).ScreenToWorldPoint(HUtilities.MousePosition());
         cardNewPosition.z = _context.GO(ContextObjects.PlayerPlayedCard).transform.position.z;
         _context.GO(ContextObjects.PlayerPlayedCard).transform.position = cardNewPosition;
       }
@@ -119,7 +127,6 @@ public class PlayerTurnStateController : TurnStateController
 
   void ShowCardTooltip(CardName cardName)
   {
-    Debug.Log("Show tooltip - " + cardName);
     _context.GO(ContextObjects.ToolTip).GetComponent<ToolTipController>().ShowToolTip(cardName);
   }
 

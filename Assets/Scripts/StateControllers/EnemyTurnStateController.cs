@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -11,7 +12,11 @@ public class EnemyTurnStateController : TurnStateController
     _themGameState = GameState.PlayerTurn;
     _doCardPauseLength = 1f;
     _hand = _context.GO(ContextObjects.EnemyHand);
-    _spinner = _context.GO(ContextObjects.EnemySpinner);
+    _spinners = new Dictionary<SpinnerType, GameObject>
+    {
+      [SpinnerType.Wheel] = _context.GO(ContextObjects.EnemySpinner),
+      [SpinnerType.Music] = _context.GO(ContextObjects.EnemySpinner),
+    };
     _playedCard = _context.GO(ContextObjects.EnemyPlayedCard);
     _meHealthBar = _context.GO(ContextObjects.EnemyHealthBar);
     _themHealthBar = _context.GO(ContextObjects.PlayerHealthBar);

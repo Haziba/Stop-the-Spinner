@@ -99,7 +99,7 @@ namespace PlayerInfo
       if(Player.Instance.Items.ContainsKey(slot.Slot))
       {
         AddInventoryItem(Player.Instance.Items[slot.Slot]);
-        
+
         DeckListHandler.Instance.UnequipSlot(slot.Slot);
       }
       Player.Instance.EquipItem(slot.Slot, item);

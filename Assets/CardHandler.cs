@@ -50,7 +50,14 @@ public class CardHandler : MonoBehaviour
 
   void ShowCardImage(CardName cardName)
   {
-    transform.Find(cardName.ToString()).gameObject.SetActive(true);;
+    try
+    {
+      transform.Find(cardName.ToString()).gameObject.SetActive(true);
+    }
+    catch (Exception)
+    {
+      Debug.Log($"Can't set card image to {cardName}");
+    }
   }
 
   void ShowCardBack()

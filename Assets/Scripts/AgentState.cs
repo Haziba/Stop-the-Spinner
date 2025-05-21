@@ -22,8 +22,6 @@ public class AgentState : IContextObject
     _initialMana = mana;
     _mana = mana;
     _manaRecoveryRate = manaRecoveryRate;
-
-    Debug.Log("Mana: " + _mana);
   }
 
   public void NextTurn()

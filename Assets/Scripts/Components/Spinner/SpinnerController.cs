@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SpinnerController : MonoBehaviour
+public class SpinnerController : MonoBehaviour, ISpinnerController
 {
   public GameObject Arrow;
   public GameObject[] SpinnerEdges;
@@ -19,6 +19,8 @@ public class SpinnerController : MonoBehaviour
   float _intoxicatedSpeed;
   float _intoxicatedAccel;
   float _intoxicatedChangeCountdown;
+  
+  public SpinnerType SpinnerType => SpinnerType.Music;
 
   void Start()
   {
@@ -92,10 +94,11 @@ public class SpinnerController : MonoBehaviour
     _spinSpeed = 360f*multiplier;
   }
 
-  public void UpdateConfig(SpinnerConfiguration config)
+  public void UpdateConfig(ISpinnerConfiguration config)
   {
-    _hit = config.Hit();
-    _crit = config.Crit();
+    var conf = config as SpinnerConfiguration;
+    _hit = conf.Hit();
+    _crit = conf.Crit();
     UpdateSegments();
   }
 
